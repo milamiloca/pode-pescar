@@ -196,54 +196,7 @@ const List<Especie> especies = [
   Especie('Robalo peba ou peva', 'Centropomus parallelus', 30),
   Especie('Robalo flecha', 'Centropomus undecimalis', 50),
   Especie('Sardinha-lage', 'Opisthonema oglinum', 15),
-  Especie('Tainha', 'Mugil platanus / Mugil liza', 35,
-      regras: 'TEMPORADA, POR MODALIDADE (art. 2º)\n'
-          'Cerco e traineira: 1º de junho a 31 de julho.\n'
-          'Emalhe costeiro de superfície sem anilhas, até 10 AB: '
-          '15 de maio a 15 de outubro.\n'
-          'Emalhe costeiro de superfície sem anilhas, acima de 10 AB: '
-          '15 de maio a 31 de julho.\n'
-          'Emalhe anilhado: 15 de maio a 31 de julho.\n'
-          'Desembarcada ou não motorizada: 1º de maio a 31 de dezembro.\n\n'
-          'Fora desses períodos a pesca da tainha é proibida para a '
-          'modalidade correspondente (§ 1º). A restrição de tempo não se '
-          'aplica dentro das lagoas e estuários (§ 2º).\n\n'
-          'ÁREAS FECHADAS (art. 3º)\n'
-          'Todas as modalidades, exceto tarrafa, de 15 de março a 15 de '
-          'setembro: proibido em todas as desembocaduras '
-          'estuarino-lagunares.\n'
-          'Redes de trolha, cercos flutuantes, redes de emalhe, faróis '
-          'manuais, anzóis, fisgas e garatéias, de 1º de maio a 31 de '
-          'dezembro, no litoral de Santa Catarina: proibido a menos de '
-          '300 m dos costões rochosos e a menos de 1 milha náutica da '
-          'costa, onde há a prática tradicional de arrastão de praia com '
-          'canoas a remo.\n'
-          'Captura de isca viva, de 1º de maio a 31 de julho, no litoral '
-          'de Santa Catarina: mesmas distâncias.\n'
-          'Cerco e traineira, de 1º de junho a 31 de julho: proibido até '
-          '5 milhas náuticas da costa em SP, PR e SC.\n'
-          'Pesca desembarcada em emalhe fixo ou de deriva: proibido no '
-          'raio de 150 m de ilhas, lajes e costões rochosos.\n'
-          'Emalhe costeiro de superfície e emalhe anilhado, com '
-          'embarcação motorizada: proibido na faixa de 1 milha náutica '
-          'medida da linha de costa.\n\n'
-          'DESEMBOCADURA ESTUARINO-LAGUNAR (art. 3º, § 1º)\n'
-          'A área compreendida a 1.000 m da boca da barra para fora, em '
-          'direção ao oceano; 200 m para dentro do rio ou estuário; e '
-          '1.000 m de extensão nas margens adjacentes.\n\n'
-          'SANÇÕES (art. 26)\n'
-          'Lei nº 9.605, de 12 de fevereiro de 1998, e Decreto nº 6.514, '
-          'de 26 de julho de 2008.\n\n'
-          'O QUE NÃO ESTÁ AQUI: AS COTAS\n'
-          'O Capítulo II fixou a cota de captura da safra de 2018 '
-          '(3.417 t) e o número de embarcações autorizadas naquele ano. '
-          'Não está reproduzido, e não vale mais: cota e número de '
-          'autorizações são fixados a cada safra, em norma própria. O '
-          'art. 25 remete as medidas dos exercícios seguintes à revisão '
-          'do Plano de Gestão da Tainha.\n\n'
-          'O que está acima é o Capítulo I: temporada por modalidade e '
-          'áreas fechadas. É a parte que segue valendo.',
-      regrasNorma: 'Portaria Interministerial nº 24, de 15 de maio de 2018'),
+  Especie('Tainha', 'Mugil platanus / Mugil liza', 35),
   Especie('Parati ou saúba', 'Mugil curema', 20),
   Especie('Trilha', 'Mullus argentinae', 13),
 ];
@@ -995,6 +948,72 @@ const List<Modalidade> modalidades = [
     alvo: 'Peixes e crustáceos diversos não controlados por regulamentação específica',
     area: 'Mar territorial (SP ao RS)',
     valeEmSc: true,
+  ),
+  Modalidade(
+    '6.8',
+    Metodo.arrasto,
+    'Arrasto de praia',
+    alvo:
+        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    incidental:
+        'Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartaruga-de-pente (Eretmochelys imbricata), Tartaruga-oliva (Lepidochelys olivacea), Tartaruga-gigante (Dermochelys coriacea), Peixe-boi marinho (Trichechus manatus), Boto-cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Baleia-jubarte (Megaptera novaeangliae), Baleia-cachalote (Physeter macrocephalus)',
+    acompanhante:
+        'Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-noturno (Carcharhinus signatus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Peixe-espada (Trichiurus lepturus), Serrinha, Cavala Pintada (Scomberomorus maculatus), Prejereba (Lobotes surinamensis), Guaivira (Oligoplites saliens), Pampo (Trachinotus falcatus), Pampo-verdadeiro (Trachinotus carolinus), Pampo-listrado (Trachinotus goodei), Pampo-malhado (Trachinotus marginatus), Paru-branco (Chaetodipterus faber)',
+    complementar:
+        'Emalhe Costeiro (Superfície). Espécies-alvo: Tainha (Mugil platanus ou Mugil liza), Anchova (Pomatomus saltatrix), Sororoca, Serra (Scomberomorus brasiliensis)',
+    area: 'Mar territorial do Estado de Santa Catarina',
+    valeEmSc: true,
+    regras:
+        'DIMENSÕES DA REDE (art. 3º)\nMalha igual ou superior a 40 mm, entre nós opostos da malha esticada. Comprimento máximo de 1.600 m. Altura máxima de 30 m.\n\nEMBARCAÇÃO (art. 4º)\nPermitida o ano todo, com embarcação de comprimento máximo de 12 m, a remo ou motorizada. O uso de motor é permitido apenas para embarcações que operam entre os municípios de Passo de Torres e Imbituba, com potência máxima de 90 HP (§ 1º).\n\nREGRAS DAS ESPÉCIES (art. 4º, § 2º)\nAs regras específicas de ordenamento das espécies que constam na Autorização de Pesca de Arrasto de Praia, incluindo os períodos de proibição de pesca e os tamanhos mínimos definidos, deverão ser obedecidas.\n\nMONITORAMENTO (art. 9º)\nMapa de Produção, um por dia, enviado até o quinto dia útil do mês subsequente, mesmo sem captura e mesmo sem saída da embarcação. A não entrega enseja suspensão de 30 dias da Autorização (art. 10) e, persistindo, cancelamento (art. 11).\n\nSANÇÕES (art. 12)\nLei nº 9.605, de 12 de fevereiro de 1998, e Decreto nº 6.514, de 22 de julho de 2008.',
+    norma:
+        'Modalidade incluída no Anexo VI da IN MPA/MMA nº 10/2011 pela Portaria SAP/MAPA nº 617, de 8 de março de 2022, que ordena a pesca de arrasto de praia no Mar Territorial em Santa Catarina.',
+  ),
+  Modalidade(
+    '6.9',
+    Metodo.arrasto,
+    'Arrasto de praia',
+    alvo:
+        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    incidental:
+        'Raia Viola (Rhinobatus horkelii, Rinobatos percellens), Cação-anjo-espinhoso (Squatina guggenheim), Cação-anjo-liso (Squatina occulta), Boto-cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartaruga-de-pente (Eretmochelys imbricata), Tartaruga-oliva (Lepidochelys olivacea), Tartaruga-gigante (Dermochelys coriacea)',
+    acompanhante:
+        'Savelha (Brevoortia pectinata), Cabrinha (Prionotus punctatus), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Peixe-espada (Trichiurus lepturus), Guaivira (Oligoplites saliens), Linguado (Paralichthys brasiliensis, Paralichthys isosceles, Paralichthys triocellatus, Paralichthys patagonicus), Maria-luiza (Paralonchurus brasiliensis), Papa-terra, Betara (Menticirrhus americanus), Pescada amarela (Cynoscion acoupa), Pescada branca (Cynoscion leiarchus), Pescada bicuda (Cynoscion microlepidotus), Pescada cambucu (Cynoscion virescens), Pescadinha (Macrodon ancylodon), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), Raia emplasto (Atlantoraja platana, Sympterygia bonapartii, Sympterygia acuta), Raia (Breviraja spinosa, Rajella purpuriventralis), Anchova (Pomatomus saltatrix), Gordinho (Peprilus paru), Merluza (Merluccius hubbsi), Tira-vira (Percophis brasiliensis), Congro rosa (Genypterus brasiliensis), Congro-preto (Conger orbignianus, Myrophis punctatus, Raneya brasiliensis), Namorado (Pseudopercis numida), Pargo rosa (Pagrus pagrus), Batata (Lopholatilus villarii), Bagre-branco (Arius grandicassis), Bagre-de-fita (Bagre marinus), Bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Netuma planifrons), Bagre-amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Camarão branco (Litopenaeus schmitti), Robalo (Centropomus parallelus, Centropomus undecimalis, Centropomus ensiferus, Centropomus pectinatus), Prejereba (Lobotes surinamensis), Vermelho (Lutjanus jocu, Ocyurus chrysurus), Sororoca, serra (Scomberomorus brasiliensis), Siri-mangue (Callinectes exasperatus), Siri-azul (Callinectes sapidus), Siri nema (Callinectes bocourti), Siri (Callinectes danae, Callinectes ornatus), Goete (Cynoscion jamaicensis)',
+    complementar:
+        'Emalhe Costeiro (fundo). Espécies-alvo: Corvina (Micropogonias furnieri), Castanha (Umbrina canosai), Pescada (Cynoscion striatus), Abrótea (Urophycis brasiliensis)',
+    area: 'Mar territorial do Estado de Santa Catarina',
+    valeEmSc: true,
+    regras:
+        'DIMENSÕES DA REDE (art. 3º)\nMalha igual ou superior a 40 mm, entre nós opostos da malha esticada. Comprimento máximo de 1.600 m. Altura máxima de 30 m.\n\nEMBARCAÇÃO (art. 4º)\nPermitida o ano todo, com embarcação de comprimento máximo de 12 m, a remo ou motorizada. O uso de motor é permitido apenas para embarcações que operam entre os municípios de Passo de Torres e Imbituba, com potência máxima de 90 HP (§ 1º).\n\nREGRAS DAS ESPÉCIES (art. 4º, § 2º)\nAs regras específicas de ordenamento das espécies que constam na Autorização de Pesca de Arrasto de Praia, incluindo os períodos de proibição de pesca e os tamanhos mínimos definidos, deverão ser obedecidas.\n\nMONITORAMENTO (art. 9º)\nMapa de Produção, um por dia, enviado até o quinto dia útil do mês subsequente, mesmo sem captura e mesmo sem saída da embarcação. A não entrega enseja suspensão de 30 dias da Autorização (art. 10) e, persistindo, cancelamento (art. 11).\n\nSANÇÕES (art. 12)\nLei nº 9.605, de 12 de fevereiro de 1998, e Decreto nº 6.514, de 22 de julho de 2008.',
+    norma:
+        'Modalidade incluída no Anexo VI da IN MPA/MMA nº 10/2011 pela Portaria SAP/MAPA nº 617, de 8 de março de 2022, que ordena a pesca de arrasto de praia no Mar Territorial em Santa Catarina.',
+  ),
+  Modalidade(
+    '6.10',
+    Metodo.arrasto,
+    'Arrasto de praia',
+    alvo:
+        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    complementar:
+        'Diversificada costeira (embarcações de pequeno porte, com propulsão a remo ou a vela, e, quando motorizadas, com potência de motor até 18,0 hp, comprimento até 8,00 m e arqueação bruta até 2,0). Espécie-alvo: peixes e crustáceos diversos',
+    area: 'Mar territorial do Estado de Santa Catarina',
+    valeEmSc: true,
+    regras:
+        'DIMENSÕES DA REDE (art. 3º)\nMalha igual ou superior a 40 mm, entre nós opostos da malha esticada. Comprimento máximo de 1.600 m. Altura máxima de 30 m.\n\nEMBARCAÇÃO (art. 4º)\nPermitida o ano todo, com embarcação de comprimento máximo de 12 m, a remo ou motorizada. O uso de motor é permitido apenas para embarcações que operam entre os municípios de Passo de Torres e Imbituba, com potência máxima de 90 HP (§ 1º).\n\nREGRAS DAS ESPÉCIES (art. 4º, § 2º)\nAs regras específicas de ordenamento das espécies que constam na Autorização de Pesca de Arrasto de Praia, incluindo os períodos de proibição de pesca e os tamanhos mínimos definidos, deverão ser obedecidas.\n\nMONITORAMENTO (art. 9º)\nMapa de Produção, um por dia, enviado até o quinto dia útil do mês subsequente, mesmo sem captura e mesmo sem saída da embarcação. A não entrega enseja suspensão de 30 dias da Autorização (art. 10) e, persistindo, cancelamento (art. 11).\n\nSANÇÕES (art. 12)\nLei nº 9.605, de 12 de fevereiro de 1998, e Decreto nº 6.514, de 22 de julho de 2008.',
+    norma:
+        'Modalidade incluída no Anexo VI da IN MPA/MMA nº 10/2011 pela Portaria SAP/MAPA nº 617, de 8 de março de 2022, que ordena a pesca de arrasto de praia no Mar Territorial em Santa Catarina.',
+  ),
+  Modalidade(
+    '6.11',
+    Metodo.arrasto,
+    'Arrasto de praia',
+    alvo:
+        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    area: 'Mar territorial do Estado de Santa Catarina',
+    valeEmSc: true,
+    regras:
+        'DIMENSÕES DA REDE (art. 3º)\nMalha igual ou superior a 40 mm, entre nós opostos da malha esticada. Comprimento máximo de 1.600 m. Altura máxima de 30 m.\n\nEMBARCAÇÃO (art. 4º)\nPermitida o ano todo, com embarcação de comprimento máximo de 12 m, a remo ou motorizada. O uso de motor é permitido apenas para embarcações que operam entre os municípios de Passo de Torres e Imbituba, com potência máxima de 90 HP (§ 1º).\n\nREGRAS DAS ESPÉCIES (art. 4º, § 2º)\nAs regras específicas de ordenamento das espécies que constam na Autorização de Pesca de Arrasto de Praia, incluindo os períodos de proibição de pesca e os tamanhos mínimos definidos, deverão ser obedecidas.\n\nMONITORAMENTO (art. 9º)\nMapa de Produção, um por dia, enviado até o quinto dia útil do mês subsequente, mesmo sem captura e mesmo sem saída da embarcação. A não entrega enseja suspensão de 30 dias da Autorização (art. 10) e, persistindo, cancelamento (art. 11).\n\nSANÇÕES (art. 12)\nLei nº 9.605, de 12 de fevereiro de 1998, e Decreto nº 6.514, de 22 de julho de 2008.',
+    norma:
+        'Modalidade incluída no Anexo VI da IN MPA/MMA nº 10/2011 pela Portaria SAP/MAPA nº 617, de 8 de março de 2022, que ordena a pesca de arrasto de praia no Mar Territorial em Santa Catarina.',
   ),
 ];
 

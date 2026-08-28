@@ -4,133 +4,15 @@ import 'dados.dart';
 import 'tema.dart';
 
 // =====================================================================
-// PARA A FISCALIZAÇÃO
+// O ENQUADRAMENTO
 //
-// Mesma conta da calculadora do pescador, saída diferente. O pescador
-// quer saber se pode desembarcar; quem fiscaliza precisa do
-// enquadramento — o artigo, a norma, o excesso em quilos — num texto
-// que dê para levar para o auto.
+// Abre a partir da ficha da espécie, já sabendo de qual se trata.
+// Monta o texto com a norma, o dispositivo e os valores apurados — o
+// excesso em quilos quando é caso de tolerância, os artigos da
+// Portaria 1.666 quando é espécie ameaçada.
 //
-// Nada é enviado. O texto é copiado para a área de transferência e a
-// pessoa cola onde quiser.
+// O texto vai para a área de transferência. Nada é enviado.
 // =====================================================================
-
-class TelaFiscal extends StatefulWidget {
-  const TelaFiscal({super.key});
-
-  @override
-  State<TelaFiscal> createState() => _TelaFiscalState();
-}
-
-class _TelaFiscalState extends State<TelaFiscal> {
-  Especie? escolhida;
-  String busca = '';
-
-  @override
-  Widget build(BuildContext context) {
-    final termo = semAcento(busca);
-    final achadas = especies
-        .where((e) =>
-            semAcento(e.nome).contains(termo) ||
-            semAcento(e.cientifico).contains(termo))
-        .toList();
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Enquadramento')),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Qual espécie foi apreendida?',
-                        style: estiloTitulo),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'O app monta o enquadramento com a norma, o artigo e '
-                      'os números, pronto para copiar.',
-                      style: estiloCorpo,
-                    ),
-                    const SizedBox(height: 16),
-                    CampoBusca(
-                      dica: 'Nome popular ou científico',
-                      aoMudar: (v) => setState(() => busca = v),
-                    ),
-                    const SizedBox(height: 14),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                  itemCount: achadas.length,
-                  itemBuilder: (context, i) {
-                    final e = achadas[i];
-                    return Cartao(
-                      destaque: e.proibidaHoje ? corNaoPode : null,
-                      aoTocar: () =>
-                          Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => TelaEnquadramento(especie: e),
-                      )),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(e.nome,
-                                    style: const TextStyle(
-                                        fontSize: 16.5,
-                                        fontWeight: FontWeight.w600,
-                                        height: 1.2,
-                                        color: corTinta)),
-                                const SizedBox(height: 2),
-                                Text(e.cientifico,
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontStyle: FontStyle.italic,
-                                        color: corApagada)),
-                                if (e.ameacada) ...[
-                                  const SizedBox(height: 3),
-                                  Text(e.categoriaPorExtenso,
-                                      style: const TextStyle(
-                                          fontSize: 12.5,
-                                          fontWeight: FontWeight.w600,
-                                          color: corNaoPode)),
-                                ],
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          if (e.proibidaHoje)
-                            const Selo('não pode', cor: corNaoPode,
-                                forte: true)
-                          else if (e.proibidaDepois)
-                            const Selo('25/10', cor: corBoia, forte: true)
-                          else
-                            Text('${e.tamanho} cm',
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: corMar)),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // =====================================================================
 // O ENQUADRAMENTO
@@ -246,8 +128,8 @@ class _TelaEnquadramentoState extends State<TelaEnquadramento> {
     }
 
     b.writeln('');
-    b.writeln('Gerado pelo aplicativo Pode Pescar? a partir do texto das '
-        'normas. Confira sempre a norma oficial e a vigência.');
+    b.writeln('Gerado pelo aplicativo Consulta Pesqueira a partir do texto '
+        'das normas. Confira sempre a norma oficial e a vigência.');
     return b.toString();
   }
 
@@ -379,7 +261,7 @@ class _TelaEnquadramentoState extends State<TelaEnquadramento> {
               const SizedBox(height: 10),
               const Text(
                 'O texto vai para a área de transferência do aparelho, com a '
-                'norma, o artigo e os números. Nada é enviado.',
+                'norma, o dispositivo e os valores apurados.',
                 style: TextStyle(fontSize: 13, height: 1.4, color: corApagada),
               ),
               const SizedBox(height: 20),
