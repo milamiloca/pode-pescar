@@ -27,8 +27,10 @@ class TelaTemporadas extends StatefulWidget {
 
 class _TelaTemporadasState extends State<TelaTemporadas> {
   @override
-  Widget build(BuildContext context) {
-    final hoje = DateTime.now();
+  Widget build(BuildContext context) =>
+      DiaDeHoje(construir: (context, hoje) => _montar(context, hoje));
+
+  Widget _montar(BuildContext context, DateTime hoje) {
     final conferidos =
         defesos.where((d) => d.origem == Origem.conferida).toList();
     final pendentes =
@@ -56,6 +58,18 @@ class _TelaTemporadasState extends State<TelaTemporadas> {
               Calendario(hoje: hoje),
               const SizedBox(height: 12),
               _Agora(hoje: hoje),
+              const SizedBox(height: 28),
+              const TituloSecao('O que muda a seguir'),
+              const SizedBox(height: 4),
+              const Text(
+                'As próximas viradas, na ordem em que acontecem. Só entre '
+                'as normas conferidas: uma data que não saiu de norma não '
+                'serve para avisar ninguém.',
+                style: TextStyle(
+                    fontSize: 14, height: 1.45, color: corApagada),
+              ),
+              const SizedBox(height: 14),
+              ProximasViradas(hoje: hoje),
               const SizedBox(height: 28),
               const TituloSecao('Normas conferidas'),
               const SizedBox(height: 4),
@@ -297,6 +311,19 @@ class _CartaoDefesoState extends State<CartaoDefeso> {
                       color: Colors.white),
                 ),
                 const SizedBox(height: 12),
+                const Text('PARA ONDE VALE',
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.5,
+                        color: Color(0xFF7FB3BF))),
+                const SizedBox(height: 5),
+                Text(
+                  d.abrangencia,
+                  style: const TextStyle(
+                      fontSize: 13.5, height: 1.4, color: Colors.white),
+                ),
+                const SizedBox(height: 12),
                 Text(
                   d.norma,
                   style: const TextStyle(
@@ -452,6 +479,14 @@ class _CartaoPendenteState extends State<_CartaoPendente> {
                 height: 1.35,
                 color: corTinta),
           ),
+          const SizedBox(height: 10),
+          const Text('PARA ONDE VALE', style: estiloEtiqueta),
+          const SizedBox(height: 4),
+          Text(
+            d.abrangencia,
+            style: const TextStyle(
+                fontSize: 13.5, height: 1.4, color: corTinta),
+          ),
           if (aberto) ...[
             const SizedBox(height: 12),
             const Regua(),
@@ -533,6 +568,14 @@ class _Nota extends StatelessWidget {
             'conferida, com o texto reproduzido. O levantamento não vira '
             'resposta do aplicativo em nenhum momento.',
             style: TextStyle(fontSize: 13.5, height: 1.45, color: corApagada),
+          ),
+          SizedBox(height: 12),
+          Text(
+            'A relação foi cruzada com a tabela de períodos de defeso '
+            'publicada pelo Ministério da Pesca e Aquicultura, e ficou '
+            'apenas o que alcança Santa Catarina. Defeso de outro estado '
+            'não entra: não é resposta errada, é resposta de outro lugar.',
+            style: TextStyle(fontSize: 13.5, height: 1.45, color: corTinta),
           ),
           SizedBox(height: 12),
           Text(

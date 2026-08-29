@@ -5,11 +5,28 @@ import 'tema.dart';
 
 const _fonteNorma =
     'Instrução Normativa MPA/MMA nº 10, de 10 de junho de 2011';
-const _fonteDetalhe = 'Anexos publicados no Diário Oficial em 07/11/2011. '
-    'Alterada pela IN MPA nº 14/2014, pela IN MPA/MMA nº 01/2015 e pela '
-    'Portaria Interministerial nº 24/2018, que incluiu a modalidade '
-    'emalhe anilhado no Anexo II. Essa modalidade ainda não consta desta '
-    'lista.';
+const _fonteDetalhe = 'Anexos publicados no Diário Oficial em 07/11/2011.';
+
+/// O aviso que precede a lista.
+///
+/// A lista abaixo é o Anexo I ORIGINAL da IN 10/2011. Duas normas
+/// posteriores, ambas em vigor, alteraram esse anexo — e não se tem o
+/// texto consolidado. Quem confere um código de permissionamento contra
+/// o RGP precisa saber disso ANTES de comparar, não depois.
+const _avisoDeVersao =
+    'ESTA LISTA É O TEXTO ORIGINAL DE 2011.\n\n'
+    'A Instrução Normativa MPA nº 14, de 3 de outubro de 2014, e a '
+    'Instrução Normativa MPA/MMA nº 01, de 22 de janeiro de 2015, estão '
+    'em vigor e alteraram o Anexo I: a de 2014 reestruturou a codificação '
+    'das modalidades de embarcações artesanais e industriais e ajustou '
+    'exigências de petrecho e de malha; a de 2015 alterou e acrescentou '
+    'regras de emalhe, cerco e espinhel.\n\n'
+    'Os textos consolidados não foram obtidos. O CÓDIGO DE UMA MODALIDADE '
+    'AQUI PODE NÃO SER O CÓDIGO QUE ESTÁ NO RGP HOJE. Antes de usar um '
+    'número em conferência de licença ou em auto de infração, confira a '
+    'modalidade no registro do MPA.\n\n'
+    'A Portaria Interministerial nº 24/2018 acrescentou ao Anexo II a '
+    'modalidade emalhe anilhado, que também não consta desta lista.';
 
 // =====================================================================
 // OS SEIS MÉTODOS
@@ -60,15 +77,37 @@ class _TelaPetrechosState extends State<TelaPetrechos> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Que apetrecho posso usar?',
+                    const Text('Modalidades e petrechos',
                         style: estiloTitulo),
                     const SizedBox(height: 6),
                     const Text(
-                      'Cada modalidade tem apetrecho, peixe e área próprios. '
-                      'Procure pelo nome que você usa.',
+                      'Cada modalidade tem petrecho, espécies-alvo e área '
+                      'de operação próprios. Busque pelo nome local do '
+                      'petrecho.',
                       style: estiloCorpo,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(13, 11, 13, 12),
+                      decoration: BoxDecoration(
+                        color: corBoia.withValues(alpha: 0.09),
+                        borderRadius: BorderRadius.circular(9),
+                        border: Border.all(
+                            color: corBoia.withValues(alpha: 0.3)),
+                      ),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Selo('confira o código no RGP', cor: corBoia),
+                          SizedBox(height: 8),
+                          TextoDobravel(
+                            titulo: 'Por que este aviso',
+                            texto: _avisoDeVersao,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 14),
                     CampoBusca(
                       dica: 'Ex.: malhão, covo, tainha',
                       aoMudar: (v) => setState(() => busca = v),
@@ -202,7 +241,7 @@ class _ListaResultados extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(28),
           child: Text(
-            'Não achei nada com esse nome.\n\nTente uma palavra só, ou '
+            'Nenhuma modalidade encontrada.\n\nTente uma palavra só, ou '
             'desligue o filtro de Santa Catarina.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 17, color: corApagada, height: 1.4),
@@ -417,11 +456,11 @@ class TelaModalidade extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 22),
-              const TituloSecao('O peixe que você pode pegar'),
+              const TituloSecao('Espécies-alvo'),
               const SizedBox(height: 4),
               TextoDobravel(titulo: 'Espécie-alvo', texto: m.alvo),
               const SizedBox(height: 14),
-              const TituloSecao('Onde pode operar'),
+              const TituloSecao('Onde a modalidade opera'),
               const SizedBox(height: 4),
               TextoDobravel(
                   titulo: 'Área de operação',
@@ -432,8 +471,8 @@ class TelaModalidade extends StatelessWidget {
                 const TituloSecao('Autorização complementar'),
                 const SizedBox(height: 2),
                 const Text(
-                  'O que você também pode pescar com autorização à parte, '
-                  'inclusive no defeso da espécie principal.',
+                  'Espécies que podem ser capturadas mediante autorização '
+                  'à parte, inclusive no defeso da espécie principal.',
                   style: estiloCorpo,
                 ),
                 const SizedBox(height: 8),
@@ -442,11 +481,11 @@ class TelaModalidade extends StatelessWidget {
               ],
               if (m.incidental.isNotEmpty || m.acompanhante.isNotEmpty) ...[
                 const SizedBox(height: 14),
-                const TituloSecao('O que vem junto'),
+                const TituloSecao('Captura incidental e fauna acompanhante'),
                 const SizedBox(height: 2),
                 const Text(
-                  'A norma já prevê o que costuma cair na rede sem ser o alvo. '
-                  'Vale conhecer: muita espécie dessa lista é protegida.',
+                  'A norma relaciona o que costuma ser capturado sem ser o '
+                  'alvo. Boa parte dessas espécies é protegida.',
                   style: estiloCorpo,
                 ),
                 const SizedBox(height: 8),

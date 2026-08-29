@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'periodos.dart';
 import 'tema.dart';
@@ -59,17 +61,17 @@ class Calendario extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _EscalaMeses(),
+          _EscalaMeses(mesDeHoje: hoje.month),
           const SizedBox(height: 10),
           for (final e in firmes.entries) ...[
-            _Grupo(nome: e.key),
+            _Grupo(nome: e.key, linhas: e.value, hoje: hoje),
             for (final p in e.value) _Linha(p: p, hoje: hoje),
             const SizedBox(height: 12),
           ],
           if (duvidosos.isNotEmpty) ...[
             const _DivisorAConfirmar(),
             for (final e in duvidosos.entries) ...[
-              _Grupo(nome: e.key),
+              _Grupo(nome: e.key, linhas: e.value, hoje: hoje),
               for (final p in e.value) _Linha(p: p, hoje: hoje),
               const SizedBox(height: 12),
             ],
@@ -84,22 +86,32 @@ class Calendario extends StatelessWidget {
 }
 
 class _EscalaMeses extends StatelessWidget {
-  const _EscalaMeses();
+  final int mesDeHoje;
+  const _EscalaMeses({required this.mesDeHoje});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        for (final m in _meses)
+        for (var i = 0; i < 12; i++)
           Expanded(
-            child: Text(
-              m,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 10.5,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-                color: corApagada,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              decoration: i + 1 == mesDeHoje
+                  ? BoxDecoration(
+                      color: corProfundo.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(4),
+                    )
+                  : null,
+              child: Text(
+                _meses[i],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: i + 1 == mesDeHoje ? corProfundo : corApagada,
+                ),
               ),
             ),
           ),
@@ -108,22 +120,66 @@ class _EscalaMeses extends StatelessWidget {
   }
 }
 
+/// O cabeçalho da espécie, com o veredito do grupo ao lado.
+///
+/// A tainha tem cinco modalidades e quatro áreas fechadas: dez linhas.
+/// Ler as dez para saber se a tainha está fechada é trabalho demais
+/// para uma pergunta que cabe numa frase.
 class _Grupo extends StatelessWidget {
   final String nome;
-  const _Grupo({required this.nome});
+  final List<Periodo> linhas;
+  final DateTime hoje;
+
+  const _Grupo({
+    required this.nome,
+    required this.linhas,
+    required this.hoje,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final fechadas = linhas.where((p) => p.fechadoEm(hoje)).length;
+    final confirmado = linhas.first.confirmado;
+    final cor = !confirmado
+        ? corApagada
+        : fechadas == 0
+            ? corPode
+            : corNaoPode;
+    final resumo = linhas.length == 1
+        ? (fechadas == 1 ? 'fechado hoje' : 'aberto hoje')
+        : fechadas == 0
+            ? 'nenhuma fechada hoje'
+            : fechadas == linhas.length
+                ? 'todas fechadas hoje'
+                : '$fechadas de ${linhas.length} fechadas hoje';
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Text(
-        nome,
-        style: const TextStyle(
-          fontSize: 12.5,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.3,
-          color: corTinta,
-        ),
+      padding: const EdgeInsets.only(top: 2, bottom: 7),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Text(
+              nome,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.2,
+                height: 1.25,
+                color: corTinta,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            resumo,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: cor,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -207,12 +263,26 @@ class _Linha extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                selo,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
+              Container(
+                margin: const EdgeInsets.only(top: 3),
+                width: 7,
+                height: 7,
+                decoration: BoxDecoration(
                   color: corSelo,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 5),
+              SizedBox(
+                width: 74,
+                child: Text(
+                  selo,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w700,
+                    color: corSelo,
+                  ),
                 ),
               ),
             ],
@@ -224,6 +294,35 @@ class _Linha extends StatelessWidget {
               size: const Size(double.infinity, 12),
               painter: _BarraPainter(p: p, hoje: hoje),
             ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  p.datas,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    height: 1.3,
+                    fontWeight: destacar ? FontWeight.w600 : FontWeight.w500,
+                    color: p.confirmado
+                        ? (p.tipo == TipoPeriodo.fechado
+                            ? corNaoPode
+                            : corPode)
+                        : corApagada,
+                  ),
+                ),
+              ),
+              if (p.viraOAno)
+                const Text(
+                  'vira o ano',
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontStyle: FontStyle.italic,
+                    color: corApagada,
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -246,6 +345,23 @@ class _BarraPainter extends CustomPainter {
     canvas.drawRRect(
       RRect.fromRectAndRadius(Offset.zero & size, raio),
       fundo,
+    );
+
+    // a coluna do mês corrente, para o olho alinhar a faixa ao mês sem
+    // precisar contar divisórias
+    const diasDoMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var antes = 0;
+    for (var i = 0; i < hoje.month - 1; i++) {
+      antes += diasDoMes[i];
+    }
+    canvas.drawRect(
+      Rect.fromLTRB(
+        antes / 365 * size.width,
+        0,
+        (antes + diasDoMes[hoje.month - 1]) / 365 * size.width,
+        size.height,
+      ),
+      Paint()..color = corProfundo.withValues(alpha: 0.07),
     );
 
     final cor = p.tipo == TipoPeriodo.fechado ? corNaoPode : corPode;
@@ -342,6 +458,13 @@ class _Legenda extends StatelessWidget {
         const _ItemLegenda(
           marca: _Ponto(cor: corPode),
           texto: 'Temporada permitida: fora da faixa, não pode.',
+        ),
+        const SizedBox(height: 5),
+        const _ItemLegenda(
+          marca: SizedBox(width: 8),
+          texto: 'A data embaixo de cada faixa diz o período: "fechado de" '
+              'é proibição; "só pode de" é temporada — fora dela, não '
+              'pode.',
         ),
         const SizedBox(height: 5),
         const _ItemLegenda(
@@ -453,6 +576,79 @@ class _AmostraPainter extends CustomPainter {
 }
 
 // =====================================================================
+// A VIRADA DA MEIA-NOITE
+//
+// Toda tela lê DateTime.now() no build, então abrir o aplicativo em 20
+// de dezembro dá a resposta de 20 de dezembro, em qualquer ano — a
+// comparação é feita só por mês e dia.
+//
+// Mas build() roda quando a tela é construída, e não de novo sozinho.
+// Um aparelho que fica aberto atravessando a meia-noite mostraria a
+// resposta de ontem. Em serviço noturno isso é resposta errada: o
+// defeso do caranguejo começa à zero hora de 1º de outubro, o da
+// garoupa à zero hora de 1º de novembro.
+//
+// Este widget reconstrói na virada, e também quando o aplicativo volta
+// do segundo plano — porque um aparelho no bolso, com a tela apagada,
+// pode não executar o temporizador.
+// =====================================================================
+
+class DiaDeHoje extends StatefulWidget {
+  final Widget Function(BuildContext, DateTime) construir;
+  const DiaDeHoje({super.key, required this.construir});
+
+  @override
+  State<DiaDeHoje> createState() => _DiaDeHojeState();
+}
+
+class _DiaDeHojeState extends State<DiaDeHoje> with WidgetsBindingObserver {
+  DateTime hoje = DateTime.now();
+  Timer? _relogio;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _agendar();
+  }
+
+  void _agendar() {
+    _relogio?.cancel();
+    final agora = DateTime.now();
+    final meiaNoite = DateTime(agora.year, agora.month, agora.day)
+        .add(const Duration(days: 1));
+    _relogio = Timer(
+      meiaNoite.difference(agora) + const Duration(seconds: 2),
+      () {
+        if (mounted) setState(() => hoje = DateTime.now());
+        _agendar();
+      },
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState estado) {
+    if (estado != AppLifecycleState.resumed) return;
+    final agora = DateTime.now();
+    final virou = agora.day != hoje.day ||
+        agora.month != hoje.month ||
+        agora.year != hoje.year;
+    if (virou && mounted) setState(() => hoje = agora);
+    _agendar();
+  }
+
+  @override
+  void dispose() {
+    _relogio?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.construir(context, hoje);
+}
+
+// =====================================================================
 // O AVISO DA TELA INICIAL
 // =====================================================================
 
@@ -468,8 +664,10 @@ class AvisoDeHoje extends StatelessWidget {
   const AvisoDeHoje({super.key, required this.aoTocar});
 
   @override
-  Widget build(BuildContext context) {
-    final hoje = DateTime.now();
+  Widget build(BuildContext context) =>
+      DiaDeHoje(construir: (context, hoje) => _montar(context, hoje));
+
+  Widget _montar(BuildContext context, DateTime hoje) {
     final fechados = fechadosEm(hoje);
     final aConfirmar = fechadosAConfirmarEm(hoje);
     final especies = especiesFechadasEm(hoje);
@@ -576,4 +774,153 @@ List<String> _nomes(List<Periodo> lista) {
     if (!vistas.contains(nome)) vistas.add(nome);
   }
   return vistas;
+}
+
+
+// =====================================================================
+// AS PRÓXIMAS VIRADAS
+//
+// O calendário responde "como é o ano". Isto responde "o que muda a
+// seguir", que é outra pergunta e aparece tanto quanto. Saber que o
+// cherne fecha em três dias vale mais, em serviço, do que saber a forma
+// da barra dele.
+// =====================================================================
+
+class ProximasViradas extends StatelessWidget {
+  final DateTime hoje;
+  const ProximasViradas({super.key, required this.hoje});
+
+  @override
+  Widget build(BuildContext context) {
+    final viradas = proximasViradas(hoje);
+    if (viradas.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: corSuperficie,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: corBorda),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var i = 0; i < viradas.length; i++)
+            _LinhaVirada(v: viradas[i], primeira: i == 0),
+        ],
+      ),
+    );
+  }
+}
+
+class _LinhaVirada extends StatelessWidget {
+  final Virada v;
+  final bool primeira;
+  const _LinhaVirada({required this.v, required this.primeira});
+
+  @override
+  Widget build(BuildContext context) {
+    final cor = v.fecha ? corNaoPode : corPode;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+      decoration: BoxDecoration(
+        border: primeira
+            ? null
+            : const Border(top: BorderSide(color: Color(0xFFEEF3F4))),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                v.data,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
+                  color: cor,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                v.quando,
+                style: const TextStyle(fontSize: 11.5, color: corApagada),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            v.verbo,
+            style: TextStyle(
+              fontSize: 10.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.1,
+              color: cor,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            v.especie,
+            style: const TextStyle(
+              fontSize: 15.5,
+              fontWeight: FontWeight.w600,
+              height: 1.25,
+              color: corTinta,
+            ),
+          ),
+          const SizedBox(height: 1),
+          Text(
+            v.periodo.detalhe,
+            style: const TextStyle(
+                fontSize: 12.5, height: 1.35, color: corApagada),
+          ),
+          if (v.periodo.onde.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              v.periodo.onde,
+              style: const TextStyle(
+                  fontSize: 11.5, height: 1.35, color: Color(0xFF8AA0A8)),
+            ),
+          ],
+          // O aviso que evita a leitura permissiva: uma regra que termina
+          // não é uma pescaria que abre.
+          if (!v.fecha && v.aindaRestrita) ...[
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              decoration: BoxDecoration(
+                color: corNaoPode.withValues(alpha: 0.07),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 4, right: 8),
+                    width: 6,
+                    height: 6,
+                    decoration: const BoxDecoration(
+                        color: corNaoPode, shape: BoxShape.circle),
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Não é a pescaria que abre: só esta regra que '
+                      'termina. ${v.especie} segue com '
+                      '${v.quantasOutras == 1 ? "outra restrição" : "${v.quantasOutras} outras restrições"} '
+                      'nesta data.',
+                      style: const TextStyle(
+                          fontSize: 12, height: 1.35, color: corNaoPode),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }

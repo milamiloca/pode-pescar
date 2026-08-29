@@ -4,9 +4,14 @@ import 'desenhos.dart';
 import 'calendario.dart';
 import 'conflitos.dart';
 import 'defesos.dart';
+import 'areas.dart';
 import 'fichas.dart';
+import 'normas.dart';
+import 'periodos.dart';
+import 'regimes.dart';
 import 'tela_conflitos.dart';
 import 'tela_especies.dart';
+import 'tela_areas.dart';
 import 'tela_petrechos.dart';
 import 'tela_temporadas.dart';
 import 'tema.dart';
@@ -94,6 +99,15 @@ class TelaInicial extends StatelessWidget {
                         norma: 'defeso por espécie',
                         destino: _Destino.temporadas,
                       ),
+                      const SizedBox(height: 12),
+                      _Porta(
+                        titulo: 'Onde não pode',
+                        detalhe: 'As $quantasRestricoes regras que não '
+                            'dependem da espécie: baía, estuário, distância '
+                            'da costa, petrecho e porte da embarcação.',
+                        norma: 'área e petrecho em SC',
+                        destino: _Destino.areas,
+                      ),
                       const SizedBox(height: 26),
                       const _BaseNormativa(),
                     ],
@@ -146,8 +160,9 @@ class _Cabecalho extends StatelessWidget {
           Container(height: 1, color: fio),
           const SizedBox(height: 14),
           const Text(
-            'As normas que regem a pesca, organizadas para a consulta em '
-            'serviço, cada regra com o dispositivo de onde ela sai.',
+            'Tamanho mínimo, defeso e espécie ameaçada, para consultar '
+            'na hora da abordagem. Cada resposta traz a norma, o artigo '
+            'e para quais estados vale.',
             style: TextStyle(
               fontSize: 14.5,
               height: 1.5,
@@ -160,7 +175,7 @@ class _Cabecalho extends StatelessWidget {
   }
 }
 
-enum _Destino { especies, petrecho, temporadas }
+enum _Destino { especies, petrecho, temporadas, areas }
 
 class _Porta extends StatelessWidget {
   final String titulo;
@@ -193,6 +208,8 @@ class _Porta extends StatelessWidget {
         return const Glifo(metodo: Metodo.emalhe, largura: 72);
       case _Destino.temporadas:
         return const Icon(Icons.schedule, size: 36, color: corBoia);
+      case _Destino.areas:
+        return const Icon(Icons.map_outlined, size: 36, color: corBoia);
     }
   }
 
@@ -204,6 +221,8 @@ class _Porta extends StatelessWidget {
         return const TelaPetrechos();
       case _Destino.temporadas:
         return const TelaTemporadas();
+      case _Destino.areas:
+        return const TelaAreas();
     }
   }
 
@@ -313,16 +332,21 @@ class _EmVerificacao extends StatelessWidget {
 class _BaseNormativa extends StatelessWidget {
   const _BaseNormativa();
 
+  /// As cinco normas de base, que valem para o aplicativo inteiro. As
+  /// demais saem dos dados — ver [_outras] — para que a lista nunca
+  /// fique menor que o que o aplicativo de fato cita. Já aconteceu de a
+  /// tela mostrar cinco normas quando o app usava vinte.
   static const _normas = <List<String>>[
     ['IN MMA nº 53, de 22/11/2005', 'Tamanho mínimo de captura'],
     ['IN MPA/MMA nº 10, de 10/06/2011', 'Modalidades de permissionamento'],
-    ['Portaria Interministerial nº 24, de 15/05/2018', 'Pesca da tainha'],
+    ['Lei nº 11.959, de 29/06/2009', 'Política Nacional de Pesca'],
     [
       'Portaria GM/MMA nº 1.666, de 27/04/2026',
       'Regras das espécies ameaçadas'
     ],
     ['Portaria GM/MMA nº 1.667, de 27/04/2026', 'Lista Nacional Oficial'],
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -357,14 +381,195 @@ class _BaseNormativa extends StatelessWidget {
           ],
           const Regua(),
           const SizedBox(height: 12),
+          const _TodasAsNormas(),
+          const SizedBox(height: 12),
+          const Regua(),
+          const SizedBox(height: 12),
           const Text(
-            'Ferramenta de consulta. Não substitui o texto da norma nem a '
-            'orientação do comando. Confira a vigência antes de aplicar.',
+            'Ferramenta de consulta. Não substitui o texto da norma. '
+            'Confira a vigência antes de aplicar.',
             style: TextStyle(fontSize: 13, height: 1.45, color: corApagada),
           ),
           const SizedBox(height: 10),
           const Regua(),
           const _EmVerificacao(),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// Todas as normas que o aplicativo cita, na ordem da hierarquia.
+///
+/// Fica recolhida por padrão: quem abre o aplicativo quer uma resposta,
+/// não uma bibliografia. Mas quem precisa montar um enquadramento
+/// precisa ver a lista inteira, e ela tem que estar aqui.
+///
+/// A ordem é a da hierarquia porque numa dúvida entre duas normas é o
+/// escalão que decide qual prevalece.
+class _TodasAsNormas extends StatefulWidget {
+  const _TodasAsNormas();
+
+  @override
+  State<_TodasAsNormas> createState() => _TodasAsNormasState();
+}
+
+class _TodasAsNormasState extends State<_TodasAsNormas> {
+  bool aberta = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final todas = normasCitadas();
+    final lidas = quantasNormasLidas;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () => setState(() => aberta = !aberta),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          aberta
+                              ? 'Recolher a lista'
+                              : 'Ver as ${todas.length} normas',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: corMar,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '$lidas com o texto lido por inteiro, '
+                          '${todas.length - lidas} citadas e ainda por obter',
+                          style: const TextStyle(
+                              fontSize: 12.5, height: 1.35, color: corApagada),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    aberta ? Icons.expand_less : Icons.expand_more,
+                    size: 20,
+                    color: corMar,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (aberta) ...[
+          const SizedBox(height: 4),
+          for (final e in Escalao.values)
+            if (todas.any((n) => n.escalao == e))
+              _GrupoDeEscalao(
+                escalao: e,
+                normas: todas.where((n) => n.escalao == e).toList(),
+              ),
+          const SizedBox(height: 8),
+          const Text(
+            'A lista sai dos dados do aplicativo: toda norma citada em um '
+            'defeso, num período do calendário ou num Plano de Recuperação '
+            'aparece aqui sozinha.',
+            style: TextStyle(fontSize: 12.5, height: 1.45, color: corApagada),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _GrupoDeEscalao extends StatelessWidget {
+  final Escalao escalao;
+  final List<NormaCitada> normas;
+
+  const _GrupoDeEscalao({required this.escalao, required this.normas});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${nomesDeEscalao[escalao]!.toUpperCase()}  ·  '
+                  '${normas.length}',
+                  style: estiloEtiqueta,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 3),
+          Text(
+            explicacaoDeEscalao[escalao]!,
+            style: const TextStyle(
+                fontSize: 12, height: 1.4, color: corApagada),
+          ),
+          const SizedBox(height: 9),
+          for (final n in normas) _LinhaDeNorma(n: n),
+        ],
+      ),
+    );
+  }
+}
+
+class _LinhaDeNorma extends StatelessWidget {
+  final NormaCitada n;
+  const _LinhaDeNorma({required this.n});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 6, right: 9),
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: n.lida ? corPode : corBoia,
+              shape: BoxShape.circle,
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  n.nome,
+                  style: const TextStyle(
+                      fontSize: 13.5, height: 1.35, color: corTinta),
+                ),
+                Text(
+                  n.lida
+                      ? 'texto lido por inteiro'
+                      : 'citada — texto ainda por obter',
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    height: 1.4,
+                    color: n.lida ? corPode : corBoia,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

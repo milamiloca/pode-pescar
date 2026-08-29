@@ -46,12 +46,18 @@ class Defeso {
   /// Ressalva específica desta entrada, quando houver.
   final String ressalva;
 
+  /// Para quais estados a norma vale. Obrigatório: este aplicativo
+  /// é de Santa Catarina, e a primeira coisa que a guarnição precisa
+  /// saber de um defeso é se ele alcança o lugar onde ela está.
+  final String abrangencia;
+
   const Defeso({
     required this.titulo,
     required this.cientificos,
     required this.periodo,
     required this.norma,
     required this.origem,
+    required this.abrangencia,
     this.detalhe = '',
     this.ressalva = '',
   });
@@ -74,6 +80,7 @@ const defesos = <Defeso>[
     titulo: 'Tainha',
     cientificos: ['Mugil liza', 'Mugil platanus'],
     periodo: 'Temporada anual, por modalidade — ver o detalhe',
+    abrangencia: 'Regiões Sudeste e Sul. As áreas fechadas do art. 3º têm dispositivos próprios para Santa Catarina.',
     norma: 'Portaria Interministerial nº 24, de 15 de maio de 2018',
     origem: Origem.conferida,
     ressalva: 'As datas abaixo foram expressamente confirmadas para 2026 '
@@ -85,8 +92,16 @@ const defesos = <Defeso>[
         'A Portaria nº 57, de 12 de maio de 2026, alterou o art. 21 da '
         'Portaria 24/2018, sobre rastreamento por satélite no emalhe '
         'anilhado. Não tocou nas temporadas nem nas áreas.\n\n'
-        'A compilação da UNIVALI registra ainda uma Portaria nº 75/2020, '
-        'cujo texto não foi obtido.',
+        'A Portaria SAP/MAPA nº 75, de 3 de abril de 2020 — que a '
+        'compilação da UNIVALI citava sem órgão nem data — foi obtida e '
+        'lida. Ela NÃO tocou nas temporadas do art. 2º. Fez duas coisas: '
+        'prorrogou até 31/12/2022 o prazo do art. 21 para o PREPS no '
+        'emalhe anilhado, e mudou a redação do primeiro inciso V do art. '
+        '3º. A mudança ESTREITOU a área fechada: antes valia "para '
+        'qualquer operação de pesca da modalidade cerco/traineira"; agora '
+        'vale para a modalidade "autorizada à captura de tainha". Uma '
+        'traineira sem autorização para tainha deixou de ser alcançada '
+        'por esse fechamento.',
     detalhe: 'TEMPORADA, POR MODALIDADE (art. 2º)\n'
         'Cerco e traineira: 1º de junho a 31 de julho.\n'
         'Emalhe costeiro de superfície sem anilhas, até 10 AB: '
@@ -110,8 +125,11 @@ const defesos = <Defeso>[
         'canoas a remo.\n'
         'Captura de isca viva, de 1º de maio a 31 de julho, no litoral '
         'de Santa Catarina: mesmas distâncias.\n'
-        'Cerco e traineira, de 1º de junho a 31 de julho: proibido até '
-        '5 milhas náuticas da costa em SP, PR e SC.\n'
+        'Cerco e traineira AUTORIZADA À CAPTURA DE TAINHA (redação da '
+        'Portaria SAP/MAPA nº 75/2020), de 1º de junho a 31 de julho: '
+        'proibido a partir da linha de costa até 3 MN para embarcações '
+        'acima de 4 AB no RJ; até 5 MN para as acima de 10 AB no RJ; até '
+        '5 MN em SP, PR e SC; e até 10 MN no RS.\n'
         'Pesca desembarcada em emalhe fixo ou de deriva: proibido no '
         'raio de 150 m de ilhas, lajes e costões rochosos.\n'
         'Emalhe costeiro de superfície e emalhe anilhado, com '
@@ -159,6 +177,7 @@ const defesos = <Defeso>[
       'Artemesia longinaris',
     ],
     periodo: '28 de janeiro a 30 de abril',
+    abrangencia: 'Rio de Janeiro, São Paulo, Paraná, Santa Catarina e Rio Grande do Sul, no mar territorial e na ZEE.',
     norma: 'Portaria SAP/MAPA nº 656, de 30 de março de 2022',
     origem: Origem.conferida,
     ressalva: 'A Portaria Interministerial MPA/MMA nº 47, de 14 de '
@@ -213,6 +232,7 @@ const defesos = <Defeso>[
     ],
     periodo: 'Permitido de 16 de novembro a 14 de julho — fora disso, '
         'não pode',
+    abrangencia: 'Somente Santa Catarina: Lagoas Mirim, Imaruí, Santo Antônio dos Anjos, Santa Marta Pequena, Camacho e Garopaba do Sul, e seus tributários.',
     norma: 'Portaria Interministerial MPA/MMA nº 65, de 3 de julho de 2026',
     origem: Origem.conferida,
     ressalva: 'Esta é a norma das águas interiores a que se refere o art. 19 '
@@ -222,7 +242,11 @@ const defesos = <Defeso>[
         'A janela permitida (16 de novembro a 14 de julho) equivale ao '
         'período fechado de 15 de julho a 15 de novembro que a compilação da '
         'UNIVALI atribui à Instrução Normativa IBAMA nº 21/2009 — que a '
-        'Portaria 65 não revogou. As duas datas coincidem.\n\n'
+        'Portaria 65 não revogou. As duas datas coincidem, e a página de '
+        'defesos marinhos do IBAMA, atualizada em 21 de janeiro de 2026, '
+        'traz a mesma coisa: Complexo Lagunar Sul (SC), camarão-rosa e '
+        'camarão-branco, IN IBAMA nº 21/2009, de 15 de julho a 15 de '
+        'novembro. Três fontes, o mesmo período.\n\n'
         'ATENÇÃO AO QUE MUDOU: o art. 22 revogou a Portaria IBAMA nº 32, de '
         '30 de março de 1998, e a Portaria IBAMA nº 27, de 10 de março de '
         '1999. A compilação da UNIVALI, de junho de 2025, ainda traz as duas '
@@ -312,50 +336,224 @@ const defesos = <Defeso>[
     titulo: 'Enchova ou anchova',
     cientificos: ['Pomatomus saltatrix'],
     periodo: '1º de dezembro a 31 de março',
-    norma: 'Instrução Normativa Interministerial MPA/MMA nº 02/2009',
+    abrangencia: 'Litoral sul: Paraná, Santa Catarina e Rio Grande do Sul.',
+    norma: 'Instrução Normativa Interministerial MPA/MMA nº 02, de 27 '
+        'de novembro de 2009',
     origem: Origem.pendente,
+    ressalva: 'O PERÍODO E A REGIÃO ESTÃO CONFIRMADOS NA FONTE OFICIAL: a '
+        'página de defesos marinhos do IBAMA, atualizada em 21 de janeiro '
+        'de 2026, traz esta norma para a anchova (Pomatomus saltatrix) no '
+        'litoral sul — PR, SC e RS — de 1º de dezembro a 31 de março, com '
+        'declaração de estoque até 7 de dezembro.\n\n'
+        'O que ainda falta é o TEXTO da norma no Diário Oficial. Por isso '
+        'ela continua marcada como a conferir: as datas e os estados o '
+        'aplicativo já pode afirmar; os artigos, não. Para o enquadramento, '
+        'consulte a Instrução Normativa Interministerial MPA/MMA nº 02, de '
+        '27 de novembro de 2009.',
     detalhe: 'A mesma norma traz ainda, segundo a compilação: captura '
         'permissível de até 5% do total desembarcado para embarcações '
         'não autorizadas, como fauna acompanhante; e área interditada '
         'na faixa de 5 milhas náuticas da costa para embarcações com '
         'arqueação bruta superior a 20.',
   ),
+  // ------------------------------- camarões na Baía da Babitonga (SC)
+  Defeso(
+    titulo: 'Camarões na Baía da Babitonga',
+    cientificos: [
+      'Litopenaeus schmitti',
+      'Penaeus schmitti',
+      'Farfantepenaeus paulensis',
+      'Penaeus paulensis',
+    ],
+    periodo: '1º de novembro a 31 de janeiro',
+    abrangencia: 'Somente o INTERIOR da Baía da Babitonga, em Santa Catarina. Fora dela, quem manda é outra norma.',
+    norma: 'Portaria IBAMA nº 70, de 30 de outubro de 2003',
+    origem: Origem.conferida,
+    ressalva: 'SÃO TRÊS DEFESOS DE CAMARÃO DIFERENTES EM SANTA CATARINA, e '
+        'um não vale pelo outro:\n'
+        '· o interior da Baía da Babitonga, por esta Portaria — 1º de '
+        'novembro a 31 de janeiro;\n'
+        '· o Complexo Lagunar Sul, pela Portaria Interministerial MPA/MMA '
+        'nº 65/2026 — permitido de 16 de novembro a 14 de julho;\n'
+        '· o mar aberto, pela Portaria SAP/MAPA nº 656/2022.\n'
+        'Antes de aplicar, veja em qual dos três a embarcação está.\n\n'
+        'VIGÊNCIA: a página oficial de defesos marinhos do IBAMA, '
+        'atualizada em 21 de janeiro de 2026, traz esta Portaria como a '
+        'norma da Baía da Babitonga, com o mesmo período de 1º de novembro '
+        'a 31 de janeiro, e disponibiliza o texto dela.',
+    detalhe: 'DEFESO (art. 1º)\n'
+        'Proibida, anualmente, de 1º de novembro a 31 de janeiro, a pesca '
+        'de camarão-branco (Litopenaeus schmitti) e camarão-rosa '
+        '(Farfantepenaeus paulensis) no interior da Baía da Babitonga, no '
+        'Estado de Santa Catarina.\n'
+        'Parágrafo único: tolera-se o desembarque dessas espécies até o '
+        'TERCEIRO DIA ÚTIL após o início do defeso.\n\n'
+        'DECLARAÇÃO DE ESTOQUE (art. 2º)\n'
+        'Quem captura, conserva, beneficia ou comercializa essas espécies '
+        'deve entregar ao IBAMA, até o SEXTO DIA ÚTIL a partir do início '
+        'do defeso, a relação detalhada dos produtos estocados, indicando '
+        'os locais de armazenamento.\n\n'
+        'PRODUTO DE FORA (art. 3º)\n'
+        'Vedados o transporte interestadual, a estocagem, o beneficiamento '
+        'e a comercialização de camarão vindo de áreas NÃO abrangidas por '
+        'este defeso sem comprovação da origem.\n'
+        '§ 1º A comprovação é a Guia de Transporte mais a Nota Fiscal, que '
+        'devem acompanhar o produto da origem até o destino final.\n'
+        '§ 2º A Guia é obtida na unidade do IBAMA mais próxima. Ela vale '
+        'só até o 2º dia após a assinatura, e só para o transporte até o '
+        'destino.\n\n'
+        'SANÇÃO (art. 4º)\n'
+        'Penalidades da Lei nº 9.605, de 12 de fevereiro de 1998, e do '
+        'Decreto nº 3.179, de 21 de setembro de 1999.\n\n'
+        'REVOGAÇÃO (art. 6º)\n'
+        'Revogou a Portaria IBAMA nº 134/02-N, de 11 de outubro de 2002.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 3 de novembro de 2003, edição nº 213. Assinou Marcus Luiz '
+        'Barroso Barros, Presidente do IBAMA.',
+  ),
   Defeso(
     titulo: 'Bagre rosado',
-    cientificos: ['Genidens genidens', 'Genidens barbus', 'Cathorops agassizii'],
+    cientificos: ['Genidens genidens', 'Genidens barbus'],
     periodo: '1º de janeiro a 31 de março',
-    norma: 'Portaria SUDEPE N-42/1984',
-    origem: Origem.pendente,
-    ressalva: 'A compilação registra ainda a Portaria Interministerial nº '
-        '39/2018, que proíbe a pesca direcionada, o transporte, o '
-        'desembarque e a comercialização de Genidens barbus nas águas '
-        'jurisdicionais brasileiras, exceto nas adjacentes a São Paulo e '
-        'ao Paraná. Nenhuma das duas foi conferida no aplicativo.',
+    abrangencia: 'Rio Grande do Sul, Santa Catarina, Paraná e São Paulo (art. 1º). E mais: durante esse mesmo prazo, o transporte, o desembarque, a retenção e a comercialização do bagre-branco ficam proibidos em TODO o território nacional, pelo art. 2º, § 6º da Portaria Interministerial nº 39/2018.',
+    norma: 'Portaria SUDEPE nº N-42, de 18 de outubro de 1984',
+    origem: Origem.conferida,
+    ressalva: 'ESTA NORMA DE 1984 SEGUE EM VIGOR, e não por presunção. O '
+        'art. 2º, § 5º da Portaria Interministerial nº 39, de 26 de julho '
+        'de 2018, determina que a captura do bagre-branco "respeitará as '
+        'restrições estabelecidas pela Portaria nº N-42, de 18 de outubro '
+        'de 1984, da Superintendência do Desenvolvimento da Pesca". Uma '
+        'norma de 2018, assinada por dois ministros, manda cumprir a de '
+        '1984.\n\n'
+        'QUAIS PEIXES. A portaria de 1984 escreve "bagre rosado (Genidens '
+        'genidens, Netuma barba ou Tachysurus barbus, T. upsulonophorus e '
+        'T. agassisi)". Netuma barba e Tachysurus barbus são nomes antigos '
+        'do Genidens barbus, o bagre-branco — e é por isso que a Portaria '
+        '39/2018 remete a esta. A Instrução Normativa Interministerial '
+        'MPA/MMA nº 10/2011, ao listar as espécies de cada modalidade, '
+        'também escreve "Bagre rosado (Genidens genidens, Genidens '
+        'barbus)".\n\n'
+        'Os outros dois nomes de 1984 — T. upsulonophorus e T. agassisi — '
+        'o aplicativo NÃO conseguiu corresponder a nomes atuais com '
+        'segurança, e por isso não os afirma. Diante de outro bagre da '
+        'região entre 1º de janeiro e 31 de março, consulte o texto da '
+        'portaria.',
+    detalhe: 'DEFESO (art. 1º)\n'
+        'Proibida, anualmente, no período de 1º de janeiro a 31 de março, '
+        'a captura do bagre rosado nas águas que banham os Estados do Rio '
+        'Grande do Sul, Santa Catarina, Paraná e São Paulo.\n\n'
+        'TAMANHO MÍNIMO (art. 2º)\n'
+        '30 cm de comprimento total, no período permitido à pesca.\n'
+        '§ 1º Comprimento total é a distância entre a ponta do focinho e a '
+        'extremidade posterior da nadadeira caudal.\n'
+        '§ 2º Admite-se tolerância de 10% sobre o PESO TOTAL dos '
+        'indivíduos capturados com dimensão inferior à estabelecida — '
+        'tolerância sobre o peso, não sobre a medida de cada peixe.\n\n'
+        'ATENÇÃO AO NÚMERO. Para o bagre-branco (Genidens barbus) existem '
+        'hoje três medidas em normas diferentes: 30 cm aqui, 40 cm na IN '
+        'MMA nº 53/2005 e 45 cm no art. 2º, § 1º, I da Portaria '
+        'Interministerial nº 39/2018. O aplicativo não escolhe por conta '
+        'própria — veja o ponto "Onde a IN 53 e o Plano de Recuperação dão '
+        'números diferentes".\n\n'
+        'DECLARAÇÃO DE ESTOQUE (art. 3º)\n'
+        'As pessoas jurídicas estabelecidas no RS, em SC, no PR e em SP '
+        'que industrializam o rosado devem, anualmente, até 31 de '
+        'dezembro, informar seus estoques aos Coordenadores Regionais da '
+        'SUDEPE. A SUDEPE não existe mais; a quem essa declaração deve ser '
+        'feita hoje, o aplicativo não afirma.\n\n'
+        'SANÇÃO (art. 4º)\n'
+        'Penalidades do Decreto-Lei nº 221, de 28 de fevereiro de 1967, e '
+        'demais legislação complementar.\n\n'
+        'REVOGAÇÃO (art. 5º)\n'
+        'Revogou a Portaria nº N-27, de 28 de julho de 1983.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 23 de outubro de 1984. Assinou José Ubirajara Coelho de '
+        'Souza Timm, Superintendente.',
   ),
   Defeso(
     titulo: 'Sardinha-verdadeira',
     cientificos: ['Sardinella brasiliensis'],
     periodo: '1º de outubro a 28 de fevereiro',
-    norma: 'Instrução Normativa SAP/MAPA nº 18/2020',
-    origem: Origem.pendente,
-    detalhe: 'Segundo a compilação, na área compreendida entre os '
-        'paralelos 22°00\' Sul (Cabo de São Tomé, Rio de Janeiro) e '
-        '28°36\' Sul (Cabo de Santa Marta, Santa Catarina).',
+    abrangencia: 'Entre os paralelos 22 graus Sul (Cabo de São Tomé, RJ) '
+        'e 28 graus e 36 minutos Sul (Cabo de Santa Marta, SC). ATENÇÃO: '
+        'o limite sul fica dentro de Santa Catarina, na altura de Laguna '
+        '— do Cabo de Santa Marta para o sul, este defeso não alcança.',
+    norma: 'IN SAP/MAPA nº 18, de 10 de junho de 2020, que deu nova '
+        'redação aos arts. 4º e 5º da IN IBAMA nº 15, de 21 de maio '
+        'de 2009',
+    origem: Origem.conferida,
+    ressalva: 'O art. 2º da IN 18/2020 previa que o período fosse '
+        'avaliado em junho de 2021 por um Comitê Científico coordenado '
+        'pela SAP/MAPA. Não se obteve o resultado dessa avaliação.',
+    detalhe: 'DEFESO (art. 4º, na redação de 2020)\n'
+        'Proibida, anualmente, a captura da sardinha-verdadeira '
+        '(Sardinella brasiliensis) na área compreendida entre os '
+        'paralelos 22 graus Sul (Cabo de São Tomé, Rio de Janeiro) e 28 '
+        'graus e 36 minutos Sul (Cabo de Santa Marta, Santa Catarina), '
+        'de 1º de outubro a 28 de fevereiro.\n'
+        'Parágrafo único: o desembarque só é permitido até o dia 3 de '
+        'outubro de cada ano.\n\n'
+        'DECLARAÇÃO DE ESTOQUE (art. 5º, na redação de 2020)\n'
+        'Quem transporta, armazena, comercializa, beneficia ou '
+        'industrializa deve declarar os estoques in natura existentes, '
+        'congelados ou não, no dia 3 de outubro de cada ano.\n'
+        '§ 1º A declaração é entregue até 9 de outubro nas '
+        'Superintendências Federais de Agricultura do estado, ou em '
+        'sistema eletrônico da SAP/MAPA.\n'
+        '§ 2º A declaração deve acompanhar o produto até o destino '
+        'final.\n\n'
+        'AMOSTRAGEM (art. 3º da IN 18/2020)\n'
+        'As empresas sob Serviço de Inspeção Federal que comprarem '
+        'direto de produtores nacionais preenchem os Anexos II e III. O '
+        'Anexo II é aplicado no desembarque, para toda embarcação de '
+        'cerco/traineira que tenha a sardinha como espécie-alvo. Para o '
+        'Anexo III, uma amostra de 250 a 300 indivíduos é medida e pesada '
+        'semanalmente, e 60 deles congelados para recolhimento.',
   ),
   Defeso(
     titulo: 'Sardinha-verdadeira para isca-viva',
     cientificos: ['Sardinella brasiliensis'],
     periodo: '15 de junho a 31 de julho',
-    norma: 'Instrução Normativa IBAMA nº 16/2009',
-    origem: Origem.pendente,
-    detalhe: 'Segundo a compilação, proíbe a captura e a estocagem a '
-        'bordo por parte das embarcações autorizadas à captura de atuns '
-        'pelo sistema de vara e isca-viva.',
+    abrangencia: 'Embarcações permissionadas para a captura de atuns e '
+        'afins pelo sistema de vara e anzol com isca-viva. A permissão do '
+        'art. 1º vale entre os paralelos 22 graus Sul (Cabo de São Tomé, '
+        'RJ) e 28 graus e 36 minutos Sul (Cabo de Santa Marta, SC).',
+    norma: 'IN IBAMA nº 16, de 21 de maio de 2009',
+    origem: Origem.conferida,
+    detalhe: 'A EXCEÇÃO (art. 1º)\n'
+        'É permitida a captura de sardinha-verdadeira com comprimento '
+        'total INFERIOR a 17 cm, exclusivamente às embarcações '
+        'permissionadas para atuns e afins pelo sistema de vara e anzol '
+        'com isca-viva, para uso próprio e unicamente como isca-viva, na '
+        'área entre 22 graus Sul (Cabo de São Tomé, RJ) e 28 graus e 36 '
+        'minutos Sul (Cabo de Santa Marta, SC).\n'
+        '§ 1º Ainda assim, é proibido capturar exemplares com menos de '
+        '5 cm de comprimento total.\n'
+        '§ 2º Comprimento total é a medida entre a ponta do focinho e a '
+        'extremidade da nadadeira caudal.\n\n'
+        'O PERÍODO FECHADO (art. 2º)\n'
+        'Proibidos, anualmente, de 15 de junho a 31 de julho, a captura, '
+        'a estocagem em qualquer área, o armazenamento, o transporte em '
+        'tinas e a comercialização da sardinha-verdadeira por essas '
+        'embarcações.\n'
+        'Parágrafo único: tolera-se no máximo 8% de sardinha-verdadeira, '
+        'em número, em relação à captura total de espécies alternativas '
+        'usadas como isca-viva e estocadas em tinas, por embarcação, no '
+        'ato da fiscalização.\n\n'
+        'PARA QUEM NÃO É DA FROTA DE VARA E ISCA-VIVA (art. 3º)\n'
+        'Proibidos, em qualquer época e em qualquer área, a captura, a '
+        'estocagem, o armazenamento, o transporte em tinas e a '
+        'comercialização de sardinha-verdadeira ABAIXO DE 17 CM por '
+        'qualquer embarcação não permissionada nos termos do art. 1º.\n'
+        '§ 1º Acima de 17 cm, para uso como isca-viva por outras '
+        'modalidades, só fora dos períodos de defeso e se adquirida de '
+        'embarcações legalmente permissionadas.',
   ),
   Defeso(
     titulo: 'Garoupa-verdadeira',
     cientificos: ['Epinephelus marginatus'],
     periodo: '1º de novembro a 28 de fevereiro',
+    abrangencia: 'Águas jurisdicionais brasileiras. Alcança Santa Catarina.',
     norma: 'Portaria Interministerial nº 41/2018',
     origem: Origem.pendente,
     ressalva: 'Esta é uma das portarias que a compilação indica como '
@@ -373,6 +571,7 @@ const defesos = <Defeso>[
     titulo: 'Cherne-verdadeiro e peixe-batata',
     cientificos: ['Hyporthodus niveatus', 'Lopholatilus villarii'],
     periodo: '1º de setembro a 31 de outubro',
+    abrangencia: 'Litoral Sudeste e Sul. Alcança Santa Catarina.',
     norma: 'Portaria Interministerial nº 40/2018',
     origem: Origem.pendente,
     ressalva: 'Também indicada pela compilação como norma que permite '
@@ -387,45 +586,229 @@ const defesos = <Defeso>[
     titulo: 'Caranguejo-uçá',
     cientificos: ['Ucides cordatus'],
     periodo: '1º de outubro a 30 de novembro (machos e fêmeas) e '
-        '1º de dezembro a 31 de dezembro (somente fêmeas)',
-    norma: 'Portaria IBAMA nº 52/2003',
-    origem: Origem.pendente,
-    detalhe: 'Segundo a compilação: proibida a captura de fêmeas ovadas '
-        'e a captura de indivíduos com largura de carapaça inferior a '
-        'seis centímetros, bem como de partes separadas do corpo '
-        '(quelas, pinças ou garras).',
+        '1º a 31 de dezembro (somente fêmeas)',
+    abrangencia: 'Espírito Santo, Rio de Janeiro, São Paulo, Paraná e '
+        'Santa Catarina.',
+    norma: 'Portaria IBAMA nº 52, de 30 de setembro de 2003',
+    origem: Origem.conferida,
+    ressalva: 'Existe uma Portaria Interministerial MPA/MMA nº 45, de 12 '
+        'de janeiro de 2026, também sobre o caranguejo-uçá, e ela NÃO '
+        'substituiu esta. As duas convivem porque tratam de regiões '
+        'diferentes: a de 2026 vale para o Amapá, o Pará, o Maranhão, o '
+        'Piauí, o Ceará, o Rio Grande do Norte, a Paraíba, Pernambuco, '
+        'Alagoas, Sergipe e a Bahia, e fixa o defeso da "andada" em '
+        'janelas curtas de cinco ou seis dias. Não alcança Santa '
+        'Catarina.\n\n'
+        'Confirmado em 29/08/2026 na notícia do Ministério da Pesca e '
+        'Aquicultura sobre a publicação da Portaria 45/2026. A tabela de '
+        'defesos do MPA trazia "RJ, SP, PR e Santa Catarina" na linha '
+        'dela — leitura errada da tabela, cujas colunas se embaralham.\n\n'
+        'Em Santa Catarina, quem vale é esta Portaria de 2003.\n\n'
+        'CONFIRMADO NA FONTE OFICIAL: a página de defesos marinhos do '
+        'IBAMA, atualizada em 21 de janeiro de 2026, traz as duas normas '
+        'lado a lado — a Portaria MPA/MMA nº 45/2026 para os estados do '
+        'Norte e do Nordeste, em janelas de cinco ou seis dias, e ESTA '
+        'Portaria IBAMA nº 52/2003 para o Espírito Santo, o Rio de '
+        'Janeiro, São Paulo, o Paraná e Santa Catarina, com os períodos de '
+        '1º de outubro a 30 de novembro e de 1º a 31 de dezembro.\n\n'
+        'A mesma página mostra que esse regime do Norte e do Nordeste vem '
+        'se renovando ano a ano em portaria própria — a de 2026 sucedeu a '
+        'Portaria Interministerial MPA/MMA nº 22, de 30 de dezembro de '
+        '2024, que por sua vez revogou a nº 325/2020. Nenhuma delas tocou '
+        'na Portaria de 2003.',
+    detalhe: 'DEFESO (art. 1º)\n'
+        'Proibidos, anualmente, a captura, a manutenção em cativeiro, o '
+        'transporte, o beneficiamento, a industrialização, o '
+        'armazenamento e a comercialização do caranguejo-uçá (Ucides '
+        'cordatus), também conhecido por caranguejo-do-mangue, '
+        'caranguejo-verdadeiro ou catanhão, no Espírito Santo, Rio de '
+        'Janeiro, São Paulo, Paraná e Santa Catarina:\n'
+        'I - de 1º de outubro a 30 de novembro: todos os indivíduos, '
+        'machos e fêmeas.\n'
+        'II - de 1º a 31 de dezembro: somente as fêmeas.\n'
+        '§ 1º Manutenção em cativeiro é o confinamento artificial de '
+        'caranguejos vivos em qualquer ambiente.\n'
+        '§ 2º Quem captura, conserva, beneficia, industrializa, armazena '
+        'ou comercializa deve entregar ao IBAMA, até o 5º dia útil de '
+        'outubro, a relação detalhada dos produtos estocados congelados '
+        'ou pré-cozidos, indicando os locais de armazenamento.\n\n'
+        'O QUE VALE O ANO INTEIRO (art. 4º)\n'
+        'Proibidos, em qualquer época, em toda a região Sudeste e Sul, a '
+        'captura, a coleta, o transporte, o beneficiamento, a '
+        'industrialização, o armazenamento e a comercialização de:\n'
+        'I - fêmeas ovadas;\n'
+        'II - indivíduos com largura de carapaça inferior a 6,0 cm;\n'
+        'III - partes isoladas (quelas, pinças ou garras).\n'
+        'Parágrafo único: a largura de carapaça é medida sobre o dorso, '
+        'na maior distância de uma margem lateral à outra.\n\n'
+        'PETRECHOS (art. 5º)\n'
+        'Proibidos, o ano inteiro, armadilhas, petrechos ou instrumentos '
+        'cortantes e produtos químicos. Excetuam-se o "chuncho" — '
+        'instrumento de madeira em forma de clave, afilado na ponta, que '
+        'alarga as tocas — e o "gancho", haste com a ponta em ângulo que '
+        'prolonga o braço do catador.\n\n'
+        'TRANSPORTE ENTRE ESTADOS (art. 3º)\n'
+        'Vedados o transporte interestadual e a comercialização sem '
+        'comprovação de origem, por guia obtida junto ao IBAMA, que deve '
+        'acompanhar o produto da origem ao destino final.\n\n'
+        'REGRA LOCAL MAIS RESTRITIVA (art. 2º)\n'
+        'Os gerentes executivos estaduais do IBAMA das regiões Sudeste e '
+        'Sul podem, em portaria específica, estabelecer adequações MAIS '
+        'restritivas, como a suspensão da captura nos dias de "andada" — '
+        'o período reprodutivo em que os caranguejos saem das galerias e '
+        'andam pelo manguezal.\n\n'
+        'APREENSÃO (art. 6º)\n'
+        'O produto apreendido, quando vivo, deve ser devolvido ao '
+        'manguezal, preferencialmente ao local da captura, observado o '
+        'Decreto nº 3.179, de 21 de setembro de 1999.\n\n'
+        'SANÇÃO (art. 7º)\n'
+        'Penalidades da Lei nº 9.605, de fevereiro de 1998, e do Decreto '
+        'nº 3.179/99.\n\n'
+        'REVOGAÇÃO (art. 8º)\n'
+        'Revogou a Portaria IBAMA nº 124, de 25 de setembro de 2002.\n\n'
+        'DE ONDE ELA SAIU\n'
+        'Dos considerandos: o Decreto-Lei nº 221, de 28 de fevereiro de '
+        '1967, e as recomendações da 4ª Reunião de Avaliação e Ordenamento '
+        'do Caranguejo-Uçá das Regiões Sudeste e Sul do Brasil.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 2 de outubro de 2003, edição nº 191. Assinou Marcus Luiz '
+        'Barroso Barros, Presidente do IBAMA.',
   ),
   Defeso(
     titulo: 'Lagostas',
-    cientificos: ['Panulirus argus', 'Panulirus laevicauda',
-        'Panulirus echinatus'],
-    periodo: '1º de novembro a 30 de abril',
-    norma: 'Portaria SAP/MAPA nº 221/2021',
-    origem: Origem.pendente,
+    cientificos: [
+      'Panulirus argus',
+      'Panulirus laevicauda',
+      'Panulirus echinatus',
+    ],
+    periodo: 'Pesca permitida de 1º de maio a 31 de outubro',
+    abrangencia: 'NÃO ALCANÇA SANTA CATARINA. O art. 4º permite a pesca '
+        'desde a fronteira da Guiana Francesa com o Amapá até a divisa do '
+        'Espírito Santo com o Rio de Janeiro. A norma para no ES: em '
+        'Santa Catarina ela não se aplica.',
+    norma: 'Portaria SAP/MAPA nº 221, de 8 de junho de 2021',
+    origem: Origem.conferida,
+    ressalva: 'Esta entrada fica no aplicativo para registrar por que a '
+        'lagosta NÃO aparece no calendário de Santa Catarina. O '
+        'levantamento da UNIVALI indicava um defeso de 1º de novembro a '
+        '30 de abril, e as datas batem com o art. 8º — mas a área da '
+        'norma termina na divisa ES/RJ. Se houver norma de lagosta que '
+        'alcance Santa Catarina, ela ainda não foi localizada.',
+    detalhe: 'ONDE VALE (art. 4º)\n'
+        'Permitida a pesca da lagosta vermelha (Panulirus argus), verde '
+        '(Panulirus laevicauda) e pintada (Panulirus echinatus) desde a '
+        'fronteira da Guiana Francesa com o Amapá até a divisa do '
+        'Espírito Santo com o Rio de Janeiro. Parágrafo único: proibida a '
+        'menos de 4 milhas náuticas da costa em parte dessa área.\n\n'
+        'TEMPORADA (art. 8º)\n'
+        'Pesca permitida das 00:00 de 1º de maio às 23h59 de 31 de '
+        'outubro. O desembarque deve ocorrer até as 23h59 de 31 de '
+        'outubro.\n\n'
+        'PETRECHOS (arts. 5º e 6º)\n'
+        'Somente armadilhas do tipo covo ou manzuá e cangalha, com malha '
+        'quadrada de no mínimo 5 cm entre nós consecutivos, tolerância de '
+        '2,5 cm. Proibidos rede de emalhe do tipo caçoeira e marambaia, '
+        'entre outros.\n\n'
+        'ESFORÇO (art. 3º)\n'
+        'Proibido o aumento do esforço de pesca: sem novas Autorizações '
+        'de Pesca para embarcações nas modalidades que capturam lagosta, '
+        'e sem incremento na quantidade de armadilhas já autorizada.',
   ),
   Defeso(
     titulo: 'Mexilhão ou marisco da pedra',
     cientificos: ['Perna perna'],
     periodo: '1º de setembro a 31 de dezembro',
-    norma: 'Instrução Normativa IBAMA nº 105/2006',
-    origem: Origem.pendente,
+    abrangencia: 'Espírito Santo, Rio de Janeiro, São Paulo, Paraná, '
+        'Santa Catarina e Rio Grande do Sul. ATENÇÃO: o defeso alcança '
+        'apenas o mexilhão de ESTOQUE NATURAL. O de cultivo segue '
+        'permitido, mediante nota fiscal e comprovação de origem.',
+    norma: 'IN IBAMA nº 105, de 20 de julho de 2006',
+    origem: Origem.conferida,
+    detalhe: 'DEFESO (art. 3º)\n'
+        'Proibidos, anualmente, de 1º de setembro a 31 de dezembro, a '
+        'extração, o abastecimento dos cultivos, o transporte, o '
+        'beneficiamento, a industrialização, o armazenamento e a '
+        'comercialização de mexilhão (Perna perna), EM QUALQUER FASE DO '
+        'CICLO DE VIDA, proveniente dos ESTOQUES NATURAIS, no Espírito '
+        'Santo, Rio de Janeiro, São Paulo, Paraná, Santa Catarina e Rio '
+        'Grande do Sul.\n\n'
+        'O CULTIVO NÃO PARA (art. 5º)\n'
+        'No período do art. 3º, a comercialização, o transporte e o '
+        'beneficiamento podem ocorrer mediante apresentação de nota '
+        'fiscal e comprovação de que o produto é oriundo de cultivo.\n\n'
+        'TAMANHO (arts. 2º e 7º)\n'
+        'Semente: indivíduo jovem, entre 2,0 e 3,0 cm de comprimento '
+        'total, medido no maior eixo.\n'
+        'Adulto: 5,0 cm ou mais de comprimento total, no maior eixo.\n'
+        'Art. 7º: proibida a comercialização de mexilhões de estoque '
+        'natural com comprimento total igual ou inferior a 5,0 cm. '
+        'Parágrafo único: tolerância máxima de 20% em peso do total '
+        'comercializado abaixo do mínimo; esse percentual não pode ser '
+        'comercializado e, quando vivo, deve voltar ao ambiente '
+        'natural.\n\n'
+        'QUEM PODE EXTRAIR DO ESTOQUE NATURAL (art. 6º)\n'
+        'Apenas pescadores profissionais cadastrados no RGP e pescadores '
+        'amadores permissionados, estes observada a cota máxima de norma '
+        'específica.\n\n'
+        'SEMENTES (arts. 8º e 9º)\n'
+        'A extração de sementes no estoque natural é autorizada apenas a '
+        'malacocultores licenciados ou signatários de TAC, com uma única '
+        'autorização anual por malacocultor e cota máxima de 3% da '
+        'produção total declarada no Registro de Aquicultor. As sementes '
+        'só podem ser retiradas acima da linha de baixa-mar, em faixas '
+        'verticais alternadas de até 50 cm — ao retirar uma faixa, outra '
+        'de igual tamanho deve ser preservada. O art. 9º proíbe a '
+        'comercialização de sementes de estoque natural; a de coletores '
+        'artificiais ou raspagem das estruturas de cultivo é permitida '
+        'com comprovação de origem.\n\n'
+        'DECLARAÇÃO DE ESTOQUE (art. 4º)\n'
+        'Entregue às Superintendências do IBAMA até o terceiro dia útil a '
+        'partir do início do defeso.',
   ),
   Defeso(
     titulo: 'Lulas',
-    cientificos: ['Loligo plei', 'Loligo sanpaulensis', 'Lolliguncula brevis'],
-    periodo: 'Permitida de 1º de novembro a 31 de março, em Santa Catarina',
-    norma: 'Portaria Interministerial MPA/MMA nº 14/2024',
-    origem: Origem.pendente,
-    ressalva: 'A norma define a janela em que a pesca é permitida, e não '
-        'um período de proibição. Fora dela, a captura não é permitida.',
-    detalhe: 'Segundo a compilação, a pesca é permitida a pescadores '
-        'profissionais artesanais embarcados ou desembarcados, e a '
-        'embarcações com arqueação bruta até 20 ou permissionadas nas '
-        'modalidades 2.2, 2.4, 3.8, 3.9, 6.7, 6.8, 6.9, 6.10 e 6.11 da '
-        'IN MPA/MMA nº 10/2011. Petrechos: arrasto de fundo (apenas como '
-        'fauna acompanhante), arrasto de praia, linhas de mão com iscas '
-        'artificiais ou naturais (zangarilhos, garatéias) e tarrafas com '
-        'malha mínima de 1,5 cm entre nós opostos.',
+    cientificos: [
+      'Loligo plei',
+      'Loligo sanpaulensis',
+      'Lolliguncula brevis',
+      'Doryteuthis plei',
+      'Doryteuthis sanpaulensis',
+    ],
+    periodo: 'Permitida de 1º de novembro a 31 de março — fora disso, '
+        'não pode',
+    abrangencia: 'Somente Santa Catarina, para pescadores profissionais '
+        'artesanais embarcados ou desembarcados.',
+    norma: 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro '
+        'de 2024',
+    origem: Origem.conferida,
+    detalhe: 'A JANELA (art. 1º)\n'
+        'Permitida a pesca de lulas (Loligo plei, Loligo sanpaulensis, '
+        'Loligo sp., Lolliguncula brevis) por pescadores profissionais '
+        'artesanais, embarcados ou desembarcados, de 1º de novembro a 31 '
+        'de março de cada ano, no estado de Santa Catarina.\n\n'
+        'QUE EMBARCAÇÃO (art. 2º)\n'
+        'Arqueação bruta até 20, E com Autorização de Pesca em uma destas '
+        'modalidades da IN MPA/MMA nº 10/2011: 2.2 emalhe de superfície; '
+        '2.4 emalhe de fundo; 3.8 e 3.9 arrasto de fundo; 6.7 '
+        'diversificada costeira; 6.8, 6.9, 6.10 e 6.11 arrasto de '
+        'praia.\n\n'
+        'DESEMBARCADO (art. 3º)\n'
+        'O pescador artesanal desembarcado deve ter RGP, ou protocolo '
+        'registrado junto ao MPA, conforme a Portaria MPA nº 127, de 29 '
+        'de agosto de 2023.\n\n'
+        'PETRECHOS (art. 4º)\n'
+        'I - arrasto de fundo;\n'
+        'II - arrasto de praia;\n'
+        'III - linhas de mão com iscas artificiais ou naturais, '
+        'chamadas zangarilhos, garateias ou outros nomes regionais; e\n'
+        'IV - tarrafas com malha mínima de 1,5 cm entre nós opostos.\n'
+        'Parágrafo único: nos casos III e IV pode ser usada atração '
+        'luminosa instalada na própria isca, em equipamento submerso, '
+        'em terra firme ou na embarcação.\n\n'
+        'NOTA DO PRODUTOR (arts. 6º e 7º)\n'
+        'O pescador desembarcado comercializa inserindo o número do RGP '
+        'na Nota do Produtor. A embarcação autorizada insere o RGP da '
+        'embarcação e o número desta Portaria.',
   ),
 ];
 

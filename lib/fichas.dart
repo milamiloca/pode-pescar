@@ -2,6 +2,7 @@ import 'ameacadas.dart';
 import 'conflitos.dart';
 import 'dados.dart';
 import 'defesos.dart';
+import 'regimes.dart';
 
 // =====================================================================
 // A LISTA ÚNICA DE ESPÉCIES
@@ -60,6 +61,43 @@ class Ficha {
 
   String get categoriaPorExtenso =>
       lista?.categoriaPorExtenso ?? in53?.categoriaPorExtenso ?? '';
+
+  /// O Plano de Recuperação da espécie, quando localizado. Estar na
+  /// Lista não veda a captura por si só: o art. 4º da Portaria
+  /// 1.666/2026 admite o uso quando há Plano, ato do MMA e norma de
+  /// ordenamento. Ver regimes.dart.
+  Plano? get plano => ameacada ? planoDe(cientifico) : null;
+
+  /// Regulada quando há plano conferido; não verificado quando está na
+  /// Lista e o aplicativo não conferiu. Só faz sentido para ameaçadas.
+  Regime? get regime => ameacada ? regimeDe(cientifico) : null;
+
+  /// A pesca desta espécie é regulada por Plano de Recuperação cujo
+  /// texto foi conferido.
+  bool get temPlano => plano != null && plano!.normaObtida;
+
+  /// Sabe-se que há Plano, mas a norma de ordenamento não foi obtida.
+  /// O aplicativo não dá regra: manda consultar, pelo nome da norma.
+  bool get planoSemNorma => plano != null && !plano!.normaObtida;
+
+  /// O asterisco que a Portaria 1.667 imprime ao lado do item: marca as
+  /// espécies NOVAS na Lista. Ver conflitos.dart para as cinco linhas de
+  /// evidência — a legenda não veio no texto publicado, mas nada aponta
+  /// para o outro lado.
+  bool get marcada => lista?.marca ?? false;
+
+  /// A vedação do art. 3º já vale para esta espécie: ela constava da
+  /// lista anterior, então não tem o prazo do art. 12.
+  bool get vedadaHoje => ameacada && !marcada;
+
+  /// Espécie nova na Lista: a vedação começa em 25 de outubro de 2026,
+  /// pelos 180 dias do art. 12 da Portaria 1.666.
+  bool get vedadaEm2510 => ameacada && marcada;
+
+  /// Está na Lista e o aplicativo não conferiu se há plano. Nesse caso
+  /// a vedação do art. 3º vale por padrão, mas não como resposta
+  /// fechada do aplicativo.
+  bool get planoNaoVerificado => ameacada && plano == null;
 
   /// Defesos e temporadas que alcançam esta espécie. Vêm de
   /// defesos.dart, cada um com a origem do que está escrito nele.

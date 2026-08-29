@@ -5,6 +5,7 @@ import 'dados.dart';
 import 'defesos.dart';
 import 'desenhos.dart';
 import 'fichas.dart';
+import 'regimes.dart';
 import 'tela_fiscal.dart';
 import 'tela_apoio.dart';
 import 'tela_conflitos.dart';
@@ -248,7 +249,7 @@ class _Linha extends StatelessWidget {
             : '${f.lista!.familia} · ${f.lista!.ordem}');
 
     return Cartao(
-      destaque: f.proibidaHoje ? corNaoPode : null,
+      destaque: f.vedadaHoje && !f.temPlano ? corNaoPode : null,
       aoTocar: () => Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => TelaFicha(f: f),
       )),
@@ -318,18 +319,22 @@ class _Etiqueta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (f.temPlano) {
+      return const Selo('regulada', cor: corMar, forte: true);
+    }
     if (f.temDuvida) {
       return const Selo('verificar', cor: corBoia, forte: true);
     }
-    if (f.proibidaHoje) {
-      return const Selo('não pode', cor: corNaoPode, forte: true);
+    if (f.planoSemNorma) {
+      return const Selo('ver norma', cor: corBoia, forte: true);
     }
-    if (f.proibidaDepois) {
+    if (f.vedadaEm2510) {
       return const Selo('25/10', cor: corBoia, forte: true);
     }
     if (f.ameacada) {
-      return const Selo('na Lista', cor: corNaoPode);
+      return const Selo('não pode', cor: corNaoPode, forte: true);
     }
+    if (!f.temTamanho) return const SizedBox.shrink();
     return Text(
       '${f.in53!.tamanho} cm',
       style: const TextStyle(
@@ -409,10 +414,7 @@ class TelaFicha extends StatelessWidget {
               const SizedBox(height: 18),
 
               // 1. o veredito
-              if (f.proibidaHoje) ..._proibida(context),
-              if (f.proibidaDepois) ..._aindaNao(context),
-              if (f.ameacada && !f.dataConferida) ..._naListaSemData(context),
-              if (!f.ameacada && f.temTamanho) ..._medida(),
+              ..._veredito(context),
 
               // 2. o que ainda não está confirmado
               if (f.temDuvida) ..._duvidas(),
@@ -471,17 +473,125 @@ class TelaFicha extends StatelessWidget {
     );
   }
 
+  // ---------- qual veredito a ficha dá ----------
+  //
+  // A ordem importa e é a da norma. O Plano de Recuperação vem
+  // primeiro porque o art. 4º da Portaria 1.666 é exceção ao art. 3º:
+  // onde há plano, a pesca é regulada, e dizer "vedada" ali seria
+  // errado. Só depois vem a vedação, e só no fim o tamanho mínimo.
+  List<Widget> _veredito(BuildContext context) {
+    if (f.temPlano) return _reguladaPorPlano(context);
+    if (f.planoSemNorma) return _planoSemNorma(context);
+    if (f.vedadaEm2510) return _aindaNao(context);
+    if (f.ameacada) return _proibida(context);
+    if (f.temTamanho) return _medida();
+    return const [];
+  }
+
+  // ---------- pesca regulada por Plano de Recuperação ----------
+
+  List<Widget> _reguladaPorPlano(BuildContext context) {
+    final p = f.plano!;
+    return [
+      _Bloco(
+        cor: corProfundo,
+        etiqueta: '${f.categoriaPorExtenso.toUpperCase()}  ·  '
+            'PLANO DE RECUPERAÇÃO',
+        titulo: 'Pesca regulada',
+        texto: 'Está na Lista, mas a captura não é vedada: há Plano de '
+            'Recuperação, ato do Ministério do Meio Ambiente reconhecendo '
+            'o uso e norma de ordenamento (art. 4º da Portaria 1.666). '
+            'Valem as regras abaixo, não a vedação do art. 3º.',
+      ),
+      const SizedBox(height: 12),
+      _RegraDoPlano(p: p),
+      if (p.emVigor.isNotEmpty) ...[
+        const SizedBox(height: 12),
+        _EstaSendoAplicada(texto: p.emVigor),
+      ],
+      const SizedBox(height: 12),
+      _Aviso(
+        etiqueta: 'CONFIRMAR A VIGÊNCIA',
+        titulo: p.atoDoMMA,
+        texto: avisoVigencia,
+      ),
+      // O aviso só sai quando os números realmente diferem. A garoupa
+      // e o peixe-batata têm o mesmo mínimo nas duas normas; alarmar
+      // ali gastaria a atenção de quem precisa dela no bagre-branco e
+      // no badejo quadrado.
+      if (f.temTamanho && f.in53!.tamanho != p.cmMinimo) ...[
+        const SizedBox(height: 12),
+        _TamanhoDivergente(cmIn53: f.in53!.tamanho, cmPlano: p.cmMinimo),
+      ],
+      if (p.cmMaximo > 0) ...[
+        const SizedBox(height: 12),
+        _TetoDeTamanho(cm: p.cmMaximo, temIn53: f.temTamanho),
+      ],
+    ];
+  }
+
+  // ---------- há Plano, mas a norma não foi obtida ----------
+  //
+  // O pior erro possível aqui seria repetir "captura vedada", porque
+  // onde existe Plano a vedação do art. 3º não é automática. O segundo
+  // pior seria inventar uma regra. O aplicativo faz a terceira coisa:
+  // diz o nome da norma e manda consultar.
+
+  List<Widget> _planoSemNorma(BuildContext context) {
+    final p = f.plano!;
+    return [
+      _Bloco(
+        cor: corBoia,
+        etiqueta: '${f.categoriaPorExtenso.toUpperCase()}  ·  '
+            'PLANO DE RECUPERAÇÃO',
+        titulo: 'Consulte a norma',
+        texto: 'Esta espécie tem Plano de Recuperação. Onde há Plano, a '
+            'vedação do art. 3º da Portaria 1.666 não se aplica sozinha — '
+            'quem diz o que pode é a norma de ordenamento, e o aplicativo '
+            'não obteve o texto dela.',
+      ),
+      const SizedBox(height: 12),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 8),
+        decoration: BoxDecoration(
+          color: corSuperficie,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: corBorda),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CampoDoPlano(
+                rotulo: 'NORMA DE ORDENAMENTO A CONSULTAR',
+                texto: p.ordenamento,
+                destaque: true),
+            _CampoDoPlano(
+                rotulo: 'PLANO DE RECUPERAÇÃO', texto: p.atoDoMMA),
+            _CampoDoPlano(rotulo: 'PARA ONDE VALE', texto: p.abrangencia),
+          ],
+        ),
+      ),
+      const SizedBox(height: 12),
+      const _Aviso(etiqueta: 'O QUE O APLICATIVO NÃO DIZ', texto: remissao),
+    ];
+  }
+
   // ---------- proibida hoje ----------
 
   List<Widget> _proibida(BuildContext context) => [
         _Bloco(
           cor: corNaoPode,
           etiqueta: f.categoriaPorExtenso.toUpperCase(),
-          titulo: 'Captura vedada',
+          titulo: 'Vedação por padrão',
           texto: 'Vedados também o transporte, a guarda a bordo, o '
               'armazenamento, o manejo, o beneficiamento e a comercialização '
               '(art. 3º da Portaria 1.666).',
         ),
+        const SizedBox(height: 12),
+        const _OQueADataQuerDizer(nova: false, dias: 0),
+        const SizedBox(height: 12),
+        const _PlanoNaoConferido(),
         const SizedBox(height: 10),
         const _MesmaProtecao(),
         if (f.temTamanho) ...[
@@ -502,52 +612,20 @@ class TelaFicha extends StatelessWidget {
             ? 'Passa a ser vedada\nem 25 de outubro'
             : 'Captura vedada',
         texto: dias > 0
-            ? 'A espécie não constava da Portaria MMA nº 445/2014. Pelo '
-                'art. 12 da Portaria 1.666, a vedação do art. 3º entra em '
-                'vigor em 25/10/2026 — faltam $dias dias. Até lá vale o '
-                'tamanho mínimo da IN 53.'
+            ? 'O item desta espécie tem asterisco na Lista: ela é nova, '
+                'não constava da lista anterior. Pelo art. 12 da Portaria '
+                '1.666, a vedação do art. 3º entra em vigor em 25/10/2026 '
+                '— faltam $dias dias.'
             : 'O prazo de 180 dias do art. 12 da Portaria 1.666 venceu em '
                 '25/10/2026. A vedação do art. 3º está em vigor.',
       ),
+      const SizedBox(height: 12),
+      _OQueADataQuerDizer(nova: true, dias: dias),
       const SizedBox(height: 10),
       const _MesmaProtecao(),
       if (f.temTamanho && dias > 0) ...[
         const SizedBox(height: 12),
         _MedidaValendo(e: f.in53!),
-      ],
-    ];
-  }
-
-  // ---------- na Lista, sem conferência de data ----------
-  //
-  // Para as 479 espécies fora da IN 53 o app não afirma desde quando a
-  // vedação vale: isso depende de constar ou não da Portaria 445/2014,
-  // e essa conferência só foi feita, uma a uma, para as da IN 53.
-
-  List<Widget> _naListaSemData(BuildContext context) {
-    final dias = diasAteAsNovasProibicoes();
-    return [
-      _Bloco(
-        cor: corNaoPode,
-        etiqueta: f.categoriaPorExtenso.toUpperCase(),
-        titulo: 'Captura vedada',
-        texto: 'Vedados também o transporte, a guarda a bordo, o '
-            'armazenamento, o manejo, o beneficiamento e a comercialização '
-            '(art. 3º da Portaria 1.666).',
-      ),
-      const SizedBox(height: 10),
-      const _MesmaProtecao(),
-      if (dias > 0) ...[
-        const SizedBox(height: 12),
-        _Aviso(
-          etiqueta: 'DESDE QUANDO VALE',
-          texto: 'Espécie que já constava da Portaria MMA nº 445/2014: a '
-              'vedação vale hoje. Espécie que entrou agora: começa em '
-              '25/10/2026, daqui a $dias dias (art. 12 da Portaria 1.666). '
-              'Esta conferência foi feita, espécie por espécie, apenas para '
-              'as $quantasComTamanho da IN 53. Para as demais, confira a '
-              'Portaria 445/2014 antes de autuar.',
-        ),
       ],
     ];
   }
@@ -865,6 +943,243 @@ class _MedidaVencida extends StatelessWidget {
 }
 
 /// As três categorias não são três níveis de vedação.
+/// As regras do Plano, em campos, para consulta em serviço.
+class _RegraDoPlano extends StatelessWidget {
+  final Plano p;
+  const _RegraDoPlano({required this.p});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 8),
+      decoration: BoxDecoration(
+        color: corSuperficie,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: corBorda),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            p.ordenamento.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 10.5,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.1,
+              height: 1.4,
+              color: corMar,
+            ),
+          ),
+          const SizedBox(height: 14),
+          _CampoDoPlano(rotulo: 'PARA ONDE VALE', texto: p.abrangencia),
+          if (p.ondePode.isNotEmpty)
+            _CampoDoPlano(rotulo: 'ONDE PODE', texto: p.ondePode,
+                destaque: true),
+          _CampoDoPlano(rotulo: 'TAMANHO', texto: p.tamanho),
+          if (p.defeso.isNotEmpty)
+            _CampoDoPlano(rotulo: 'PERÍODO FECHADO', texto: p.defeso),
+          _CampoDoPlano(rotulo: 'QUEM PODE', texto: p.quemPode),
+          _CampoDoPlano(rotulo: 'CAPTURA INCIDENTAL', texto: p.incidental),
+        ],
+      ),
+    );
+  }
+}
+
+class _CampoDoPlano extends StatelessWidget {
+  final String rotulo;
+  final String texto;
+  final bool destaque;
+
+  const _CampoDoPlano({
+    required this.rotulo,
+    required this.texto,
+    this.destaque = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            rotulo,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.3,
+              color: destaque ? corNaoPode : corApagada,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            texto,
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.4,
+              fontWeight: destaque ? FontWeight.w600 : FontWeight.w500,
+              color: destaque ? corNaoPode : corTinta,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Onde a IN 53 e o Plano dão números diferentes, os dois aparecem, e
+/// o aplicativo diz qual prevalece e por quê. Esconder um deles seria
+/// mais limpo e menos honesto: quem for autuar vai encontrar os dois.
+class _TamanhoDivergente extends StatelessWidget {
+  final int cmIn53;
+  final int cmPlano;
+
+  const _TamanhoDivergente({required this.cmIn53, required this.cmPlano});
+
+  @override
+  Widget build(BuildContext context) {
+    return _Aviso(
+      etiqueta: 'DOIS NÚMEROS PARA A MESMA ESPÉCIE',
+      titulo: 'IN 53: $cmIn53 cm  ·  Plano: $cmPlano cm',
+      texto: 'A favor do número maior: a norma do Plano é de 2018, treze '
+          'anos posterior à IN 53; é específica de uma espécie, contra as '
+          '35 da IN 53; e é Portaria Interministerial, assinada por dois '
+          'ministros. Pelo art. 2º, § 1º da LINDB, a norma posterior que '
+          'regula inteiramente a matéria revoga a anterior.\n\n'
+          'A favor do número menor: o art. 5º da IN 53 preserva as regras '
+          'de portarias específicas apenas "para espécies que NÃO constam '
+          'nos Anexos I e II" — e esta consta. Lido a contrario, sugere '
+          'que para as espécies dos anexos valem os números dela. E, em '
+          'matéria sancionadora, dúvida real não autua.\n\n'
+          'Confira com o comando qual número aplicar antes de autuar.',
+    );
+  }
+}
+
+/// Prova de que a norma está sendo aplicada. Verde, e não âmbar,
+/// porque não é dúvida: é o órgão fiscalizador agindo sob a norma, com
+/// data. Vale mais que qualquer raciocínio sobre vigência.
+class _EstaSendoAplicada extends StatelessWidget {
+  final String texto;
+  const _EstaSendoAplicada({required this.texto});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: corPode.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: corPode.withValues(alpha: 0.35)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('ESTÁ SENDO APLICADA',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: corPode)),
+          const SizedBox(height: 8),
+          Text(texto,
+              style: const TextStyle(
+                  fontSize: 13.5, height: 1.45, color: corApagada)),
+        ],
+      ),
+    );
+  }
+}
+
+/// O que a data da vedação quer dizer.
+///
+/// O art. 12 da Portaria 1.666 deu 180 dias às espécies que entraram
+/// agora na Lista. Quem vai usar isto em campo não precisa da história
+/// da decisão — precisa saber o que a data significa para o exemplar
+/// que está na mão dela.
+class _OQueADataQuerDizer extends StatelessWidget {
+  final bool nova;
+  final int dias;
+
+  const _OQueADataQuerDizer({required this.nova, required this.dias});
+
+  @override
+  Widget build(BuildContext context) {
+    return _Aviso(
+      etiqueta: 'O QUE ESSA DATA QUER DIZER',
+      titulo: nova
+          ? 'Espécie nova na Lista'
+          : 'Espécie que já era da Lista',
+      texto: nova
+          ? 'A Lista Nacional Oficial foi publicada em 28 de abril de '
+              '2026. Para as espécies que NÃO estavam na lista anterior, '
+              'o art. 12 da Portaria 1.666 deu 180 dias antes de a '
+              'vedação começar a valer. Esse prazo vence em 25 de outubro '
+              'de 2026 — daqui a $dias dias.\n\n'
+              'Até lá, a captura desta espécie não é vedada por estar na '
+              'Lista. As demais regras continuam valendo: tamanho mínimo, '
+              'defeso, petrecho e área, quando houver.\n\n'
+              'A partir de 25 de outubro, vale a vedação integral do art. '
+              '3º — captura, transporte, guarda a bordo, armazenamento, '
+              'manejo, beneficiamento e comercialização.'
+          : 'Esta espécie já constava da lista anterior, de 2014. O prazo '
+              'de 180 dias do art. 12 da Portaria 1.666 vale só para as '
+              'que entraram agora — e não é o caso desta.\n\n'
+              'A vedação do art. 3º vale desde já.',
+    );
+  }
+}
+
+/// O teto de tamanho./// O teto de tamanho. Só o Plano da garoupa tem um, e é o tipo de
+/// regra que passa despercebida: quem cresceu com a IN 53 na cabeça
+/// procura o peixe pequeno demais, não o grande demais.
+class _TetoDeTamanho extends StatelessWidget {
+  final int cm;
+  final bool temIn53;
+
+  const _TetoDeTamanho({required this.cm, required this.temIn53});
+
+  @override
+  Widget build(BuildContext context) {
+    return _Aviso(
+      etiqueta: 'TEM TETO, NÃO SÓ PISO',
+      titulo: 'Acima de $cm cm também é irregular',
+      texto: temIn53
+          ? 'O Plano de Recuperação permite a captura dentro de uma FAIXA. '
+              'A IN 53 fixa só o mínimo e não tem teto: um exemplar acima '
+              'de $cm cm é regular por ela e irregular pelo Plano.'
+          : 'O Plano de Recuperação permite a captura dentro de uma FAIXA. '
+              'O exemplar acima de $cm cm está fora dela.',
+    );
+  }
+}
+
+/// O aviso que separa "não pode" de "não conferi". Sem ele, o
+/// aplicativo afirmaria para 480 e poucas espécies uma coisa que só
+/// conferiu em oito.
+class _PlanoNaoConferido extends StatelessWidget {
+  const _PlanoNaoConferido();
+
+  @override
+  Widget build(BuildContext context) {
+    return _Aviso(
+      etiqueta: 'PLANO DE RECUPERAÇÃO — NÃO CONFERIDO',
+      texto: 'Estar na Lista não veda a captura por si só. O art. 4º da '
+          'Portaria 1.666 admite o uso quando há Plano de Recuperação, ato '
+          'do Ministério do Meio Ambiente reconhecendo o uso e norma de '
+          'ordenamento — e o art. 11, parágrafo único, mantém em vigor os '
+          'planos e as regras anteriores durante a revisão.\n\n'
+          'O aplicativo conferiu isso em $quantosPlanos espécies, e não '
+          'nesta. A vedação acima é o padrão do art. 3º, não uma resposta '
+          'fechada: confirme se existe plano antes de qualquer medida.',
+    );
+  }
+}
+
 class _MesmaProtecao extends StatelessWidget {
   const _MesmaProtecao();
 
