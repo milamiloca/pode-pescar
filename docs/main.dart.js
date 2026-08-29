@@ -80589,7 +80589,7 @@ $1(a){return a.ph(this.a.e)},
 $S:53}
 A.P8.prototype={
 D(a){var s=null
-return new A.bC(B.Nn,A.b6(A.b([A.aU(s,B.l,B.M.bv(0.4),s,1,s,s,s),B.Q,B.a8a,B.bX,B.a7N,B.I],t.p),B.o,B.r,B.m),s)}}
+return new A.bC(B.Nn,A.b6(A.b([A.aU(s,B.l,B.M.bv(0.4),s,1,s,s,s),B.Q,B.a89,B.bX,B.a7N,B.I],t.p),B.o,B.r,B.m),s)}}
 A.CL.prototype={
 D(a){var s,r,q,p,o,n,m,l,k,j=null,i=this.c,h=this.d,g=i.ph(h),f=i.x
 if(f){s=g?"fechado hoje":"aberto hoje"
@@ -80607,7 +80607,7 @@ k=q?B.a0:B.a_
 if(f)n=n?B.Y:B.a8
 else n=B.G
 k=A.b([A.dZ(A.O(l,j,j,j,A.cp(j,j,n,j,j,j,j,j,j,j,j,11.5,j,j,k,j,1.3,!0,j,j,j,j,j,j,j,j),j,j),1)],o)
-if(m>i)k.push(B.a8j)
+if(m>i)k.push(B.a8i)
 return new A.bC(B.nV,A.b6(A.b([p,B.aq,h,B.aq,A.cV(k,B.aE,B.m,0,j)],o),B.o,B.r,B.m),j)}}
 A.NQ.prototype={
 aB(a,b){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d
@@ -80756,8 +80756,8 @@ m=e===1?"restri\xe7\xe3o":"restri\xe7\xf5es"
 m=""+e+" "+m+" em curso: "+B.b.b8(i,", ").toLowerCase()
 e=m}else e="Nenhuma restri\xe7\xe3o de per\xedodo em curso"
 m=t.p
-e=A.b([f,B.aL,A.O(e,l,l,l,B.a5F,l,l),B.aq,B.a8d],m)
-if(j.length!==0)B.b.J(e,A.b([B.Q,A.aU(l,B.l,B.M.bv(0.35),l,1,l,l,l),B.lT,A.O("+ "+j.length+" a confirmar: "+B.b.b8(A.aKV(j),", ").toLowerCase(),l,l,l,B.a43,l,l),B.cU,B.a7Z],m))
+e=A.b([f,B.aL,A.O(e,l,l,l,B.a5F,l,l),B.aq,B.a8c],m)
+if(j.length!==0)B.b.J(e,A.b([B.Q,A.aU(l,B.l,B.M.bv(0.35),l,1,l,l,l),B.lT,A.O("+ "+j.length+" a confirmar: "+B.b.b8(A.aKV(j),", ").toLowerCase(),l,l,l,B.a43,l,l),B.cU,B.a7Y],m))
 return A.j9(!1,B.a9,!0,r,A.xM(!1,q,!0,A.aU(A.cV(A.b([n,A.dZ(A.b6(e,B.o,B.r,B.m),1),B.lS,A.xz(B.kN,g,l,19)],m),B.o,B.m,0,l),B.l,l,new A.aT(l,l,o,p,l,l,B.w),l,l,B.NP,l),l,!0,l,l,l,l,l,l,this.c,l,l,l),B.l,s,0,l,l,l,l,l,B.c6)}}
 A.XD.prototype={
 $2(a,b){return this.a.a1y(a,b)},
@@ -81003,7 +81003,7 @@ $1(a){return B.A3},
 $S:494}
 A.O2.prototype={
 D(a){var s=null
-return A.aU(A.b6(A.b([B.a7A,B.aK,A.aU(s,B.l,B.jE,s,1,s,s,s),B.bL,B.a7y,B.bL,A.aU(s,B.l,B.jE,s,1,s,s,s),B.aK,B.a7V],t.p),B.o,B.r,B.m),B.l,B.ci,s,s,s,B.O4,s)}}
+return A.aU(A.b6(A.b([B.a7A,B.aK,A.aU(s,B.l,B.jE,s,1,s,s,s),B.bL,B.a7y,B.bL,A.aU(s,B.l,B.jE,s,1,s,s,s),B.aK,B.a8p],t.p),B.o,B.r,B.m),B.l,B.ci,s,s,s,B.O4,s)}}
 A.ui.prototype={
 I(){return"_Destino."+this.b}}
 A.qa.prototype={
@@ -81041,7 +81041,7 @@ m.push(B.ac4)
 m.push(B.I)
 m.push(B.ec)
 m.push(B.I)
-m.push(B.a8e)
+m.push(B.a8d)
 m.push(B.Q)
 m.push(B.ec)
 m.push(B.aaP)
@@ -81055,7 +81055,7 @@ if(o.d){j=A.b([B.aq],j)
 for(i=A.a3(m).i("ae<1>"),s=i.i("u.E"),r=0;r<6;++r){q=B.QW[r]
 if(B.b.cI(m,new A.an4(q))){p=A.Y(new A.ae(m,new A.an5(q),i),s)
 j.push(new A.Q0(q,p,n))}}j.push(B.aQ)
-j.push(B.a8n)
+j.push(B.a8m)
 B.b.J(k,j)}return A.b6(k,B.o,B.r,B.m)}}
 A.an3.prototype={
 $0(){var s=this.a
@@ -81171,8 +81171,8 @@ A.apl.prototype={
 $1(a){return a.r},
 $S:503}
 A.tI.prototype={
-D(a){var s=null,r=A.iK(B.a87),q=A.O("Captura incidental",s,s,s,B.cV,s,s),p=A.O(this.c,s,s,s,B.a3H,s,s),o=B.a8.bv(0.13),n=A.bh(14),m=A.cs(B.a8,2),l=t.p
-return A.ig(r,A.dE(new A.cZ(B.bG,A.lS(A.b([q,B.aq,p,B.bL,A.aU(A.b6(A.b([B.a7R,B.aQ,B.a8o],l),B.o,B.r,B.m),B.l,s,new A.aT(o,s,m,n,s,s,B.w),s,s,B.k6,1/0),B.eh,B.abS,B.abT,B.abR,B.bL,B.P4],l),B.d8),s),s,s))}}
+D(a){var s=null,r=A.iK(B.a86),q=A.O("Captura incidental",s,s,s,B.cV,s,s),p=A.O(this.c,s,s,s,B.a3H,s,s),o=B.a8.bv(0.13),n=A.bh(14),m=A.cs(B.a8,2),l=t.p
+return A.ig(r,A.dE(new A.cZ(B.bG,A.lS(A.b([q,B.aq,p,B.bL,A.aU(A.b6(A.b([B.a7R,B.aQ,B.a8n],l),B.o,B.r,B.m),B.l,s,new A.aT(o,s,m,n,s,s,B.w),s,s,B.k6,1/0),B.eh,B.abS,B.abT,B.abR,B.bL,B.P4],l),B.d8),s),s,s))}}
 A.uO.prototype={
 D(a){var s=null
 return A.aU(A.b6(A.b([A.O(this.d,s,s,s,B.a5N,s,s),B.cU,A.O(this.e,s,s,s,B.AA,s,s)],t.p),B.o,B.r,B.m),B.l,s,new A.aT(s,s,new A.de(B.v,B.v,B.v,new A.b0(this.c,3,B.y,-1)),s,s,s,B.w),s,B.nT,B.NK,s)}}
@@ -81190,7 +81190,7 @@ s.toString
 q=s/d*100}else q=0
 d=e.d===1
 p=q<=(d?10:20)
-s=A.iK(B.a80)
+s=A.iK(B.a8_)
 o=A.O(e.a,f,f,f,B.m1,f,f)
 n=t.p
 o=A.b([o,B.aq,A.O("O limite para esta esp\xe9cie \xe9 "+(d?10:20)+"% em peso.",f,f,f,B.bf,f,f),B.iJ,new A.BL("Peso total da captura, em quilos",new A.alW(g),f),B.bL,new A.BL("Peso dos exemplares abaixo de "+e.c+" cm, em quilos",new A.alX(g),f),B.zP],n)
@@ -81539,7 +81539,7 @@ a3e(){var s,r,q,p=t.p,o=A.b([B.aK],p)
 for(s=A.ase(this.c.gdK()),r=s.length,q=0;q<s.length;s.length===r||(0,A.t)(s),++q)B.b.J(o,A.b([new A.qL(s[q],!0,null),B.Q],p))
 return o},
 acP(){var s,r,q=this.c,p=A.WE(q.gdK()).length===1?"Esta esp\xe9cie tem per\xedodo fechado":"Esta esp\xe9cie tem "+A.WE(q.gdK()).length+" regras de per\xedodo",o=t.p
-p=A.b([B.iJ,new A.e7(p,null),B.a8i,B.I],o)
+p=A.b([B.iJ,new A.e7(p,null),B.a8h,B.I],o)
 for(q=A.WE(q.gdK()),s=q.length,r=0;r<q.length;q.length===s||(0,A.t)(q),++r)B.b.J(p,A.b([new A.qM(q[r],!0,null),B.Q],o))
 return p},
 a1Y(){var s,r,q=null,p=this.c,o=p.b,n=o.a,m=o.w,l=m?"  *":"",k=o.b,j=t.p
@@ -81609,7 +81609,7 @@ A.U2.prototype={
 D(a){return new A.iy("DOIS N\xdaMEROS PARA A MESMA ESP\xc9CIE","IN 53: "+this.c+" cm  \xb7  Plano: "+this.d+" cm",'A favor do n\xfamero maior: a norma do Plano \xe9 de 2018, treze anos posterior \xe0 IN 53; \xe9 espec\xedfica de uma esp\xe9cie, contra as 35 da IN 53; e \xe9 Portaria Interministerial, assinada por dois ministros. Pelo art. 2\xba, \xa7 1\xba da LINDB, a norma posterior que regula inteiramente a mat\xe9ria revoga a anterior.\n\nA favor do n\xfamero menor: o art. 5\xba da IN 53 preserva as regras de portarias espec\xedficas apenas "para esp\xe9cies que N\xc3O constam nos Anexos I e II" \u2014 e esta consta. Lido a contrario, sugere que para as esp\xe9cies dos anexos valem os n\xfameros dela. E, em mat\xe9ria sancionadora, d\xfavida real n\xe3o autua.\n\nConfira com o comando qual n\xfamero aplicar antes de autuar.',null)}}
 A.Ps.prototype={
 D(a){var s=null,r=B.a8.bv(0.08),q=A.bh(12),p=A.cs(B.a8.bv(0.35),1)
-return A.aU(A.b6(A.b([B.a86,B.aQ,A.O(this.c,s,s,s,B.cy,s,s)],t.p),B.o,B.r,B.m),B.l,s,new A.aT(r,s,p,q,s,s,B.w),s,s,B.bO,1/0)}}
+return A.aU(A.b6(A.b([B.a85,B.aQ,A.O(this.c,s,s,s,B.cy,s,s)],t.p),B.o,B.r,B.m),B.l,s,new A.aT(r,s,p,q,s,s,B.w),s,s,B.bO,1/0)}}
 A.D6.prototype={
 D(a){var s=this.c,r=s?"Esp\xe9cie nova na Lista":"Esp\xe9cie que j\xe1 era da Lista"
 return new A.iy("O QUE ESSA DATA QUER DIZER",r,s?"A Lista Nacional Oficial foi publicada em 28 de abril de 2026. Para as esp\xe9cies que N\xc3O estavam na lista anterior, o art. 12 da Portaria 1.666 deu 180 dias antes de a veda\xe7\xe3o come\xe7ar a valer. Esse prazo vence em 25 de outubro de 2026 \u2014 daqui a "+this.d+" dias.\n\nAt\xe9 l\xe1, a captura desta esp\xe9cie n\xe3o \xe9 vedada por estar na Lista. As demais regras continuam valendo: tamanho m\xednimo, defeso, petrecho e \xe1rea, quando houver.\n\nA partir de 25 de outubro, vale a veda\xe7\xe3o integral do art. 3\xba \u2014 captura, transporte, guarda a bordo, armazenamento, manejo, beneficiamento e comercializa\xe7\xe3o.":"Esta esp\xe9cie j\xe1 constava da lista anterior, de 2014. O prazo de 180 dias do art. 12 da Portaria 1.666 vale s\xf3 para as que entraram agora \u2014 e n\xe3o \xe9 o caso desta.\n\nA veda\xe7\xe3o do art. 3\xba vale desde j\xe1.",null)}}
@@ -81620,7 +81620,7 @@ A.Rr.prototype={
 D(a){return new A.iy("PLANO DE RECUPERA\xc7\xc3O \u2014 N\xc3O CONFERIDO",null,"Estar na Lista n\xe3o veda a captura por si s\xf3. O art. 4\xba da Portaria 1.666 admite o uso quando h\xe1 Plano de Recupera\xe7\xe3o, ato do Minist\xe9rio do Meio Ambiente reconhecendo o uso e norma de ordenamento \u2014 e o art. 11, par\xe1grafo \xfanico, mant\xe9m em vigor os planos e as regras anteriores durante a revis\xe3o.\n\nO aplicativo conferiu isso em "+A.aMS()+" esp\xe9cies, e n\xe3o nesta. A veda\xe7\xe3o acima \xe9 o padr\xe3o do art. 3\xba, n\xe3o uma resposta fechada: confirme se existe plano antes de qualquer medida.",null)}}
 A.QV.prototype={
 D(a){var s=null
-return A.aU(B.a8h,B.l,s,new A.aT(B.Y.bv(0.08),s,s,A.bh(10),s,s,B.w),s,s,B.nZ,1/0)}}
+return A.aU(B.a8g,B.l,s,new A.aT(B.Y.bv(0.08),s,s,A.bh(10),s,s,B.w),s,s,B.nZ,1/0)}}
 A.iy.prototype={
 D(a){var s=null,r=B.M.bv(0.09),q=A.bh(12),p=A.cs(B.M.bv(0.35),1),o=t.p,n=A.b([A.O(this.c,s,s,s,B.a20,s,s)],o),m=this.d
 if(m!=null)B.b.J(n,A.b([B.aQ,A.O(m,s,s,s,B.Aj,s,s)],o))
@@ -81687,7 +81687,7 @@ case 3:if(p.c==null){s=1
 break}p.ag(new A.alZ(p))
 case 1:return A.U(q,r)}})
 return A.V($async$uN,r)},
-D(a){var s,r,q,p,o=this,n=null,m=o.a.c,l=A.iK(B.a8b),k=t.p,j=A.b([A.O(m.a,n,n,n,B.cV,n,n),B.cu,A.O(m.b,n,n,n,B.Az,n,n),B.bL],k),i=m.r,h=i.length!==0
+D(a){var s,r,q,p,o=this,n=null,m=o.a.c,l=A.iK(B.a8a),k=t.p,j=A.b([A.O(m.a,n,n,n,B.cV,n,n),B.cu,A.O(m.b,n,n,n,B.Az,n,n),B.bL],k),i=m.r,h=i.length!==0
 if(h&&m.x)j.push(new A.ul(B.Y,"CAPTURA PROIBIDA","Art. 3\xba da Portaria 1.666","Prote\xe7\xe3o integral: captura, transporte, armazenamento, guarda, manejo, beneficiamento e comercializa\xe7\xe3o. "+m.ghB()+" ("+i+"), item "+m.w+" da Lista.",n))
 else if(h&&!m.x)j.push(new A.ul(B.M,"PROIBI\xc7\xc3O A PARTIR DE 25/10/2026","Art. 12 da Portaria 1.666","N\xe3o constava da Portaria 445/2014, ent\xe3o tem o prazo de 180 dias. At\xe9 24/10/2026 vale o tamanho m\xednimo de "+m.c+" cm.",n))
 if(h&&m.x)B.b.J(j,A.b([B.I,B.aaQ],k))
@@ -81762,7 +81762,7 @@ gQw(){if(this.e){var s=t.ut
 s=A.Y(new A.ae(B.hT,new A.amb(),s),s.i("u.E"))}else s=B.hT
 return s},
 D(a){var s,r,q=this,p=null,o=A.vl(q.d),n=q.gQw(),m=A.a3(n).i("ae<1>"),l=A.Y(new A.ae(n,new A.ame(o),m),m.i("u.E"))
-n=A.iK(B.a8k)
+n=A.iK(B.a8j)
 m=B.M.bv(0.09)
 s=A.bh(9)
 r=t.p
@@ -81877,10 +81877,10 @@ m.push(B.a8C)
 m.push(B.aq)
 m.push(new A.is("\xc1rea de opera\xe7\xe3o",o.x,!0,p))
 s=o.w
-if(s.length!==0)B.b.J(m,A.b([B.aK,B.a8H,B.cu,B.a89,B.aQ,new A.is("Esp\xe9cies alternativas",s,!1,p)],l))
+if(s.length!==0)B.b.J(m,A.b([B.aK,B.a8H,B.cu,B.a88,B.aQ,new A.is("Esp\xe9cies alternativas",s,!1,p)],l))
 s=o.f
 r=s.length===0
-if(!r||o.r.length!==0){l=A.b([B.aK,B.a8D,B.cu,B.a8g,B.aQ],l)
+if(!r||o.r.length!==0){l=A.b([B.aK,B.a8D,B.cu,B.a8f,B.aQ],l)
 if(!r)l.push(new A.is("Captura incidental",s,!1,p))
 s=o.r
 if(s.length!==0)l.push(new A.is("Fauna acompanhante previs\xedvel",s,!1,p))
@@ -81897,7 +81897,7 @@ D(a){return new A.nU(new A.amk(this),null)},
 acO(a,b){var s,r,q,p=null,o=t.l1,n=o.i("u.E"),m=A.Y(new A.ae(B.hP,new A.ami(),o),n),l=A.Y(new A.ae(B.hP,new A.amj(),o),n)
 o=A.iK(B.a7B)
 n=t.p
-s=A.b([B.a85,B.aL,B.a7X,B.c9,new A.GO(b,p),B.I,new A.Nj(b,p),B.zQ,B.a8J,B.aq,B.a7I,B.aK,new A.Ko(b,p),B.zQ,B.a8E,B.aq,A.O(""+m.length+" normas lidas por inteiro e reproduzidas. S\xe3o resposta do aplicativo.",p,p,p,B.iT,p,p),B.aK],n)
+s=A.b([B.a84,B.aL,B.a7W,B.c9,new A.GO(b,p),B.I,new A.Nj(b,p),B.zQ,B.a8J,B.aq,B.a7I,B.aK,new A.Ko(b,p),B.zQ,B.a8E,B.aq,A.O(""+m.length+" normas lidas por inteiro e reproduzidas. S\xe3o resposta do aplicativo.",p,p,p,B.iT,p,p),B.aK],n)
 for(r=m.length,q=0;q<m.length;m.length===r||(0,A.t)(m),++q)B.b.J(s,A.b([new A.qM(m[q],!1,p),B.I],n))
 s.push(B.c9)
 s.push(B.a8G)
@@ -81949,7 +81949,7 @@ i.push(B.a7s)
 i.push(B.bX)
 i.push(A.O(m.c,n,n,n,B.a5v,n,n))
 i.push(B.I)
-i.push(B.a8m)
+i.push(B.a8l)
 i.push(B.bX)
 i.push(A.O(m.w,n,n,n,B.a21,n,n))
 i.push(B.I)
@@ -81979,8 +81979,8 @@ $S:0}
 A.BN.prototype={
 aj(){return new A.O7()}}
 A.O7.prototype={
-D(a){var s,r,q=this,p=null,o=q.a.c,n=A.bh(12),m=A.cs(B.ax,1),l=t.p,k=A.b([A.cV(A.b([A.dZ(A.O(o.a,p,p,p,B.a73,p,p),1),B.eg,B.a_b],l),B.o,B.m,0,p),B.cU,A.O(B.b.b8(o.b,", "),p,p,p,B.a2G,p,p),B.Q,B.a7u,B.aq,A.O(o.d,p,p,p,B.a3b,p,p),B.Q,B.a81,B.aq,A.O(o.w,p,p,p,B.a5M,p,p)],l)
-if(q.d){s=A.b([B.I,B.ec,B.Q,B.a8c,B.aL,A.O("Per\xedodo: "+o.c+".",p,p,p,B.cy,p,p)],l)
+D(a){var s,r,q=this,p=null,o=q.a.c,n=A.bh(12),m=A.cs(B.ax,1),l=t.p,k=A.b([A.cV(A.b([A.dZ(A.O(o.a,p,p,p,B.a73,p,p),1),B.eg,B.a_b],l),B.o,B.m,0,p),B.cU,A.O(B.b.b8(o.b,", "),p,p,p,B.a2G,p,p),B.Q,B.a7u,B.aq,A.O(o.d,p,p,p,B.a3b,p,p),B.Q,B.a80,B.aq,A.O(o.w,p,p,p,B.a5M,p,p)],l)
+if(q.d){s=A.b([B.I,B.ec,B.Q,B.a8b,B.aL,A.O("Per\xedodo: "+o.c+".",p,p,p,B.cy,p,p)],l)
 r=o.e
 if(r.length!==0)B.b.J(s,A.b([B.aL,A.O(r,p,p,p,B.cy,p,p)],l))
 r=o.r
@@ -82003,7 +82003,7 @@ D(a){var s=null
 return A.aU(s,B.l,B.ax,s,1,s,s,s)}}
 A.j0.prototype={
 D(a){var s=null,r=A.bh(12)
-return A.aU(A.b6(A.b([B.a82,B.aL,A.O(this.c,s,s,s,B.Aj,s,s),B.aq,A.O(this.d,s,s,s,B.Am,s,s),B.aQ,B.a88],t.p),B.o,B.r,B.m),B.l,s,new A.aT(B.ne,s,s,r,s,s,B.w),s,s,B.bO,1/0)}}
+return A.aU(A.b6(A.b([B.a81,B.aL,A.O(this.c,s,s,s,B.Aj,s,s),B.aq,A.O(this.d,s,s,s,B.Am,s,s),B.aQ,B.a87],t.p),B.o,B.r,B.m),B.l,s,new A.aT(B.ne,s,s,r,s,s,B.w),s,s,B.bO,1/0)}}
 A.w3.prototype={
 D(a){var s=null
 return A.arf(A.a2x(s,A.na(!1),s,B.nX,s,s,s,s,!0,A.na(!1),s,s,s,s,s,B.j,!0,s,s,s,s,A.na(!0),s,s,s,s,s,s,s,s,s,this.c,s,s,s,s,s,s,s,s,s,!0,!0,!1,s,B.Py,s,s,s,s,s,s,s,s,s,s,s,s),s,this.d,B.Aq)}}
@@ -85059,13 +85059,13 @@ B.O8=new A.a5(40,40,40,40)
 B.G=new A.C(1,0.3215686274509804,0.40784313725490196,0.43529411764705883,B.e)
 B.a65=new A.j(!0,B.G,null,null,null,null,16,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.cb=new A.kM(2,"center")
-B.a8_=new A.aL("Nenhuma esp\xe9cie encontrada.\n\nTente s\xf3 o come\xe7o do nome, o g\xeanero (Balistes), a fam\xedlia (Balistidae) ou a ordem.",null,B.a65,B.cb,null,null,null,null,null)
-B.Xy=new A.bC(B.O8,B.a8_,null)
+B.a7Z=new A.aL("Nenhuma esp\xe9cie encontrada.\n\nTente s\xf3 o come\xe7o do nome, o g\xeanero (Balistes), a fam\xedlia (Balistidae) ou a ordem.",null,B.a65,B.cb,null,null,null,null,null)
+B.Xy=new A.bC(B.O8,B.a7Z,null)
 B.KY=new A.jW(B.ar,null,null,B.Xy,null)
 B.O6=new A.a5(28,28,28,28)
 B.a4D=new A.j(!0,B.G,null,null,null,null,17,null,null,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8f=new A.aL("Nenhuma modalidade encontrada.\n\nTente uma palavra s\xf3, ou desligue o filtro de Santa Catarina.",null,B.a4D,B.cb,null,null,null,null,null)
-B.Xz=new A.bC(B.O6,B.a8f,null)
+B.a8e=new A.aL("Nenhuma modalidade encontrada.\n\nTente uma palavra s\xf3, ou desligue o filtro de Santa Catarina.",null,B.a4D,B.cb,null,null,null,null,null)
+B.Xz=new A.bC(B.O6,B.a8e,null)
 B.KZ=new A.jW(B.ar,null,null,B.Xz,null)
 B.L_=new A.w8(null,null,null,null,null,null,null,null,null)
 B.dM=new A.qP(0,"none")
@@ -85181,23 +85181,23 @@ B.o=new A.nM(0,"start")
 B.cY=new A.adR(1,"down")
 B.A=new A.fk(700)
 B.bD=new A.j(!0,B.G,null,null,null,null,11,B.A,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8p=new A.aL("POR QUE ISTO EST\xc1 \xc0 VISTA",null,B.bD,null,null,null,null,null,null)
+B.a8o=new A.aL("POR QUE ISTO EST\xc1 \xc0 VISTA",null,B.bD,null,null,null,null,null,null)
 B.Q=new A.c4(null,10,null,null)
 B.a3i=new A.j(!0,B.J,null,null,null,null,14,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8l=new A.aL("Enquanto a d\xfavida existe, quem est\xe1 em servi\xe7o precisa saber que ela existe. Um aplicativo de fiscaliza\xe7\xe3o que esconde o que n\xe3o conferiu \xe9 pior do que n\xe3o ter aplicativo: ele d\xe1 confian\xe7a onde n\xe3o deveria haver.",null,B.a3i,null,null,null,null,null,null)
+B.a8k=new A.aL("Enquanto a d\xfavida existe, quem est\xe1 em servi\xe7o precisa saber que ela existe. Um aplicativo de fiscaliza\xe7\xe3o que esconde o que n\xe3o conferiu \xe9 pior do que n\xe3o ter aplicativo: ele d\xe1 confian\xe7a onde n\xe3o deveria haver.",null,B.a3i,null,null,null,null,null,null)
 B.I=new A.c4(null,12,null,null)
 B.cy=new A.j(!0,B.G,null,null,null,null,13.5,null,null,null,null,null,1.45,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a84=new A.aL("Quando a norma que falta chegar, o ponto sai desta lista e a resposta do aplicativo \xe9 corrigida.",null,B.cy,null,null,null,null,null,null)
-B.RQ=s([B.a8p,B.Q,B.a8l,B.I,B.a84],t.p)
+B.a83=new A.aL("Quando a norma que falta chegar, o ponto sai desta lista e a resposta do aplicativo \xe9 corrigida.",null,B.cy,null,null,null,null,null,null)
+B.RQ=s([B.a8o,B.Q,B.a8k,B.I,B.a83],t.p)
 B.M1=new A.nI(B.aB,B.r,B.m,B.o,null,B.cY,null,0,B.RQ,null)
 B.a7w=new A.aL("COMO ESTA LISTA FOI MONTADA",null,B.bD,null,null,null,null,null,null)
 B.a5k=new A.j(!0,B.J,null,null,null,null,13.5,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.a7Q=new A.aL('A rela\xe7\xe3o de defesos veio do levantamento "Legisla\xe7\xe3o Pesqueira em Santa Catarina" (Prof. Roberto Wahrlich, Laborat\xf3rio de Tecnologia e Extens\xe3o Pesqueira/UNIVALI, 10 de junho de 2025), usado como \xedndice: ele diz que a regra existe e qual norma procurar.',null,B.a5k,null,null,null,null,null,null)
 B.a7J=new A.aL("Cada norma obtida \xe9 lida por inteiro e passa para a se\xe7\xe3o conferida, com o texto reproduzido. O levantamento n\xe3o vira resposta do aplicativo em nenhum momento.",null,B.cy,null,null,null,null,null,null)
 B.a3t=new A.j(!0,B.J,null,null,null,null,13.5,null,null,null,null,null,1.45,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a83=new A.aL("A rela\xe7\xe3o foi cruzada com a tabela de per\xedodos de defeso publicada pelo Minist\xe9rio da Pesca e Aquicultura, e ficou apenas o que alcan\xe7a Santa Catarina. Defeso de outro estado n\xe3o entra: n\xe3o \xe9 resposta errada, \xe9 resposta de outro lugar.",null,B.a3t,null,null,null,null,null,null)
+B.a82=new A.aL("A rela\xe7\xe3o foi cruzada com a tabela de per\xedodos de defeso publicada pelo Minist\xe9rio da Pesca e Aquicultura, e ficou apenas o que alcan\xe7a Santa Catarina. Defeso de outro estado n\xe3o entra: n\xe3o \xe9 resposta errada, \xe9 resposta de outro lugar.",null,B.a3t,null,null,null,null,null,null)
 B.a8r=new A.aL("O levantamento exclui pescarias al\xe9m da is\xf3bata de 100 m, licenciamento, procedimentos administrativos, Unidades de Conserva\xe7\xe3o e normas municipais. Defesos estaduais e municipais n\xe3o est\xe3o aqui.",null,B.cy,null,null,null,null,null,null)
-B.SG=s([B.a7w,B.Q,B.a7Q,B.I,B.a7J,B.I,B.a83,B.I,B.a8r],t.p)
+B.SG=s([B.a7w,B.Q,B.a7Q,B.I,B.a7J,B.I,B.a82,B.I,B.a8r],t.p)
 B.M2=new A.nI(B.aB,B.r,B.m,B.o,null,B.cY,null,0,B.SG,null)
 B.a_7=new A.f_("confira o c\xf3digo no RGP",B.M,!1,null)
 B.aQ=new A.c4(null,8,null,null)
@@ -85502,15 +85502,15 @@ B.o8=new A.nY(!1,!1,!1,!1)
 B.o9=new A.nY(!1,!1,!1,!0)
 B.db=new A.If(0,"tight")
 B.a6A=new A.j(!0,B.M,null,null,null,null,10.5,B.A,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a7W=new A.aL("EM VERIFICA\xc7\xc3O",null,B.a6A,null,null,null,null,null,null)
-B.OR=new A.k1(1,B.db,B.a7W,null)
+B.a7V=new A.aL("EM VERIFICA\xc7\xc3O",null,B.a6A,null,null,null,null,null,null)
+B.OR=new A.k1(1,B.db,B.a7V,null)
 B.iR=new A.j(!0,B.G,null,null,null,null,13.5,null,null,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.a7U=new A.aL("Tamanho m\xednimo da IN 53. Continua na norma, mas n\xe3o decide mais: a veda\xe7\xe3o alcan\xe7a a esp\xe9cie em qualquer tamanho.",null,B.iR,null,null,null,null,null,null)
 B.OS=new A.k1(1,B.db,B.a7U,null)
 B.a_=new A.fk(500)
 B.a5R=new A.j(!0,B.a8,null,null,null,null,12.5,B.a_,null,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a7Y=new A.aL("Texto da norma conferido e reproduzido no aplicativo.",null,B.a5R,null,null,null,null,null,null)
-B.OT=new A.k1(1,B.db,B.a7Y,null)
+B.a7X=new A.aL("Texto da norma conferido e reproduzido no aplicativo.",null,B.a5R,null,null,null,null,null,null)
+B.OT=new A.k1(1,B.db,B.a7X,null)
 B.OU=new A.xc(null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.hv=new A.k2(!1,!1,!1,!1)
 B.hw=new A.k2(!1,!1,!1,!0)
@@ -88415,37 +88415,37 @@ B.a6m=new A.j(!0,B.G,null,null,null,null,12.5,null,null,null,null,null,1.5,null,
 B.a7S=new A.aL("Estas regras n\xe3o dependem da esp\xe9cie. Elas se somam ao tamanho m\xednimo, ao defeso e \xe0 veda\xe7\xe3o por amea\xe7a de extin\xe7\xe3o \u2014 n\xe3o substituem nenhum dos tr\xeas, e nenhum dos tr\xeas dispensa estas. Confira a vig\xeancia antes de aplicar.",null,B.a6m,null,null,null,null,null,null)
 B.a5z=new A.j(!0,B.J,null,null,null,null,14.5,null,null,null,null,null,1.45,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.a7T=new A.aL("Nenhuma restri\xe7\xe3o de per\xedodo em curso hoje, entre as normas conferidas.",null,B.a5z,null,null,null,null,null,null)
-B.a5T=new A.j(!0,B.np,null,null,null,null,14.5,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a7V=new A.aL("Tamanho m\xednimo, defeso e esp\xe9cie amea\xe7ada, para consultar na hora da abordagem. Cada resposta traz a norma, o artigo e para quais estados vale.",null,B.a5T,null,null,null,null,null,null)
-B.a7X=new A.aL("O calend\xe1rio tem duas camadas. Em cima, faixa cheia: norma lida por inteiro, \xe9 resposta do aplicativo. Embaixo, faixa hachurada: data que veio do levantamento e cuja norma ainda n\xe3o foi obtida \u2014 serve para saber o que procurar, n\xe3o para autuar.",null,B.bf,null,null,null,null,null,null)
-B.a7Z=new A.aL("O levantamento indica defeso, a norma ainda n\xe3o foi obtida.",null,B.iS,null,null,null,null,null,null)
-B.a80=new A.aL("C\xe1lculo da toler\xe2ncia",null,null,null,null,null,null,null,null)
-B.a81=new A.aL("PARA ONDE VALE",null,B.bD,null,null,null,null,null,null)
-B.a82=new A.aL("DE ONDE VEM ESSA REGRA",null,B.bD,null,null,null,null,null,null)
-B.a85=new A.aL("O ano, em per\xedodos",null,B.cV,null,null,null,null,null,null)
+B.a7W=new A.aL("O calend\xe1rio tem duas camadas. Em cima, faixa cheia: norma lida por inteiro, \xe9 resposta do aplicativo. Embaixo, faixa hachurada: data que veio do levantamento e cuja norma ainda n\xe3o foi obtida \u2014 serve para saber o que procurar, n\xe3o para autuar.",null,B.bf,null,null,null,null,null,null)
+B.a7Y=new A.aL("O levantamento indica defeso, a norma ainda n\xe3o foi obtida.",null,B.iS,null,null,null,null,null,null)
+B.a8_=new A.aL("C\xe1lculo da toler\xe2ncia",null,null,null,null,null,null,null,null)
+B.a80=new A.aL("PARA ONDE VALE",null,B.bD,null,null,null,null,null,null)
+B.a81=new A.aL("DE ONDE VEM ESSA REGRA",null,B.bD,null,null,null,null,null,null)
+B.a84=new A.aL("O ano, em per\xedodos",null,B.cV,null,null,null,null,null,null)
 B.a5K=new A.j(!0,B.a8,null,null,null,null,11,B.A,null,1.2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a86=new A.aL("EST\xc1 SENDO APLICADA",null,B.a5K,null,null,null,null,null,null)
-B.a87=new A.aL("Captura incidental",null,null,null,null,null,null,null,null)
+B.a85=new A.aL("EST\xc1 SENDO APLICADA",null,B.a5K,null,null,null,null,null,null)
+B.a86=new A.aL("Captura incidental",null,null,null,null,null,null,null,null)
 B.a35=new A.j(!0,B.G,null,null,null,null,13,null,B.cP,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a88=new A.aL("Este aplicativo n\xe3o substitui a norma. Na d\xfavida, procure a sua col\xf4nia.",null,B.a35,null,null,null,null,null,null)
-B.a89=new A.aL("Esp\xe9cies que podem ser capturadas mediante autoriza\xe7\xe3o \xe0 parte, inclusive no defeso da esp\xe9cie principal.",null,B.bf,null,null,null,null,null,null)
+B.a87=new A.aL("Este aplicativo n\xe3o substitui a norma. Na d\xfavida, procure a sua col\xf4nia.",null,B.a35,null,null,null,null,null,null)
+B.a88=new A.aL("Esp\xe9cies que podem ser capturadas mediante autoriza\xe7\xe3o \xe0 parte, inclusive no defeso da esp\xe9cie principal.",null,B.bf,null,null,null,null,null,null)
 B.a2o=new A.j(!0,B.M,null,null,null,null,10,B.A,null,1.2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8a=new A.aL("A CONFIRMAR \u2014 NORMA AINDA N\xc3O OBTIDA",null,B.a2o,null,null,null,null,null,null)
-B.a8b=new A.aL("Enquadramento",null,null,null,null,null,null,null,null)
+B.a89=new A.aL("A CONFIRMAR \u2014 NORMA AINDA N\xc3O OBTIDA",null,B.a2o,null,null,null,null,null,null)
+B.a8a=new A.aL("Enquadramento",null,null,null,null,null,null,null,null)
 B.a22=new A.j(!0,B.G,null,null,null,null,10,B.A,null,1.1,null,null,1.3,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8c=new A.aL("O QUE O LEVANTAMENTO INDICA \u2014 N\xc3O \xc9 RESPOSTA DO APLICATIVO",null,B.a22,null,null,null,null,null,null)
-B.a8d=new A.aL("Contando apenas as normas com texto conferido.",null,B.iS,null,null,null,null,null,null)
-B.a8e=new A.aL("Ferramenta de consulta. N\xe3o substitui o texto da norma. Confira a vig\xeancia antes de aplicar.",null,B.At,null,null,null,null,null,null)
-B.a8g=new A.aL("A norma relaciona o que costuma ser capturado sem ser o alvo. Boa parte dessas esp\xe9cies \xe9 protegida.",null,B.bf,null,null,null,null,null,null)
-B.a8h=new A.aL("Criticamente em Perigo, Em Perigo e Vulner\xe1vel recebem a mesma prote\xe7\xe3o integral. A categoria diz o risco de extin\xe7\xe3o, n\xe3o o tamanho da veda\xe7\xe3o.",null,B.iR,null,null,null,null,null,null)
-B.a8i=new A.aL("Al\xe9m do tamanho m\xednimo, a captura s\xf3 \xe9 permitida dentro do per\xedodo fixado em norma espec\xedfica.",null,B.bf,null,null,null,null,null,null)
+B.a8b=new A.aL("O QUE O LEVANTAMENTO INDICA \u2014 N\xc3O \xc9 RESPOSTA DO APLICATIVO",null,B.a22,null,null,null,null,null,null)
+B.a8c=new A.aL("Contando apenas as normas com texto conferido.",null,B.iS,null,null,null,null,null,null)
+B.a8d=new A.aL("Ferramenta de consulta. N\xe3o substitui o texto da norma. Confira a vig\xeancia antes de aplicar.",null,B.At,null,null,null,null,null,null)
+B.a8f=new A.aL("A norma relaciona o que costuma ser capturado sem ser o alvo. Boa parte dessas esp\xe9cies \xe9 protegida.",null,B.bf,null,null,null,null,null,null)
+B.a8g=new A.aL("Criticamente em Perigo, Em Perigo e Vulner\xe1vel recebem a mesma prote\xe7\xe3o integral. A categoria diz o risco de extin\xe7\xe3o, n\xe3o o tamanho da veda\xe7\xe3o.",null,B.iR,null,null,null,null,null,null)
+B.a8h=new A.aL("Al\xe9m do tamanho m\xednimo, a captura s\xf3 \xe9 permitida dentro do per\xedodo fixado em norma espec\xedfica.",null,B.bf,null,null,null,null,null,null)
 B.a3f=new A.j(!0,B.G,null,null,null,null,10.5,null,B.cP,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8j=new A.aL("vira o ano",null,B.a3f,null,null,null,null,null,null)
-B.a8k=new A.aL("Apetrechos",null,null,null,null,null,null,null,null)
-B.a8m=new A.aL("PARA ONDE VALE",null,B.An,null,null,null,null,null,null)
-B.a8n=new A.aL("A lista sai dos dados do aplicativo: toda norma citada em um defeso, num per\xedodo do calend\xe1rio ou num Plano de Recupera\xe7\xe3o aparece aqui sozinha.",null,B.Aw,null,null,null,null,null,null)
+B.a8i=new A.aL("vira o ano",null,B.a3f,null,null,null,null,null,null)
+B.a8j=new A.aL("Apetrechos",null,null,null,null,null,null,null,null)
+B.a8l=new A.aL("PARA ONDE VALE",null,B.An,null,null,null,null,null,null)
+B.a8m=new A.aL("A lista sai dos dados do aplicativo: toda norma citada em um defeso, num per\xedodo do calend\xe1rio ou num Plano de Recupera\xe7\xe3o aparece aqui sozinha.",null,B.Aw,null,null,null,null,null,null)
 B.a2_=new A.j(!0,B.J,null,null,null,null,26,B.A,null,null,null,null,1.1,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.a8o=new A.aL("A libera\xe7\xe3o for\nviva e imediata",null,B.a2_,null,null,null,null,null,null)
+B.a8n=new A.aL("A libera\xe7\xe3o for\nviva e imediata",null,B.a2_,null,null,null,null,null,null)
+B.a5T=new A.j(!0,B.np,null,null,null,null,14.5,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.a8p=new A.aL("Tamanho m\xednimo, defeso, esp\xe9cie amea\xe7ada e \xe1rea proibida em Santa Catarina.",null,B.a5T,null,null,null,null,null,null)
 B.a8q=new A.aL("O texto vai para a \xe1rea de transfer\xeancia do aparelho, com a norma, o dispositivo e os valores apurados.",null,B.Am,null,null,null,null,null,null)
 B.a8s=new A.aL("Modalidades e petrechos",null,B.cV,null,null,null,null,null,null)
 B.a8t=new A.aL("Pontos em verifica\xe7\xe3o",null,B.cV,null,null,null,null,null,null)

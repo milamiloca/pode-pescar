@@ -160,9 +160,7 @@ class _Cabecalho extends StatelessWidget {
           Container(height: 1, color: fio),
           const SizedBox(height: 14),
           const Text(
-            'Tamanho mínimo, defeso e espécie ameaçada, para consultar '
-            'na hora da abordagem. Cada resposta traz a norma, o artigo '
-            'e para quais estados vale.',
+            'Tamanho mínimo, defeso, espécie ameaçada e área proibida em Santa Catarina.',
             style: TextStyle(
               fontSize: 14.5,
               height: 1.5,
