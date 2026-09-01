@@ -8,7 +8,7 @@ import 'tema.dart';
 // O CALENDÁRIO DO ANO
 //
 // Doze meses numa faixa, uma barra por período, e uma linha vertical em
-// hoje. A pergunta que ele responde de relance é a que a guarnição faz
+// hoje. A pergunta que ele responde de relance é a que quem consulta faz
 // primeiro: estamos em defeso de alguma coisa agora?
 //
 // Duas cores, e a diferença entre elas importa:
@@ -23,7 +23,7 @@ import 'tema.dart';
 //   barra cheia      — a norma foi lida por inteiro. É resposta.
 //   barra hachurada  — a data veio do levantamento, a norma ainda não
 //                      foi obtida. Não é resposta: é aviso de que há
-//                      norma para procurar antes de autuar.
+//                      norma para procurar antes de aplicar.
 //
 // A camada de baixo nunca se mistura com a de cima. Ela vem depois de
 // um cabeçalho próprio, com a cor da dúvida, e cada barra dela carrega
@@ -211,7 +211,7 @@ class _DivisorAConfirmar extends StatelessWidget {
           const SizedBox(height: 5),
           const Text(
             'Datas do levantamento da UNIVALI. Servem para saber que há '
-            'norma a procurar, não para autuar.',
+            'norma a procurar, não como resposta pronta.',
             style: TextStyle(fontSize: 12, height: 1.4, color: corApagada),
           ),
           const SizedBox(height: 12),
@@ -584,7 +584,7 @@ class _AmostraPainter extends CustomPainter {
 //
 // Mas build() roda quando a tela é construída, e não de novo sozinho.
 // Um aparelho que fica aberto atravessando a meia-noite mostraria a
-// resposta de ontem. Em serviço noturno isso é resposta errada: o
+// resposta de ontem. Numa consulta de madrugada isso é resposta errada: o
 // defeso do caranguejo começa à zero hora de 1º de outubro, o da
 // garoupa à zero hora de 1º de novembro.
 //
@@ -782,7 +782,7 @@ List<String> _nomes(List<Periodo> lista) {
 //
 // O calendário responde "como é o ano". Isto responde "o que muda a
 // seguir", que é outra pergunta e aparece tanto quanto. Saber que o
-// cherne fecha em três dias vale mais, em serviço, do que saber a forma
+// cherne fecha em três dias vale mais, na prática, do que saber a forma
 // da barra dele.
 // =====================================================================
 

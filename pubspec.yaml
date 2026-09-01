@@ -60,6 +60,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # A figura do Anexo I da Portaria SAP/MAPA nº 656/2022, que mostra de
+  # onde a onde se mede o comprimento total do camarão. É o único arquivo
+  # de imagem do aplicativo: todo o resto é desenhado em código.
+  assets:
+    - assets/camarao_656.png
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

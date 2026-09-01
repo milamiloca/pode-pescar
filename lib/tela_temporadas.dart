@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 import 'calendario.dart';
 import 'defesos.dart';
+import 'desenhos.dart';
 import 'periodos.dart';
 import 'tema.dart';
+
+/// O defeso é de camarão?
+///
+/// Serve para uma coisa só: decidir se mostra a figura de como medir. Os
+/// gêneros são os que a Portaria SAP/MAPA nº 656/2022 nomeia no art. 1º,
+/// mais o Farfantepenaeus e o Litopenaeus, que são como as portarias
+/// mais antigas do IBAMA escrevem os mesmos bichos.
+bool _ehCamarao(Defeso d) => d.cientificos.any((c) =>
+    c.startsWith('Penaeus') ||
+    c.startsWith('Farfantepenaeus') ||
+    c.startsWith('Litopenaeus') ||
+    c.startsWith('Xiphopenaeus') ||
+    c.startsWith('Pleoticus') ||
+    c.startsWith('Artemesia'));
 
 // =====================================================================
 // DEFESOS E TEMPORADAS
@@ -11,7 +26,7 @@ import 'tema.dart';
 // Defeso não: depende da data, às vezes da modalidade, e vem de norma
 // própria, com data própria.
 //
-// A tela abre pelo calendário, porque a primeira pergunta em serviço é
+// A tela abre pelo calendário, porque a primeira pergunta na prática é
 // "estamos em defeso de alguma coisa agora?". Depois vêm os defesos com
 // o texto da norma conferido — esses são resposta do aplicativo. Por
 // último, a lista do que ainda falta obter, que não é resposta de nada:
@@ -50,8 +65,8 @@ class _TelaTemporadasState extends State<TelaTemporadas> {
                 'O calendário tem duas camadas. Em cima, faixa cheia: norma '
                 'lida por inteiro, é resposta do aplicativo. Embaixo, faixa '
                 'hachurada: data que veio do levantamento e cuja norma ainda '
-                'não foi obtida — serve para saber o que procurar, não para '
-                'autuar.',
+                'não foi obtida — serve para saber o que procurar, não como '
+                'resposta pronta.',
                 style: estiloCorpo,
               ),
               const SizedBox(height: 16),
@@ -378,6 +393,55 @@ class _CartaoDefesoState extends State<CartaoDefeso> {
                 ),
               ),
             ),
+          // O camarão tem tamanho mínimo medido de um ponto ao outro, e
+          // a Portaria 656/2022 traz uma figura no Anexo I dizendo quais
+          // são esses pontos. Aqui a figura é redesenhada, sem o brasão
+          // nem o cabeçalho do Ministério que vêm no documento.
+          if (aberto && _ehCamarao(d)) ...[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 18, 0),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                decoration: BoxDecoration(
+                  color: corMar.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('COMO SE MEDE', style: estiloEtiqueta),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Comprimento total é a distância entre a extremidade '
+                      'do rostro e a ponta do telso — art. 6º, § 1º da '
+                      'Portaria SAP/MAPA nº 656/2022, com a figura do '
+                      'Anexo I.',
+                      style: TextStyle(
+                          fontSize: 12.5, height: 1.45, color: corApagada),
+                    ),
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: corBorda),
+                        ),
+                        child: const ComoMedirCamarao(largura: 250),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Figura do Anexo I da Portaria SAP/MAPA nº 656/2022, '
+                      'como publicada.',
+                      style: estiloEtiqueta,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
           if (d.detalhe.isNotEmpty) ...[
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 12, 18, 0),

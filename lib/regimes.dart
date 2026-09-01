@@ -30,7 +30,7 @@
 // Para as espécies em que não localizei plano, o aplicativo não afirma
 // nem nega: diz que a vedação do art. 3º se aplica por padrão e que
 // esta espécie não foi conferida. É a diferença entre "não pode" e
-// "não conferi" — e num aplicativo que serve para autuar, essa
+// "não conferi" — e num aplicativo de consulta, essa
 // diferença é a coisa mais importante da tela.
 // =====================================================================
 
@@ -63,7 +63,7 @@ class Plano {
   final String ondePode;
 
   /// Para que estados a norma vale, sempre dito. Este aplicativo é para
-  /// Santa Catarina: a primeira coisa que a guarnição precisa saber de
+  /// Santa Catarina: a primeira coisa que quem consulta precisa saber de
   /// uma norma é se ela alcança o lugar onde ela está.
   final String abrangencia;
 

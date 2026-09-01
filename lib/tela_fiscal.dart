@@ -183,7 +183,7 @@ class _TelaEnquadramentoState extends State<TelaEnquadramento> {
                 const SizedBox(height: 12),
                 const _Faixa(
                   cor: corPode,
-                  etiqueta: 'NÃO AUTUAR SE',
+                  etiqueta: 'A RESTRIÇÃO NÃO SE APLICA QUANDO',
                   titulo: 'Art. 3º, § 4º',
                   detalhe: 'Captura incidental com liberação viva ou '
                       'descarte no ato, com registro da captura e da '

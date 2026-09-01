@@ -23,8 +23,8 @@ const _avisoDeVersao =
     'regras de emalhe, cerco e espinhel.\n\n'
     'Os textos consolidados não foram obtidos. O CÓDIGO DE UMA MODALIDADE '
     'AQUI PODE NÃO SER O CÓDIGO QUE ESTÁ NO RGP HOJE. Antes de usar um '
-    'número em conferência de licença ou em auto de infração, confira a '
-    'modalidade no registro do MPA.\n\n'
+    'número em conferência de licença ou em qualquer decisão, confira a '
+    'modalidade no registro do MPA e a norma nos sites oficiais.\n\n'
     'A Portaria Interministerial nº 24/2018 acrescentou ao Anexo II a '
     'modalidade emalhe anilhado, que também não consta desta lista.';
 

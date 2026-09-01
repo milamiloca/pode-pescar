@@ -4,9 +4,9 @@
 // Onde o aplicativo dá uma resposta e existe indício de que ela pode
 // estar errada, o ponto entra aqui e a ficha da espécie avisa.
 //
-// Isso não é excesso de zelo. O app é usado para autuar. Uma resposta
-// errada custa caro nos dois sentidos: deixar passar quem deveria ser
-// autuado, ou autuar quem estava dentro da lei. Enquanto a dúvida
+// Isso não é excesso de zelo. O app é usado para decidir. Uma resposta
+// errada custa caro nos dois sentidos: dar por permitido o que a norma
+// proíbe, ou dar por proibido o que ela permite. Enquanto a dúvida
 // existe, quem está com o aparelho na mão precisa saber que ela existe.
 //
 // Nada aqui é palpite: cada ponto tem o que o app diz hoje, o que a
@@ -56,12 +56,60 @@ class Conflito {
 
 const conflitos = <Conflito>[
   Conflito(
+    titulo: 'Lula com arrasto de fundo dentro do defeso do camarão — '
+        'RESOLVIDO',
+    desde: '01/09/2026',
+    cientificos: [
+      'Loligo plei',
+      'Loligo sanpaulensis',
+      'Lolliguncula brevis',
+    ],
+    tambemAlcanca: 'Alcança quem pesca lula em Santa Catarina entre 28 de '
+        'janeiro e 31 de março, que é onde as duas janelas se cruzam.',
+    appDiz: 'Que NÃO pode arrastar de fundo para pegar lula durante o '
+        'defeso do camarão, mesmo que a Portaria da lula liste o arrasto '
+        'de fundo entre as modalidades autorizadas.\n\n'
+        'POR QUE A DÚVIDA APARECE. A Portaria Interministerial MPA/MMA nº '
+        '14, de 1º de novembro de 2024, permite a pesca de lula em Santa '
+        'Catarina de 1º DE NOVEMBRO A 31 DE MARÇO (art. 1º) e lista, '
+        'entre as modalidades autorizadas, a 3.8 e a 3.9 — arrasto de '
+        'fundo (art. 2º, II). O defeso do camarão da Portaria SAP/MAPA nº '
+        '656/2022 vai de 28 DE JANEIRO A 30 DE ABRIL. As duas janelas se '
+        'cruzam em fevereiro e março.\n\n'
+        'Lendo só a Portaria da lula, alguém concluiria que arrastar de '
+        'fundo em fevereiro está liberado. É a leitura errada, e é a '
+        'leitura permissiva.',
+    indicio: 'ESTE PONTO ESTÁ DECIDIDO, e por duas fontes.\n\n'
+        'PRIMEIRA — a posição do órgão. Em nota de 23 de abril de 2026, o '
+        'IBAMA afirma textualmente que "a Portaria MPA/MMA nº 14/2024 não '
+        'autoriza o uso de arrasto de fundo durante o defeso do camarão, '
+        'devendo a captura de lula ocorrer exclusivamente por métodos '
+        'permitidos e de menor impacto ambiental".\n\n'
+        'SEGUNDA — a decisão judicial. Na Ação Civil Pública nº '
+        '5010379-83.2026.4.04.7200/SC, o Estado de Santa Catarina pediu '
+        'liminar para autorizar a pesca de lula por arrasto de fundo '
+        'durante o defeso do camarão. Em 20 de abril de 2026 o Juiz '
+        'Federal Marcelo Krás Borges INDEFERIU o pedido, registrando que '
+        'o arrasto de fundo compromete a reprodução das espécies, tem '
+        'baixa seletividade, com elevado descarte de fauna acompanhante, '
+        'e causa impactos severos ao habitat marinho.\n\n'
+        'A mesma nota informa a Operação Decapoda, em curso no RJ, SP, '
+        'PR, SC e RS, com mais de 3 toneladas de camarão apreendidas '
+        'desde o início do defeso, em 28 de janeiro de 2026.',
+    falta: 'Nada para resolver a dúvida — ela está resolvida. O que falta '
+        'é acompanhar o desfecho da Ação Civil Pública, porque a liminar '
+        'foi indeferida mas o processo segue. Se a decisão final mudar, '
+        'este ponto muda com ela.\n\n'
+        'Falta também o Anexo I da Portaria 14/2024, que altera os Anexos '
+        'II, III e VI da IN MPA/MMA nº 10/2011 — o aplicativo cita a '
+        'alteração e não tem o texto dela.',
+  ),
+  Conflito(
     titulo: 'Arrasto na Babitonga: a de 1983 proíbe, a de 2002 abre exceção',
     desde: '29/08/2026',
     cientificos: [],
     tambemAlcanca: 'Não é um ponto de espécie: é de ÁREA E PETRECHO. '
-        'Alcança qualquer abordagem de arrasto dentro da Baía da '
-        'Babitonga.',
+        'Alcança qualquer arrasto dentro da Baía da Babitonga.',
     appDiz: 'Mostra as duas regras, e diz que na Babitonga vale a de '
         '2002.\n\n'
         'A Portaria SUDEPE nº N-51, de 26 de outubro de 1983, art. 1º, '
@@ -87,16 +135,20 @@ const conflitos = <Conflito>[
         '2000). Fora da Babitonga, e dentro da Babitonga para qualquer '
         'arrasto que não seja o gerival do art. 2º, a de 1983 segue '
         'inteira.\n\n'
-        'NA PRÁTICA DA ABORDAGEM: gerival na Babitonga, dentro das '
+        'NA PRÁTICA: gerival na Babitonga, dentro das '
         'condições do art. 2º e por pescador profissional registrado, '
         'não é infração. Gerival fora daquelas condições, ou arrasto de '
         'outra natureza, ou gerival em qualquer outra baía catarinense, é '
         'infração pelas duas normas.',
     falta: 'Confirmação, junto ao IBAMA/SC, de que a Portaria SUDEPE nº '
         'N-51/1983 segue vigente e de que a leitura acima é a que o órgão '
-        'aplica. E o texto da Portaria IBAMA nº 107, de 29 de setembro de '
-        '1992, que trata do arrasto motorizado perto da costa catarinense '
-        'e pode mudar o desenho do conjunto.',
+        'aplica.\n\n'
+        'Fica em aberto, ao lado disto, qual norma fixa hoje a DISTÂNCIA '
+        'MÍNIMA DA COSTA para o arrasto motorizado na costa aberta de '
+        'Santa Catarina. A Portaria IBAMA nº 107/1992 foi esvaziada do '
+        'aplicativo em 01/09/2026 e a IN IBAMA nº 189/2008, cujo texto foi '
+        'lido, não fixa distância nenhuma nem revoga aquela. Veja o item '
+        '"Distância mínima da costa" na tela Onde não pode.',
   ),
   Conflito(
     titulo: 'A vigência dos Planos de Recuperação, e a revisão de 2026',
@@ -198,13 +250,15 @@ const conflitos = <Conflito>[
         'portarias específicas apenas "para espécies que NÃO constam nos '
         'Anexos I e II" — e estas constam. Lido a contrario, sugere que '
         'para as espécies dos anexos valem os números dela. E, em matéria '
-        'sancionadora, dúvida real não autua.\n\n'
+        'sancionadora, dúvida real não se resolve contra quem é '
+        'fiscalizado.\n\n'
         'No bagre-branco a questão é secundária em Santa Catarina: o art. '
         '2º, § 1º da Portaria 39 só permite a captura nas águas adjacentes '
         'a São Paulo e ao Paraná. No badejo quadrado não há restrição '
         'geográfica, e a dúvida vale para o litoral inteiro.',
-    falta: 'Orientação do comando sobre qual número aplicar onde a captura '
-        'é permitida.',
+    falta: 'A definição de qual número aplicar onde a captura é '
+        'permitida. Enquanto não houver, consulte as duas normas nos '
+        'sites oficiais.',
   ),
   Conflito(
     titulo: 'O asterisco da Lista — leitura adotada em 29/08/2026',

@@ -411,8 +411,8 @@ class _NotaDefeso extends StatelessWidget {
           Expanded(
             child: Text(
               'Esta conferência não olha defeso. As datas de defeso mudam '
-              'várias vezes por ano e não estão dentro do aplicativo — '
-              'confira na sua colônia antes de sair.',
+              'várias vezes por ano — consulte a norma nos sites oficiais '
+              'antes de aplicar.',
               style: TextStyle(fontSize: 13, height: 1.4, color: corApagada),
             ),
           ),

@@ -81,7 +81,7 @@ class Periodo {
 
   /// As datas por extenso, com o verbo certo para o tipo. A barra
   /// desenha a forma do período; isto diz o número, que é o que a
-  /// guarnição precisa falar em voz alta na abordagem.
+  /// quem consulta precisa poder ler em voz alta.
   String get datas => tipo == TipoPeriodo.fechado
       ? 'Fechado de ${porExtenso(de)} a ${porExtenso(ate)}'
       : 'Só pode de ${porExtenso(de)} a ${porExtenso(ate)}';
@@ -273,21 +273,22 @@ const periodos = <Periodo>[
     artigo: 'art. 6º',
   ),
 
-  // =================================================================
-  // A CONFIRMAR — datas do levantamento, norma ainda não obtida
-  // =================================================================
   Periodo(
     especie: 'Enchova ou anchova',
     detalhe: 'Defeso',
     tipo: TipoPeriodo.fechado,
     de: 1201,
     ate: 331,
-    onde: 'Paraná, Santa Catarina e Rio Grande do Sul',
+    onde: 'Litoral sul do país — Paraná, Santa Catarina e Rio Grande do Sul',
     norma: 'Instrução Normativa Interministerial MPA/MMA nº 02, de 27 '
         'de novembro de 2009',
-    artigo: 'norma a obter',
-    confirmado: false,
+    artigo: 'art. 4º',
+    confirmado: true,
   ),
+
+  // =================================================================
+  // A CONFIRMAR — datas do levantamento, norma ainda não obtida
+  // =================================================================
   Periodo(
     especie: 'Bagre rosado',
     detalhe: 'Defeso',
@@ -373,38 +374,43 @@ const periodos = <Periodo>[
   ),
   Periodo(
     especie: 'Águas continentais — bacia do rio Uruguai',
-    detalhe: 'Todas as espécies ocorrentes na bacia, pesca desembarcada',
+    detalhe: 'Piracema. Sobra anzol simples, um por pescador; embarcado '
+        'só em barco não motorizado',
     tipo: TipoPeriodo.fechado,
     de: 1001,
     ate: 131,
     onde: 'Bacia hidrográfica do rio Uruguai, em Santa Catarina e no '
         'Rio Grande do Sul',
     norma: 'IN IBAMA nº 193, de 2 de outubro de 2008',
-    artigo: 'norma a obter',
-    confirmado: false,
+    artigo: 'art. 2º',
+    confirmado: true,
   ),
   Periodo(
     especie: 'Águas continentais — demais bacias',
-    detalhe: 'Todas as espécies ocorrentes na bacia, pesca desembarcada',
+    detalhe: 'Piracema. Sobra anzol simples, um por pescador, embarcado '
+        'ou não',
     tipo: TipoPeriodo.fechado,
     de: 1101,
     ate: 131,
-    onde: 'Bacias de Santa Catarina e do Rio Grande do Sul, exceto a do '
-        'rio Uruguai e as lagoas costeiras que a norma excepciona',
+    onde: 'Bacias hidrográficas de Santa Catarina e do Rio Grande do Sul. '
+        'NÃO alcança a bacia do rio Uruguai (tem norma própria) nem as '
+        'LAGOAS COSTEIRAS E BAÍAS DE SANTA CATARINA (art. 3º, VI)',
     norma: 'IN IBAMA nº 197, de 2 de outubro de 2008',
-    artigo: 'norma a obter',
-    confirmado: false,
+    artigo: 'art. 4º',
+    confirmado: true,
   ),
   Periodo(
     especie: 'Águas continentais — bacia do rio Paraná',
-    detalhe: 'Todas as espécies ocorrentes na bacia, pesca desembarcada',
+    detalhe: 'Piracema. Proibida também a captura de espécies nativas '
+        'da bacia, inclusive ornamentais',
     tipo: TipoPeriodo.fechado,
     de: 1101,
     ate: 228,
-    onde: 'Bacia do rio Paraná — MG, GO, SP, PR, MS e Santa Catarina',
+    onde: 'Bacia hidrográfica do rio Paraná. A norma delimita por BACIA e '
+        'não nomeia estados — não cita Santa Catarina em nenhum artigo',
     norma: 'IN IBAMA nº 25, de 1º de setembro de 2009',
-    artigo: 'norma a obter',
-    confirmado: false,
+    artigo: 'art. 1º',
+    confirmado: true,
   ),
 ];
 
@@ -467,9 +473,9 @@ const _mesesPorExtenso = [
 /// Uma virada: o dia em que um período começa ou termina.
 ///
 /// O calendário responde "como é o ano". Isto responde outra pergunta,
-/// que em serviço aparece tanto quanto: o que muda a seguir, e em
+/// que na prática aparece tanto quanto: o que muda a seguir, e em
 /// quantos dias. Quem sabe que o cherne fecha em três dias avisa o
-/// pescador antes, em vez de autuar depois.
+/// aviso antes, em vez da surpresa depois.
 class Virada {
   final int mmdd;
   final bool fecha;

@@ -2,6 +2,7 @@ import 'ameacadas.dart';
 import 'conflitos.dart';
 import 'dados.dart';
 import 'defesos.dart';
+import 'nomes.dart';
 import 'regimes.dart';
 
 // =====================================================================
@@ -109,7 +110,18 @@ class Ficha {
   List<Conflito> get emVerificacao => conflitosDe(cientifico);
   bool get temDuvida => emVerificacao.isNotEmpty;
 
+  /// Os nomes comuns oficiais da espécie, pela Portaria MPA nº
+  /// 532/2025. Lista vazia quando a espécie não consta daquela Portaria
+  /// — o que é comum, porque ela cobre as espécies de interesse
+  /// comercial, e a Lista de ameaçadas tem muita espécie que ninguém
+  /// pesca.
+  List<String> get nomesComuns => comunsDe(cientifico);
+  bool get temNomeComum => nomesComuns.isNotEmpty;
+
   /// Tudo em que a busca deve procurar.
+  ///
+  /// Os nomes comuns oficiais entram aqui porque quem consulta digita o
+  /// nome que usa. Sem isso, procurar "cururuca" não acha a corvina.
   String get textoDeBusca => [
         in53?.nome ?? '',
         in53?.cientifico ?? '',
@@ -117,6 +129,7 @@ class Ficha {
         lista?.pop445 ?? '',
         lista?.familia ?? '',
         lista?.ordem ?? '',
+        nomesComuns.join(' '),
       ].join(' ');
 }
 

@@ -5,6 +5,8 @@ import 'dados.dart';
 import 'defesos.dart';
 import 'desenhos.dart';
 import 'fichas.dart';
+import 'nomes.dart';
+import 'procura.dart';
 import 'regimes.dart';
 import 'tela_fiscal.dart';
 import 'tela_apoio.dart';
@@ -111,7 +113,7 @@ class _TelaEspeciesState extends State<TelaEspecies> {
               ),
               Expanded(
                 child: achadas.isEmpty
-                    ? const _Vazio()
+                    ? _Vazio(termo: busca)
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                         itemCount: achadas.length,
@@ -242,11 +244,16 @@ class _Linha extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // O nome comum oficial da Portaria 532/2025 vem antes do nome da
+    // portaria revogada: é o que está em vigor, e é o que a pessoa fala.
+    final oficial = f.nomesComuns.take(3).join(', ');
     final segunda = f.in53 != null
-        ? f.cientifico
-        : (f.lista!.pop445.isNotEmpty
-            ? '${f.lista!.pop445}  ·  nome da portaria revogada'
-            : '${f.lista!.familia} · ${f.lista!.ordem}');
+        ? (oficial.isNotEmpty ? '${f.cientifico}  ·  $oficial' : f.cientifico)
+        : (oficial.isNotEmpty
+            ? oficial
+            : (f.lista!.pop445.isNotEmpty
+                ? '${f.lista!.pop445}  ·  nome da portaria revogada'
+                : '${f.lista!.familia} · ${f.lista!.ordem}'));
 
     return Cartao(
       destaque: f.vedadaHoje && !f.temPlano ? corNaoPode : null,
@@ -343,21 +350,186 @@ class _Etiqueta extends StatelessWidget {
   }
 }
 
+/// O que o aplicativo responde quando não encontra ficha.
+///
+/// Antes respondia só "nenhuma espécie encontrada", e isso é perigoso:
+/// esta tela cobre tamanho mínimo e espécie ameaçada, mais nada. Um
+/// peixe pode não ter ficha aqui e mesmo assim estar num defeso, numa
+/// área fechada ou numa modalidade. Quem procurou e não achou lê o
+/// silêncio como "não há regra", e não é isso que o silêncio quer dizer.
+///
+/// Então a busca continua: pela Portaria MPA nº 532/2025, para descobrir
+/// por qual nome científico a norma chama aquilo; e pelas outras telas,
+/// para mostrar onde o termo aparece.
 class _Vazio extends StatelessWidget {
-  const _Vazio();
+  final String termo;
+  const _Vazio({required this.termo});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(40),
-        child: Text(
-          'Nenhuma espécie encontrada.\n\nTente só o começo do nome, o '
-          'gênero (Balistes), a família (Balistidae) ou a ordem.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, height: 1.5, color: corApagada),
+    final t = termo.trim();
+    if (t.length < 3) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(40),
+          child: Text(
+            'Nenhuma espécie encontrada.\n\nTente só o começo do nome, o '
+            'gênero (Balistes), a família (Balistidae) ou a ordem.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, height: 1.5, color: corApagada),
+          ),
         ),
-      ),
+      );
+    }
+
+    final cientificos = cientificosDoTermo(t);
+    final mencoes = ondeMaisAparece(t);
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+      children: [
+        Container(
+          padding: const EdgeInsets.fromLTRB(15, 14, 15, 15),
+          decoration: BoxDecoration(
+            color: corBoia.withValues(alpha: 0.09),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: corBoia.withValues(alpha: 0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Selo('não consta nesta tela', cor: corBoia, forte: true),
+              const SizedBox(height: 10),
+              Text(
+                'Nenhuma espécie desta tela atende por "$t".',
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    height: 1.35,
+                    color: corTinta),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'ISSO NÃO QUER DIZER QUE A PESCA SEJA LIVRE. Esta tela '
+                'responde por duas coisas apenas: tamanho mínimo da IN 53 '
+                'e espécie na Lista Nacional Oficial de ameaçadas. Defeso, '
+                'área proibida e petrecho estão nas outras telas, e uma '
+                'espécie pode estar em qualquer uma delas sem ter ficha '
+                'aqui.',
+                style: TextStyle(fontSize: 13, height: 1.5, color: corTinta),
+              ),
+            ],
+          ),
+        ),
+        if (cientificos.isNotEmpty) ...[
+          const SizedBox(height: 22),
+          Text('COMO A NORMA CHAMA', style: estiloEtiqueta),
+          const SizedBox(height: 3),
+          const Text(
+            'Pela Portaria MPA nº 532, de 23 de setembro de 2025, que fixa '
+            'os nomes comuns oficiais.',
+            style: TextStyle(fontSize: 12.5, height: 1.4, color: corApagada),
+          ),
+          const SizedBox(height: 10),
+          for (final c in cientificos.take(8))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Cartao(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      c,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w600,
+                        color: corTinta,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      comunsEmLinha(c),
+                      style: const TextStyle(
+                          fontSize: 13, height: 1.4, color: corApagada),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          if (cientificos.length > 8)
+            Text('… e mais ${cientificos.length - 8}.',
+                style: const TextStyle(fontSize: 12.5, color: corApagada)),
+        ],
+        if (mencoes.isNotEmpty) ...[
+          const SizedBox(height: 22),
+          Text('ONDE ESTE NOME APARECE NO APLICATIVO', style: estiloEtiqueta),
+          const SizedBox(height: 3),
+          const Text(
+            'O aplicativo mostra onde o nome aparece. Qual regra se aplica '
+            'depende do lugar, do petrecho e da data — isso o aplicativo '
+            'não decide por você.',
+            style: TextStyle(fontSize: 12.5, height: 1.4, color: corApagada),
+          ),
+          const SizedBox(height: 10),
+          for (final m in mencoes)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Cartao(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Selo(nomesDeCamada[m.camada]!, cor: corMar),
+                    const SizedBox(height: 8),
+                    Text(
+                      m.titulo,
+                      style: const TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w600,
+                          height: 1.3,
+                          color: corTinta),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'aparece ${m.onde}',
+                      style: const TextStyle(
+                          fontSize: 12.5, height: 1.4, color: corApagada),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(height: 1, color: corBorda),
+                    const SizedBox(height: 7),
+                    Text(
+                      m.norma,
+                      style: const TextStyle(
+                          fontSize: 12,
+                          height: 1.4,
+                          fontWeight: FontWeight.w500,
+                          color: corApagada),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+        if (cientificos.isEmpty && mencoes.isEmpty) ...[
+          const SizedBox(height: 20),
+          const Text(
+            'Também não encontrei esse nome nas outras telas nem na '
+            'Portaria MPA nº 532/2025 dos nomes oficiais.\n\n'
+            'Tente só o começo do nome, o gênero (Balistes), a família '
+            '(Balistidae) ou a ordem. Se ainda assim não aparecer, '
+            'consulte a norma nos sites oficiais.',
+            style: TextStyle(fontSize: 14, height: 1.55, color: corApagada),
+          ),
+        ],
+        const SizedBox(height: 20),
+        const Text(
+          'Na dúvida, consulte a norma nos sites oficiais.',
+          style: TextStyle(fontSize: 12.5, height: 1.5, color: corApagada),
+        ),
+      ],
     );
   }
 }
@@ -425,6 +597,9 @@ class TelaFicha extends StatelessWidget {
               // 3. a classificação na Lista
               if (f.ameacada) ..._classificacao(),
 
+              // 3b. o que o aplicativo procurou e não encontrou
+              ..._naoEncontrado(),
+
               // 4. as ações
               const SizedBox(height: 22),
               if (f.ameacada) ...[
@@ -471,6 +646,105 @@ class TelaFicha extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // ---------- o que o aplicativo procurou e não encontrou ----------
+  //
+  // Antes a ficha só omitia a seção que a norma não alcançava. Omitir é
+  // a resposta errada, e é errada sempre para o mesmo lado: quem abre a
+  // ficha de um peixe e não lê nada sobre tamanho conclui que pode levar
+  // de qualquer medida.
+  //
+  // O aplicativo carrega as duas listas por inteiro — as 35 espécies da
+  // IN 53 e as 490 do Anexo I da Portaria 1.667. A ausência nelas não é
+  // "não achei": é fato conferível. O que ele não pode afirmar é que não
+  // exista tamanho mínimo em lugar nenhum, porque existe em Plano de
+  // Recuperação, em norma estadual e em norma específica de espécie. Daí
+  // o texto dizer onde procurou, e mandar consultar o resto.
+
+  List<Widget> _naoEncontrado() {
+    final semTamanho = !f.temTamanho && (f.plano?.cmMinimo ?? 0) == 0;
+    final foraDaLista = !f.ameacada;
+    if (!semTamanho && !foraDaLista) return const [];
+
+    return [
+      const SizedBox(height: 12),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 15),
+        decoration: BoxDecoration(
+          color: corSuperficie,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: corBorda),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Selo('não localizado', cor: corApagada),
+            const SizedBox(height: 11),
+            if (semTamanho) ...[
+              const Text(
+                'TAMANHO MÍNIMO',
+                style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.6,
+                    color: corApagada),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'Não foi encontrada regulamentação de tamanho mínimo de '
+                'captura para esta espécie na Instrução Normativa MMA nº '
+                '53/2005, que é a norma de tamanhos que este aplicativo '
+                'carrega.\n\n'
+                'Isso não quer dizer que não exista tamanho mínimo. Pode '
+                'haver medida fixada em Plano de Recuperação, em norma '
+                'estadual ou em norma específica da espécie. Consulte a '
+                'norma nos sites oficiais.',
+                style: TextStyle(
+                    fontSize: 13, height: 1.5, color: corTinta),
+              ),
+            ],
+            if (semTamanho && foraDaLista) const SizedBox(height: 13),
+            if (foraDaLista) ...[
+              const Text(
+                'LISTA NACIONAL DE ESPÉCIES AMEAÇADAS',
+                style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.6,
+                    color: corApagada),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'Esta espécie não consta do Anexo I da Portaria GM/MMA nº '
+                '1.667, de 27 de abril de 2026 — a Lista Nacional Oficial '
+                'de Espécies Ameaçadas de Extinção. O aplicativo carrega '
+                'esse anexo por inteiro.\n\n'
+                'A vedação de captura do art. 3º da Portaria GM/MMA nº '
+                '1.666/2026 alcança as espécies da Lista. Não estar nela '
+                'afasta essa vedação, e só ela: defeso, área proibida, '
+                'petrecho e tamanho seguem valendo pelas normas próprias '
+                'de cada um.',
+                style: TextStyle(
+                    fontSize: 13, height: 1.5, color: corTinta),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Container(height: 1, color: corBorda),
+            const SizedBox(height: 10),
+            const Text(
+              'Na dúvida, consulte a norma nos sites oficiais.',
+              style: TextStyle(
+                  fontSize: 12.5,
+                  height: 1.4,
+                  fontWeight: FontWeight.w500,
+                  color: corApagada),
+            ),
+          ],
+        ),
+      ),
+    ];
   }
 
   // ---------- qual veredito a ficha dá ----------
@@ -750,8 +1024,8 @@ class TelaFicha extends StatelessWidget {
           texto: 'É o nome da coluna "Nome comum" da Portaria MMA nº '
               '445/2014, revogada pela 1.667. A Lista em vigor não traz nome '
               'popular. Está aqui só para achar a espécie na busca: não '
-              'fundamenta autuação, e o nome usado na região pode ser outro. '
-              'O que vale é o nome científico.',
+              'fundamenta decisão nenhuma, e o nome usado na região pode '
+              'ser outro. O que vale é o nome científico.',
         ),
       ],
       if (a.marca) ...[
@@ -943,7 +1217,7 @@ class _MedidaVencida extends StatelessWidget {
 }
 
 /// As três categorias não são três níveis de vedação.
-/// As regras do Plano, em campos, para consulta em serviço.
+/// As regras do Plano, em campos, para consulta rápida.
 class _RegraDoPlano extends StatelessWidget {
   final Plano p;
   const _RegraDoPlano({required this.p});
@@ -1032,7 +1306,7 @@ class _CampoDoPlano extends StatelessWidget {
 
 /// Onde a IN 53 e o Plano dão números diferentes, os dois aparecem, e
 /// o aplicativo diz qual prevalece e por quê. Esconder um deles seria
-/// mais limpo e menos honesto: quem for autuar vai encontrar os dois.
+/// mais limpo e menos honesto: quem for aplicar vai encontrar os dois.
 class _TamanhoDivergente extends StatelessWidget {
   final int cmIn53;
   final int cmPlano;
@@ -1053,8 +1327,10 @@ class _TamanhoDivergente extends StatelessWidget {
           'de portarias específicas apenas "para espécies que NÃO constam '
           'nos Anexos I e II" — e esta consta. Lido a contrario, sugere '
           'que para as espécies dos anexos valem os números dela. E, em '
-          'matéria sancionadora, dúvida real não autua.\n\n'
-          'Confira com o comando qual número aplicar antes de autuar.',
+          'matéria sancionadora, dúvida real não se resolve contra quem '
+          'é fiscalizado.\n\n'
+          'Consulte as duas normas nos sites oficiais antes de aplicar '
+          'um dos dois números.',
     );
   }
 }

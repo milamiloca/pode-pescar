@@ -7,7 +7,7 @@ import 'tema.dart';
 //
 // A lista dos pontos em que o aplicativo dá uma resposta e existe
 // indício de que ela pode estar errada. Serve para duas pessoas: quem
-// está em serviço, para não confiar cegamente naquele ponto; e quem vai
+// está consultando, para não confiar cegamente naquele ponto; e quem vai
 // buscar a norma que falta, para saber exatamente qual pedir.
 // =====================================================================
 
@@ -192,10 +192,10 @@ class _Porque extends StatelessWidget {
           Text('POR QUE ISTO ESTÁ À VISTA', style: estiloEtiqueta),
           SizedBox(height: 10),
           Text(
-            'Enquanto a dúvida existe, quem está em serviço precisa saber '
-            'que ela existe. Um aplicativo de fiscalização que esconde o '
-            'que não conferiu é pior do que não ter aplicativo: ele dá '
-            'confiança onde não deveria haver.',
+            'Enquanto a dúvida existe, quem consulta precisa saber que '
+            'ela existe. Um aplicativo que esconde o que não conferiu é '
+            'pior do que não ter aplicativo: ele dá confiança onde não '
+            'deveria haver.',
             style: TextStyle(fontSize: 14, height: 1.5, color: corTinta),
           ),
           SizedBox(height: 12),

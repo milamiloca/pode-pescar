@@ -144,6 +144,45 @@ class PeixePainter extends CustomPainter {
       antigo.ateFurca != ateFurca;
 }
 
+// -------------------------------------------------------------- camarão
+
+/// A figura do Anexo I da Portaria SAP/MAPA nº 656/2022.
+///
+/// É a imagem da própria norma, não um desenho parecido: os dois pontos
+/// de referência da medida — rostro e telso — precisam ser os que o
+/// documento mostra, porque é sobre eles que a discussão acontece em
+/// campo.
+///
+/// Do arquivo original foi retirado só o cabeçalho, com o Brasão da
+/// República e o nome do Ministério. Ele não faz parte do desenho, e
+/// este aplicativo não é institucional. A figura está inteira: o título,
+/// as duas setas, a chave do comprimento total e a nota de rodapé.
+///
+/// Imagem de 900 px de largura, 62 KB — é o único arquivo de imagem do
+/// aplicativo.
+class ComoMedirCamarao extends StatelessWidget {
+  final double largura;
+  const ComoMedirCamarao({super.key, this.largura = 260});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/camarao_656.png',
+      width: largura,
+      fit: BoxFit.contain,
+      // A figura é traço preto sobre fundo branco. Num tema escuro ela
+      // ficaria uma mancha; o fundo claro atrás dela resolve isso sem
+      // mexer na imagem.
+      errorBuilder: (context, erro, pilha) => Text(
+        'Figura do Anexo I da Portaria SAP/MAPA nº 656/2022 — a medida '
+        'vai da extremidade do rostro à ponta do telso.',
+        style: const TextStyle(
+            fontSize: 12.5, height: 1.45, color: corApagada),
+      ),
+    );
+  }
+}
+
 // ------------------------------------------------------------- petrecho
 
 /// Esquema do apetrecho, desenhado só com traço — o registro é o de

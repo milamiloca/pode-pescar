@@ -171,6 +171,15 @@ SEM_CITAR = [
      'MPA/MMA nº 66, de 27 de julho de 2026, combinada com a Portaria MMA '
      'nº 1.742, de 24 de julho de 2026 — e é para essas duas que o Plano '
      'do pargo já aponta no aplicativo. Fica aqui só como histórico.'),
+    ('Portaria IBAMA nº 107, de 29 de setembro de 1992 — RETIRADA DO '
+     'APLICATIVO EM 01/09/2026', 'IBAMA',
+     'Era a regra de distância mínima da costa para o arrasto motorizado '
+     'em SC. Nunca teve o texto obtido, e tudo o que ela dizia foi '
+     'apagado do aplicativo por ordem da Camila. A pesquisa a dá como '
+     'revogada pela IN IBAMA nº 189/2008 — mas o texto da 189/2008 foi '
+     'lido e o art. 8º dela revoga apenas as IN IBAMA 91/2006 e 92/2006. '
+     'Fica registrada só como histórico. NÃO REPOR números dela sem o '
+     'texto publicado na mão.'),
     ('Instrução Normativa MPA nº 14, de 3 de outubro de 2014 — '
      'CONSOLIDADO DA IN 10/2011', 'MPA',
      'EM VIGOR. Alterou o Anexo I da IN 10/2011: reestruturou a '

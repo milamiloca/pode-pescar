@@ -278,6 +278,94 @@ for (arq, classe), membros in ESPERADO.items():
 print(f'  10. membros dentro das classes .... '
       f'{sum(len(v) for v in ESPERADO.values())} conferidos')
 
+# 15. nada de entrada repetida
+#
+# Aconteceu: a lula ja' estava no aplicativo, vinda da compilacao, e uma
+# segunda entrada foi acrescentada por cima sem ninguem conferir. Duas
+# linhas para a mesma regra no calendario e' ruim de duas maneiras — a
+# contagem mente ("2 de 3 fechadas hoje") e quem le acha que sao regras
+# diferentes.
+import unicodedata
+
+
+def _mesmo_bicho(a, b):
+    """"Lula" e "Lulas" são o mesmo bicho; "Tainha" e "Sardinha" não."""
+    def limpo(x):
+        x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore').decode()
+        x = x.lower().strip().rstrip('s')
+        return x
+    return limpo(a) == limpo(b)
+
+
+# mesma norma + mesmas datas + mesmo tipo: pode ser duplicata, pode ser
+# modalidade diferente. Só é falha quando a espécie também é a mesma.
+por_norma = {}
+for p in PER:
+    k = (p['norma'].strip(), p['de'], p['ate'], p['tipo'])
+    por_norma.setdefault(k, []).append(p)
+for k, lista in por_norma.items():
+    if len(lista) < 2:
+        continue
+    for i in range(len(lista)):
+        for j in range(i + 1, len(lista)):
+            a, b = lista[i], lista[j]
+            # No calendário isto é AVISO, não falha: a tainha tem, de
+            # propósito, duas linhas com a mesma norma e as mesmas datas
+            # — uma por modalidade. Não dá para distinguir por máquina o
+            # desdobramento proposital da duplicata acidental; dá para
+            # colocar as duas à vista de quem lê.
+            aviso('repetido',
+                  f'calendário: "{a["especie"]}" ({a["detalhe"][:34]}) e '
+                  f'"{b["especie"]}" ({b["detalhe"][:34]}) dividem norma, '
+                  f'datas e tipo — modalidades diferentes, ou duplicata?')
+
+por_norma_d = {}
+for d in DEF:
+    if d['norma'].strip():
+        por_norma_d.setdefault(d['norma'].strip(), []).append(d['titulo'])
+for norma, titulos in por_norma_d.items():
+    for i in range(len(titulos)):
+        for j in range(i + 1, len(titulos)):
+            if _mesmo_bicho(titulos[i], titulos[j]):
+                erro('repetido', f'defeso: "{titulos[i]}" e "{titulos[j]}" '
+                                 f'são a mesma coisa, pela mesma norma')
+
+vistosa = {}
+for a in ARE:
+    k = (a['norma'].strip(), a['artigo'].strip())
+    if k in vistosa:
+        erro('repetido', f'área: "{a["titulo"]}" e "{vistosa[k]}" são a mesma '
+                         f'norma e o mesmo artigo')
+    else:
+        vistosa[k] = a['titulo']
+print(f'  15. entradas repetidas ........... nenhuma em '
+      f'{len(PER)} períodos, {len(DEF)} defesos, {len(ARE)} áreas')
+
+# 14. a tabela de nomes da Portaria 532 esta sa
+#
+# Nasceu da busca por "carapeba" nao devolver nada. Se a tabela quebrar
+# na geracao, o app volta a responder silencio — e silencio, aqui, e' a
+# resposta que libera quem nao deveria ser liberado.
+tn = io.open(LIB + 'nomes.dart', encoding='utf-8').read()
+pares = re.findall(r"^  '([^']+)': \[([^\]]*)\],$", tn, re.M)
+if len(pares) < 400:
+    erro('nomes', f'nomes.dart tem só {len(pares)} espécies — a geração quebrou')
+maus = 0
+for cient, comuns in pares:
+    if not re.match(r"^[A-Z][a-z]+ (?:[a-zç][a-zç-]+|spp\.|sp\.)", cient):
+        erro('nomes', f'"{cient}" não parece nome científico')
+        maus += 1
+    if not comuns.strip():
+        erro('nomes', f'"{cient}" está sem nome comum')
+        maus += 1
+    if maus > 6:
+        break
+# a busca precisa achar o caso que originou tudo isto
+tem_carapeba = any('Carapeba' in c for _, c in pares)
+if not tem_carapeba:
+    erro('nomes', 'a carapeba sumiu da tabela — foi ela que originou o caso')
+print(f'  14. tabela de nomes .............. {len(pares)} espécies, carapeba presente')
+
 # 13. quebra de linha de verdade, e não a letra n atrás de uma barra
 #
 # Em Dart, '\n' é quebra de linha e '\\n' é uma barra invertida seguida

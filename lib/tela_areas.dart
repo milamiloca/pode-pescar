@@ -6,14 +6,14 @@ import 'tema.dart';
 // =====================================================================
 // ONDE NÃO PODE
 //
-// Esta tela responde à primeira pergunta de uma abordagem em baía, que
-// não é sobre o peixe: é sobre o LUGAR e o PETRECHO. Uma traineira
-// arrastando dentro da Baía Sul comete infração ainda que a espécie no
-// porão esteja liberada e no tamanho certo.
+// Esta tela responde à pergunta que não é sobre o peixe: é sobre o
+// LUGAR e o PETRECHO. Uma traineira arrastando dentro da Baía Sul
+// comete infração ainda que a espécie no porão esteja liberada e no
+// tamanho certo.
 //
-// A ordem na tela é a da abordagem, do mais perto para o mais longe:
-// primeiro a baía e o estuário, onde a guarnição chega de bote; depois
-// a costa; depois a faixa oceânica das regiões Sudeste e Sul.
+// A ordem na tela vai do mais perto da terra para o mais longe:
+// primeiro a baía e o estuário; depois a costa; depois a faixa
+// oceânica das regiões Sudeste e Sul.
 //
 // As regras sazonais aparecem primeiro quando estão valendo hoje. Uma
 // proibição que só vale de 15 de maio a 15 de junho não pode ficar

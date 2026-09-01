@@ -7,8 +7,8 @@ import 'periodos.dart' show porExtenso;
 // defeso, ameaça de extinção. Esta responde sobre o LUGAR e o PETRECHO:
 // onde a embarcação está, o que ela está usando, e se aquilo pode.
 //
-// É a pergunta que a guarnição faz primeiro numa abordagem em baía, e
-// até agora o aplicativo não tinha onde respondê-la. Uma traineira
+// É a primeira pergunta quando o que está em questão é uma baía, e até
+// agora o aplicativo não tinha onde respondê-la. Uma traineira
 // arrastando dentro da Baía Sul é infração mesmo que a espécie no porão
 // esteja liberada e no tamanho.
 //
@@ -47,7 +47,7 @@ const nomesDeAlcance = <Alcance, String>{
 enum TextoDaNorma { lido, aObter }
 
 class Restricao {
-  /// O que a regra proíbe, em uma linha, do jeito que se diz em serviço.
+  /// O que a regra proíbe, em uma linha, sem rodeio.
   final String titulo;
 
   /// O lugar exato, nas palavras da norma.
@@ -117,8 +117,8 @@ class Restricao {
 List<Restricao> restricoesEm(DateTime dia) =>
     restricoes.where((r) => r.valeEm(dia)).toList();
 
-/// As que só valem em parte do ano — as que a guarnição precisa checar
-/// contra a data, e não decorar.
+/// As que só valem em parte do ano — as que precisam ser checadas
+/// contra a data, e não decoradas.
 List<Restricao> get restricoesSazonais =>
     restricoes.where((r) => !r.oAnoInteiro).toList();
 
@@ -392,34 +392,265 @@ const restricoes = <Restricao>[
   ),
 
   // -------------------------------------------------------------------
+  // arrasto de praia — só Santa Catarina
+  // -------------------------------------------------------------------
+  Restricao(
+    titulo: 'Rede de arrasto de praia: malha, comprimento e altura',
+    onde: 'Mar territorial do Estado de Santa Catarina.',
+    oQueProibe: 'Usar rede de arrasto de praia fora destas medidas: malha '
+        'MENOR que 40 mm entre nós opostos da malha esticada, comprimento '
+        'MAIOR que 1.600 m, ou altura MAIOR que 30 m.',
+    norma: 'Portaria SAP/MAPA nº 617, de 8 de março de 2022',
+    artigo: 'art. 3º',
+    alcance: Alcance.estado,
+    texto: TextoDaNorma.lido,
+    detalhe: 'O QUE É ARRASTO DE PRAIA (art. 2º, I)\n'
+        'A pesca feita por pescadores profissionais artesanais '
+        'tradicionais que usam embarcação, a remo ou a motor, para lançar '
+        'ao mar uma rede deixando na praia uma das extremidades — dela ou '
+        'de um cabo ligado a ela — e voltando à praia com a outra. O '
+        'recolhimento é MANUAL, por pescadores e auxiliares, puxando as '
+        'duas pontas, e termina quando a parte central da rede chega à '
+        'praia.\n\n'
+        'AS MEDIDAS DA REDE (art. 3º)\n'
+        'I - malha igual ou superior a 40 mm, entre nós opostos da malha '
+        'esticada;\n'
+        'II - comprimento máximo de 1.600 m;\n'
+        'III - altura máxima de 30 m.\n\n'
+        'SANÇÃO (art. 12)\n'
+        'Penalidades da Lei nº 9.605, de 1998, e do Decreto nº 6.514, de '
+        '2008.\n\n'
+        'REVOGAÇÃO (art. 14)\n'
+        'Revogou a Portaria IBAMA nº 112-N, de 19 de outubro de 1992, e a '
+        'alínea "c" do art. 2º da Portaria IBAMA nº 54-N, de 9 de junho de '
+        '1999.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 09/03/2022, edição 46, página 14. Assinou Jorge Seif '
+        'Júnior, Secretário de Aquicultura e Pesca.',
+  ),
+  Restricao(
+    titulo: 'Arrasto de praia a motor: só entre Passo de Torres e Imbituba',
+    onde: 'Mar territorial de Santa Catarina. O uso de motor é permitido '
+        'apenas para embarcações que operam ENTRE OS MUNICÍPIOS DE PASSO '
+        'DE TORRES E IMBITUBA.',
+    oQueProibe: 'Arrasto de praia com embarcação de comprimento MAIOR que '
+        '12 m, em qualquer lugar. E arrasto de praia A MOTOR fora do '
+        'trecho entre Passo de Torres e Imbituba, ou com motor de '
+        'potência acima de 90 HP.',
+    excecao: 'A remo, a embarcação de até 12 m pode operar em todo o mar '
+        'territorial catarinense, o ano todo.',
+    norma: 'Portaria SAP/MAPA nº 617, de 8 de março de 2022',
+    artigo: 'art. 4º e § 1º',
+    alcance: Alcance.estado,
+    texto: TextoDaNorma.lido,
+    ressalva: 'O art. 4º, § 2º manda expressamente observar "as regras '
+        'específicas de ordenamento das espécies que constam na '
+        'Autorização de Pesca de Arrasto de Praia, incluindo os períodos '
+        'de proibição de pesca e os tamanhos mínimos definidos". Ou seja: '
+        'poder arrastar na praia não afasta o defeso da tainha, o tamanho '
+        'mínimo da corvina nem nenhuma outra regra de espécie. As duas '
+        'coisas se somam.',
+    detalhe: 'QUANDO E COM O QUÊ (art. 4º)\n'
+        'O arrasto de praia pode ser realizado durante o ANO TODO, com '
+        'embarcação de pesca de comprimento máximo de 12 m, a remo ou '
+        'motorizada.\n'
+        '§ 1º O uso de motor é permitido APENAS para embarcações que '
+        'operam entre os municípios de Passo de Torres e Imbituba, e com '
+        'potência máxima de 90 HP.\n'
+        '§ 2º As regras específicas de ordenamento das espécies que '
+        'constam na Autorização de Pesca de Arrasto de Praia, incluindo '
+        'os períodos de proibição de pesca e os tamanhos mínimos '
+        'definidos, deverão ser obedecidas.\n\n'
+        'AS MODALIDADES (art. 5º e Anexo I)\n'
+        'A Portaria acrescentou ao Anexo VI da IN MPA/MMA nº 10/2011 as '
+        'modalidades 6.8, 6.9, 6.10 e 6.11 — todas "arrasto de praia", '
+        'todas com área de operação no mar territorial de Santa Catarina. '
+        'Elas estão na tela de modalidades.\n\n'
+        'CONVERSÃO (art. 7º)\n'
+        'Quem tinha a modalidade 2.2 converte para 6.8 ou 6.11; quem '
+        'tinha 2.4 converte para 6.9 ou 6.11; quem tinha 6.7 converte '
+        'para 6.10 ou 6.11. Quem não tinha nenhuma delas só pode obter a '
+        '6.11. Na conversão, o registro anterior é cancelado.\n\n'
+        'MAPA DE PRODUÇÃO (art. 9º)\n'
+        'Um por dia, enviados até o quinto dia útil do mês seguinte, '
+        'mesmo quando não houve captura da espécie-alvo e mesmo quando a '
+        'embarcação não saiu.\n\n'
+        'O QUE ACONTECE SE NÃO ENVIAR (arts. 10 e 11)\n'
+        'Suspensão da Autorização por 30 dias corridos. Passados os 30 '
+        'dias sem regularizar, a Autorização é cancelada até o fim da '
+        'validade.',
+  ),
+  Restricao(
+    titulo: 'Arrasto motorizado de camarão: não entra frota nova',
+    onde: 'Mar territorial e Zona Econômica Exclusiva das regiões Sudeste '
+        'e Sul. Alcança Santa Catarina.',
+    oQueProibe: 'A CONCESSÃO de autorização de pesca para o ingresso de '
+        'embarcação nas modalidades de arrasto com tração motorizada que '
+        'tenham como alvo o camarão-rosa (Penaeus paulensis, P. '
+        'brasiliensis e P. subtilis) e o sete-barbas (Xiphopenaeus '
+        'kroyeri). A frota está fechada para novas entradas.',
+    norma: 'Portaria SAP/MAPA nº 656, de 30 de março de 2022',
+    artigo: 'art. 7º',
+    alcance: Alcance.regiao,
+    texto: TextoDaNorma.lido,
+    ressalva: 'O QUE O ARTIGO ALCANÇA, E O QUE NÃO ALCANÇA. Ele proíbe '
+        'a CONCESSÃO de autorização para o INGRESSO de embarcação na '
+        'modalidade. Não fala de quem já tem a autorização, não fala de '
+        'renovação, e não fecha a porta da substituição: os arts. 9º e 10 '
+        'da mesma Portaria permitem expressamente substituir a embarcação '
+        'em caso de naufrágio, destruição ou desativação, e transformá-la '
+        '— desde que a nova tenha potência de motor, arqueação bruta e '
+        'comprimento total iguais ou menores que a anterior.\n\n'
+        'Ou seja: uma autorização com data posterior a 30 de março de '
+        '2022 não é, por si, sinal de irregularidade — pode ser '
+        'exatamente a substituição que o art. 9º autoriza. O que a norma '
+        'veda é a entrada de barco novo na modalidade.\n\n'
+        'O defeso, os petrechos e o tamanho mínimo desta mesma Portaria '
+        'estão na tela de defesos, no camarão.',
+    detalhe: 'A PROIBIÇÃO (art. 7º)\n'
+        'Fica proibida a concessão de autorização de pesca para o '
+        'ingresso de embarcação de pesca nas Modalidades de '
+        'Permissionamento de arrasto com tração motorizada que têm como '
+        'espécies-alvo os camarões rosa e o sete-barbas para operar no '
+        'Mar Territorial e na Zona Econômica Exclusiva nas regiões '
+        'Sudeste e Sul do Brasil.\n\n'
+        'SUBSTITUIÇÃO DE EMBARCAÇÃO (arts. 9º e 10)\n'
+        'É permitida em caso de naufrágio, destruição ou desativação, '
+        'desde que do mesmo proprietário. A substituta deve ter potência '
+        'de motor, arqueação bruta e comprimento total IGUAIS OU MENORES '
+        'que a substituída (§ 3º). Acima disso, só para garantir a '
+        'segurança da navegação e do trabalhador a bordo, com documento '
+        'da autoridade marítima (§ 4º). A transformação da embarcação '
+        'segue a mesma regra do menor ou igual (art. 10).',
+  ),
+
+  // -------------------------------------------------------------------
   // a costa catarinense — norma ainda não obtida
   // -------------------------------------------------------------------
   Restricao(
-    titulo: 'Arrasto motorizado perto da costa catarinense',
-    onde: 'Litoral de Santa Catarina, em dois trechos.',
-    oQueProibe: 'TEXTO NÃO OBTIDO. Sabe-se que a Portaria trata do arrasto '
-        'de tração motorizada, por portas ou parelhas, e da distância '
-        'mínima da costa conforme o porte da embarcação. Antes de aplicar, '
-        'consulte a Portaria IBAMA nº 107, de 29 de setembro de 1992.',
-    norma: 'Portaria IBAMA nº 107, de 29 de setembro de 1992',
-    artigo: 'norma a obter',
+    titulo: 'Arrasto de camarão no defeso: a frota não pode trocar de alvo',
+    onde: 'Regiões Sudeste e Sul. Alcança Santa Catarina inteira.',
+    oQueProibe: 'Durante o período de defeso do camarão, as frotas '
+        'permissionadas para o arrasto de camarão ficam proibidas de '
+        'capturar OUTRAS espécies cujo esforço de pesca esteja sob '
+        'controle, ou que constem do Anexo II da Instrução Normativa MMA '
+        'nº 5, de 21 de maio de 2004, e da Instrução Normativa MMA nº 52, '
+        'de 8 de novembro de 2005.',
+    excecao: 'A captura de outras espécies NÃO alcançadas pelo caput, pela '
+        'frota camaroeira permissionada para o camarão-rosa, depende de '
+        'permissão de pesca específica do órgão competente (parágrafo '
+        'único).',
+    norma: 'Instrução Normativa IBAMA nº 189, de 23 de setembro de 2008',
+    artigo: 'art. 6º',
+    alcance: Alcance.regiao,
+    texto: TextoDaNorma.lido,
+    ressalva: 'ATENÇÃO ÀS DATAS DESTA NORMA. O art. 1º, I dela fixou o '
+        'defeso do arrasto motorizado de camarão em 1º DE MARÇO A 31 DE '
+        'MAIO, da divisa ES/RJ até a foz do Arroio Chuí. Não é esse o '
+        'período que se aplica hoje no mar de Santa Catarina: a Portaria '
+        'SAP/MAPA nº 656, de 30 de março de 2022, fixa 28 DE JANEIRO A 30 '
+        'DE ABRIL para RJ, SP, PR, SC e RS, e é ela que a página de '
+        'defesos marinhos do IBAMA, atualizada em 21 de janeiro de 2026, '
+        'apresenta como vigente. Use o defeso da tela de temporadas, não '
+        'as datas de 2008.\n\n'
+        'O que segue útil desta norma é o art. 6º, acima, e o art. 5º: '
+        '"nas áreas estuarinas e lagunares os períodos de defeso serão '
+        'definidos em instruções normativas específicas". É esse artigo '
+        'que sustenta os defesos próprios da Baía da Babitonga e do '
+        'Complexo Lagunar Sul.',
+    detalhe: 'DEFESO DE 2008 (art. 1º) — VER A RESSALVA ACIMA\n'
+        'Proibiu o arrasto com tração motorizada para captura de '
+        'camarão-rosa (Farfantepenaeus paulensis, F. brasiliensis e F. '
+        'subtilis), sete-barbas (Xiphopenaeus kroyeri), branco '
+        '(Litopenaeus schmitti), santana ou vermelho (Pleoticus muelleri) '
+        'e barba-ruça (Artemesia longinaris):\n'
+        'I - de 1º de março a 31 de maio, entre 21º18\'04,00"S (divisa '
+        'ES/RJ) e 33º40\'33,00"S (foz do Arroio Chuí, RS) — a faixa que '
+        'inclui Santa Catarina;\n'
+        'II - entre 21º18\'04,00"S e 18º20\'45,80"S (divisa BA/ES): de 15 '
+        'de novembro a 15 de janeiro, e de 1º de abril a 31 de maio.\n'
+        '§ 2º Desembarque tolerado até o SEGUNDO DIA CORRIDO após o '
+        'início do defeso.\n\n'
+        'CAMARÃO-BRANCO (art. 2º)\n'
+        'Fica permitida a pesca do camarão-branco (Litopenaeus schmitti) '
+        'nas áreas e períodos do art. 1º, DESDE QUE NÃO POR ARRASTO COM '
+        'TRAÇÃO MOTORIZADA.\n\n'
+        'DECLARAÇÃO DE ESTOQUE (art. 3º)\n'
+        'Às Superintendências Estaduais do IBAMA, até o SÉTIMO DIA '
+        'CORRIDO a contar do início do defeso.\n\n'
+        'PRODUTO SEM ORIGEM (art. 4º)\n'
+        'Proibidos, durante o defeso, o transporte interestadual, a '
+        'estocagem, o beneficiamento, a industrialização e a '
+        'comercialização de QUALQUER VOLUME de camarão das espécies '
+        'proibidas sem comprovação de origem, por guia obtida na unidade '
+        'do IBAMA mais próxima, que acompanha o produto da origem ao '
+        'destino final e vale até o 2º dia após a assinatura.\n\n'
+        'ÁREAS ESTUARINAS E LAGUNARES (art. 5º)\n'
+        'Os períodos de defeso serão definidos em instruções normativas '
+        'específicas, de acordo com as características ambientais de cada '
+        'região e as peculiaridades locais da atividade pesqueira.\n\n'
+        'TROCA DE ALVO NO DEFESO (art. 6º)\n'
+        'Proibido às frotas permissionadas para o arrasto de camarão '
+        'capturar, durante o defeso, outras espécies sob controle de '
+        'esforço ou listadas no Anexo II da IN MMA nº 5/2004 e na IN MMA '
+        'nº 52/2005.\n\n'
+        'SANÇÃO (art. 7º)\n'
+        'Penalidades da Lei nº 9.605, de 12 de fevereiro de 1998, e do '
+        'Decreto nº 6.514, de 22 de julho de 2008.\n\n'
+        'REVOGAÇÃO (art. 8º)\n'
+        'Revogou a Instrução Normativa IBAMA nº 91, de 06 de fevereiro de '
+        '2006, e a Instrução Normativa IBAMA nº 92, de 07 de fevereiro de '
+        '2006. E SOMENTE ESSAS DUAS.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 24 de setembro de 2008, edição nº 185, páginas 83 e 84. '
+        'Assinou Roberto Messias Franco.',
+  ),
+  Restricao(
+    titulo: 'Distância mínima da costa para o arrasto motorizado: o '
+        'aplicativo NÃO tem esta regra',
+    onde: 'Costa aberta de Santa Catarina — fora de baía, lagoa costeira, '
+        'canal e estuário.',
+    oQueProibe: 'NADA, AQUI. O aplicativo não afirma nenhuma distância '
+        'mínima da costa para o arrasto de tração motorizada em Santa '
+        'Catarina, porque não tem norma conferida que a fixe. Antes de '
+        'aplicar qualquer distância da costa em arrasto, consulte nos '
+        'sites oficiais a norma de ordenamento vigente do arrasto de '
+        'camarão no Sudeste e Sul.',
+    norma: 'Instrução Normativa IBAMA nº 189, de 23 de setembro de 2008',
+    artigo: 'a norma de distância não foi identificada',
     alcance: Alcance.estado,
-    texto: TextoDaNorma.aObter,
-    ressalva: 'O QUE A PESQUISA INDICA, E QUE O APLICATIVO NÃO AFIRMA: '
-        'proibição de arrasto de tração motorizada por portas ou parelhas, '
-        'para embarcações acima de 10 AB, a menos de 3 milhas náuticas da '
-        'costa entre a divisa com o Rio Grande do Sul (São João do Sul) e '
-        'o Cabo de Santa Marta, e a menos de 1 milha náutica do Cabo de '
-        'Santa Marta para o norte, até a divisa com o Paraná (Itapoá).\n\n'
-        'Isso vem de pesquisa, não do texto publicado. As distâncias e o '
-        'porte são justamente o que decide a autuação — não use estes '
-        'números sem o texto na mão.\n\n'
-        'Enquanto o texto não vem: dentro de baía, lagoa costeira, canal '
-        'ou estuário, a Portaria SUDEPE nº N-51/1983 já proíbe o arrasto '
-        'sob qualquer denominação, e ela foi lida.',
-    detalhe: 'Norma conhecida, texto não obtido. O aplicativo registra a '
-        'existência da regra para que ela não seja esquecida numa '
-        'abordagem, e não reproduz nenhum número que não tenha conferido.',
+    texto: TextoDaNorma.lido,
+    ressalva: 'DE ONDE VEIO ESTA LACUNA. A regra de milhas da costa para o '
+        'arrasto motorizado em Santa Catarina era atribuída à Portaria '
+        'IBAMA nº 107, de 29 de setembro de 1992. Em 01/09/2026 essa '
+        'entrada foi ESVAZIADA: nenhum número dela permanece no '
+        'aplicativo.\n\n'
+        'O QUE SE SABE, E O QUE NÃO SE SABE. A pesquisa aponta a Portaria '
+        '107/1992 como revogada pela Instrução Normativa IBAMA nº 189, de '
+        '23 de setembro de 2008. O texto da IN 189/2008 foi obtido e lido, '
+        'e ELE NÃO DIZ ISSO: o art. 8º revoga a IN IBAMA nº 91/2006 e a IN '
+        'IBAMA nº 92/2006, e mais nenhuma. A IN 189/2008 também não fixa '
+        'distância da costa nenhuma — ela fixa um defeso por faixa de '
+        'latitude. Então ela não é a substituta da regra de milhas: é '
+        'outra coisa.\n\n'
+        'Pode ser que a 107/1992 tenha sido revogada por outra norma, ou '
+        'tacitamente. O aplicativo não afirma nem uma coisa nem outra, e '
+        'sobretudo não reproduz os números antigos.\n\n'
+        'O QUE O APLICATIVO TEM E PODE APLICAR:\n'
+        '· dentro de baía, lagoa costeira, canal ou estuário, a Portaria '
+        'SUDEPE nº N-51/1983 proíbe o arrasto sob qualquer denominação — '
+        'texto lido;\n'
+        '· no mar, o defeso do camarão da Portaria SAP/MAPA nº 656/2022, '
+        'de 28 de janeiro a 30 de abril — texto lido;\n'
+        '· para o EMALHE, as distâncias da Instrução Normativa '
+        'Interministerial MPA/MMA nº 12/2012 — 1 milha para motorizadas, '
+        '4 milhas acima de 20 AB — texto lido. Emalhe não é arrasto: não '
+        'transporte esses números de uma modalidade para a outra.',
+    detalhe: 'Este item existe para que a lacuna não passe despercebida. '
+        'Uma regra que o aplicativo não tem é diferente de uma regra que '
+        'não existe, e a diferença importa na hora de aplicar: diante de '
+        'arrasto motorizado na costa aberta, se a dúvida for a '
+        'distância, a resposta não está aqui.',
   ),
 
   // -------------------------------------------------------------------
@@ -620,12 +851,12 @@ const restricoes = <Restricao>[
     ressalva: 'AS COORDENADAS NÃO ESTÃO AQUI DE PROPÓSITO. A extração do '
         'Anexo I saiu corrompida — uma das longitudes veio como -19, que '
         'não existe naquela costa, e a Área 3 apareceu duas vezes com '
-        'pontos diferentes. Coordenada errada em auto de infração é auto '
-        'perdido. Leia o Anexo I e o mapa do Anexo II no texto publicado '
-        'da Instrução Normativa.\n\n'
-        'O aplicativo registra que as áreas EXISTEM, para que a guarnição '
-        'saiba que precisa conferi-las, e não reproduz números que não '
-        'conferiu.',
+        'pontos diferentes. Coordenada errada leva a conclusão errada. '
+        'Leia o Anexo I e o mapa do Anexo II no texto publicado da '
+        'Instrução Normativa, nos sites oficiais.\n\n'
+        'O aplicativo registra que as áreas EXISTEM, para que se saiba '
+        'que elas precisam ser conferidas, e não reproduz números que '
+        'não conferiu.',
     detalhe: 'A PROIBIÇÃO (art. 5º)\n'
         'Proibir toda e qualquer pesca de emalhe nas áreas de exclusão '
         'correspondentes aos espaços geográficos definidos pelas '
