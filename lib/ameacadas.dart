@@ -74,11 +74,18 @@ class Ameacada {
       this.grupo, this.cat, this.marca, [this.pop445 = '']);
 
   String get categoriaPorExtenso => switch (cat) {
+        'EW' => 'Extintas na Natureza',
         'CR' => 'Criticamente em Perigo',
         'EN' => 'Em Perigo',
         'VU' => 'Vulnerável',
         _ => '',
       };
+
+  /// A categoria como o art. 3º da Portaria 1.666 a escreve: por
+  /// extenso e com a sigla, "Vulnerável - VU". É a etiqueta que a ficha
+  /// mostra, para que o rótulo na tela seja o rótulo da norma.
+  String get categoriaComSigla =>
+      categoriaPorExtenso.isEmpty ? '' : '$categoriaPorExtenso - $cat';
 
   String get grupoPorExtenso => gruposAmeacadas[grupo];
   String get classePorExtenso => classesAmeacadas[classe];

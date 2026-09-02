@@ -1,7 +1,9 @@
 import 'ameacadas.dart';
+import 'catalogo.dart';
 import 'conflitos.dart';
 import 'dados.dart';
 import 'defesos.dart';
+import 'fotos.dart';
 import 'nomes.dart';
 import 'regimes.dart';
 
@@ -34,17 +36,45 @@ class Ficha {
   /// A linha da Lista Nacional Oficial, quando a espécie é ameaçada.
   final Ameacada? lista;
 
-  const Ficha({this.in53, this.lista});
+  /// O nome científico, quando a espécie entra só pelo catálogo de
+  /// nomes: nenhuma das duas normas de ficha a alcança, mas alguma
+  /// norma que o aplicativo carrega a nomeia, e a Portaria MPA nº
+  /// 532/2025 dá os nomes comuns dela. Ver catalogo.dart.
+  final String? soNome;
+
+  const Ficha({this.in53, this.lista, this.soNome});
+
+  /// A ficha não vem de norma de tamanho nem da Lista. Ela existe para
+  /// que a busca tenha o que responder, e para dizer as ausências em
+  /// voz alta em vez de ficar calada.
+  bool get soDoCatalogo => in53 == null && lista == null;
+
+  /// A ficha existe só porque há foto da espécie: nenhuma norma
+  /// carregada por este aplicativo a alcança, nem para nomeá-la. A tela
+  /// diz isso na página. Ver especiesSoDaFoto em fotos.dart.
+  bool get soPelaFoto =>
+      soDoCatalogo && especiesSoDaFoto.contains(soNome);
 
   /// O nome que se lê primeiro. Nome popular quando existe na IN 53;
   /// senão o nome científico, que é o que a Lista dá.
-  String get titulo => in53?.nome ?? lista!.especie;
+  String get titulo {
+    if (in53 != null) return in53!.nome;
+    if (lista != null) return lista!.especie;
+    // Do catálogo: o nome comum oficial da Portaria 532 é melhor
+    // manchete que o binômio, e é o que a pessoa digita.
+    final c = nomesComuns;
+    return c.isEmpty ? soNome! : c.first;
+  }
 
   /// O nome científico, sempre.
-  String get cientifico => in53?.cientifico ?? lista!.especie;
+  String get cientifico =>
+      in53?.cientifico ?? lista?.especie ?? soNome!;
 
   /// O nome popular só aparece se vier de norma. Nunca inventado.
-  bool get temNomePopular => in53 != null || (lista?.pop445.isNotEmpty ?? false);
+  bool get temNomePopular =>
+      in53 != null ||
+      (lista?.pop445.isNotEmpty ?? false) ||
+      (soDoCatalogo && nomesComuns.isNotEmpty);
 
   bool get temTamanho => in53 != null;
   bool get ameacada => lista != null;
@@ -62,6 +92,13 @@ class Ficha {
 
   String get categoriaPorExtenso =>
       lista?.categoriaPorExtenso ?? in53?.categoriaPorExtenso ?? '';
+
+  /// A categoria como a norma a escreve: "Vulnerável - VU".
+  String get categoriaComSigla {
+    final c = categoriaPorExtenso;
+    final s = lista?.cat ?? in53?.ameaca ?? '';
+    return c.isEmpty || s.isEmpty ? c : '$c - $s';
+  }
 
   /// O Plano de Recuperação da espécie, quando localizado. Estar na
   /// Lista não veda a captura por si só: o art. 4º da Portaria
@@ -129,9 +166,92 @@ class Ficha {
         lista?.pop445 ?? '',
         lista?.familia ?? '',
         lista?.ordem ?? '',
+        soNome ?? '',
         nomesComuns.join(' '),
       ].join(' ');
 }
+
+// =====================================================================
+// A MATRIZ x A LISTA
+//
+// A matriz de modalidades nomeia espécies em quatro campos. A Lista
+// Nacional Oficial nomeia 490. Trinta e três estão nas duas, e dezoito
+// aparecem na matriz como ESPÉCIE-ALVO — inclusive tubarões CR.
+//
+// Quem lê a modalidade e vê o bicho na espécie-alvo conclui que aquilo
+// se pesca. Estar na Lista não veda por si: o art. 4º da Portaria
+// GM/MMA nº 1.666/2026 admite o uso onde há Plano de Recuperação, ato
+// do MMA e norma de ordenamento. Mas quem decide isso é a ficha da
+// espécie, não a matriz — e é para lá que este cruzamento aponta.
+// =====================================================================
+
+/// Uma espécie da Lista nomeada dentro de uma modalidade.
+class NaMatriz {
+  final Ameacada lista;
+
+  /// Em que campo da modalidade ela aparece: alvo, captura incidental,
+  /// fauna acompanhante ou autorização complementar.
+  final String campo;
+
+  const NaMatriz({required this.lista, required this.campo});
+
+  String get cientifico => lista.especie;
+  String get categoria => lista.cat;
+
+  /// A ficha da espécie, que é quem dá o veredito.
+  Ficha? get ficha {
+    for (final f in fichas) {
+      if (f.cientifico == lista.especie) return f;
+    }
+    return null;
+  }
+}
+
+const _camposDaMatriz = <String, String>{
+  'alvo': 'espécie-alvo',
+  'incidental': 'captura incidental',
+  'acompanhante': 'fauna acompanhante previsível',
+  'complementar': 'autorização complementar',
+};
+
+final Map<String, List<NaMatriz>> _naMatriz = {};
+
+/// As espécies da Lista que esta modalidade nomeia, e em que campo.
+///
+/// Calculado dos dados, não de lista gerada: se a matriz ou a Lista
+/// mudarem, isto acompanha sozinho.
+List<NaMatriz> ameacadasNaModalidade(Modalidade m) {
+  final achado = _naMatriz[m.numero];
+  if (achado != null) return achado;
+
+  final textos = <String, String>{
+    'alvo': m.alvo,
+    'incidental': m.incidental,
+    'acompanhante': m.acompanhante,
+    'complementar': m.complementar,
+  };
+  final saida = <NaMatriz>[];
+  final vistos = <String>{};
+  for (final a in listaAmeacadas) {
+    for (final e in textos.entries) {
+      if (e.value.contains(a.especie) && vistos.add(a.especie)) {
+        saida.add(NaMatriz(lista: a, campo: _camposDaMatriz[e.key]!));
+        break;
+      }
+    }
+  }
+  saida.sort((x, y) {
+    const ordem = {'CR': 0, 'EN': 1, 'VU': 2};
+    final c = (ordem[x.categoria] ?? 9).compareTo(ordem[y.categoria] ?? 9);
+    return c != 0 ? c : x.cientifico.compareTo(y.cientifico);
+  });
+  _naMatriz[m.numero] = saida;
+  return saida;
+}
+
+/// Quantas modalidades nomeiam ao menos uma espécie da Lista.
+int get quantasModalidadesComAmeacada =>
+    modalidades.where((m) => ameacadasNaModalidade(m).isNotEmpty).length;
 
 List<Ficha>? _cache;
 
@@ -155,12 +275,24 @@ List<Ficha> get fichas {
   for (final a in listaAmeacadas) {
     if (!usados.contains(a.n)) saida.add(Ficha(lista: a));
   }
+  // Por último as do catálogo: não respondem regra, respondem nome.
+  for (final c in catalogo) {
+    saida.add(Ficha(soNome: c));
+  }
+  // E as que só têm foto: não respondem regra nem nome de norma —
+  // respondem à imagem que a pessoa tem na mão.
+  for (final c in especiesSoDaFoto) {
+    saida.add(Ficha(soNome: c));
+  }
 
   _cache = saida;
   return saida;
 }
 
 /// Quantas fichas têm tamanho mínimo, quantas são ameaçadas.
+int get quantasDoCatalogo =>
+    fichas.where((f) => f.soDoCatalogo && !f.soPelaFoto).length;
+int get quantasFichasSoDaFoto => fichas.where((f) => f.soPelaFoto).length;
 int get quantasComTamanho => fichas.where((f) => f.temTamanho).length;
 int get quantasAmeacadas => fichas.where((f) => f.ameacada).length;
 

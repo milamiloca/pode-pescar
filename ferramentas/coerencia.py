@@ -63,6 +63,7 @@ ARE = [{'titulo': campo(b, 'titulo'), 'onde': campo(b, 'onde'),
         'norma': campo(b, 'norma'), 'artigo': campo(b, 'artigo'),
         'proibe': campo(b, 'oQueProibe'), 'detalhe': campo(b, 'detalhe'),
         'lida': 'TextoDaNorma.lido' in b,
+        'revogada': 'TextoDaNorma.revogada' in b,
         'de': int((re.search(r'\n    de: (\d+)', b) or ['', '0'])[1]),
         'ate': int((re.search(r'\n    ate: (\d+)', b) or ['', '0'])[1])}
        for b in blocos('areas.dart', 'const restricoes = <Restricao>[',
@@ -278,6 +279,327 @@ for (arq, classe), membros in ESPERADO.items():
 print(f'  10. membros dentro das classes .... '
       f'{sum(len(v) for v in ESPERADO.values())} conferidos')
 
+# 23. toda foto aponta para especie que existe, e declara origem
+#
+# Uma foto e' uma AFIRMACAO de que aquele bicho e' aquela especie. Duas
+# formas de errar:
+#
+#   · apontar para nome cientifico que nenhuma ficha tem — a foto nunca
+#     apareceria, e ninguem notaria a falta;
+#   · entrar sem declarar de onde veio — que e' o mesmo defeito das
+#     datas sem fonte, so' que com imagem.
+#
+# O arquivo tambem precisa existir em assets/especies/, senao a ficha
+# mostra um buraco.
+_ft = io.open(LIB + 'fotos.dart', encoding='utf-8').read()
+_FOTOS = re.findall(
+    r"Foto\(\s*cientifico:\s*'([^']+)',\s*arquivo:\s*'([^']+)',\s*"
+    r"origem:\s*OrigemDaFoto\.(\w+)", _ft)
+_nomes = set()
+# especiesSoDaFoto entra aqui porque fichas.dart monta ficha para cada
+# uma delas — a lista de nomes tem de ser a mesma que a das fichas, e
+# nao uma copia que envelhece (foi assim que o inventario.py errou).
+_SO_FOTO = re.findall(r"^\s*'([A-Z][a-z]+[^']*)',",
+                      _ft.split('const especiesSoDaFoto')[1]
+                      .split('];')[0], re.M) if \
+    'const especiesSoDaFoto' in _ft else []
+_nomes |= set(_SO_FOTO)
+for _f in ('dados.dart', 'ameacadas.dart', 'catalogo.dart'):
+    _t = io.open(LIB + _f, encoding='utf-8').read()
+    _nomes |= set(re.findall(r"Especie\('[^']*',\s*'([^']*)'", _t))
+    _nomes |= set(re.findall(r"Ameacada\(\d+,\s*'([^']*)'", _t))
+    _nomes |= set(re.findall(r"^\s*'([A-Z][a-z]+ [a-z.]+)',", _t, re.M))
+for _f in ('defesos.dart', 'regimes.dart'):
+    for _b in re.findall(r"cientificos:\s*\[(.*?)\]",
+                         io.open(LIB + _f, encoding='utf-8').read(), re.S):
+        _nomes |= {x for x in re.findall(r"'([^']+)'", _b)}
+_blob = ' ;; '.join(_nomes)
+import os as _os
+for _c, _a, _o in _FOTOS:
+    if _c not in _nomes and _c not in _blob:
+        erro('foto', f'"{_c}" não existe em nenhuma ficha — a foto '
+                     f'{_a} nunca apareceria')
+    if not _os.path.exists('pode_pescar/assets/especies/' + _a):
+        erro('foto', f'o arquivo {_a} não está em assets/especies/')
+    if _o not in ('orgao', 'catalogo', 'norma', 'naoDeclarada'):
+        erro('foto', f'{_a}: origem "{_o}" desconhecida')
+_dobrada = [c for c in {x[0] for x in _FOTOS}
+            if [x[0] for x in _FOTOS].count(c) > 1]
+for _c in _dobrada:
+    erro('foto', f'"{_c}" tem mais de uma foto')
+# 23b. a especie que entra SO' pela foto tem de ter foto, e nao pode ja'
+# estar coberta por norma — senao sao duas paginas para o mesmo bicho.
+_comFoto = {c for c, _, _ in _FOTOS}
+_deNorma = set()
+for _f in ('dados.dart', 'ameacadas.dart', 'catalogo.dart'):
+    _t = io.open(LIB + _f, encoding='utf-8').read()
+    _deNorma |= set(re.findall(r"Especie\('[^']*',\s*'([^']*)'", _t))
+    _deNorma |= set(re.findall(r"Ameacada\(\d+,\s*'([^']*)'", _t))
+    _deNorma |= set(re.findall(r"^\s*'([A-Z][a-z]+ [a-z.]+)',", _t, re.M))
+for _n in _SO_FOTO:
+    if _n not in _comFoto:
+        erro('só-foto', f'"{_n}" entra só pela foto e NÃO TEM foto — '
+                        f'a ficha nasceria vazia')
+    if _n in _deNorma:
+        erro('só-foto', f'"{_n}" entra só pela foto mas alguma norma já '
+                        f'a nomeia — sairiam duas páginas para o mesmo bicho')
+_maus23b = len([f for f in falhas if f.startswith('só-foto')])
+print(f'  23b. entram só pela foto ........ '
+      + (f'{len(_SO_FOTO)} conferidas, todas com foto e sem repetir ficha'
+         if _maus23b == 0 else f'{_maus23b} PROBLEMA(S)'))
+
+_maus23 = len([f for f in falhas if f.startswith('foto')])
+_semOrigem = sum(1 for x in _FOTOS if x[2] == 'naoDeclarada')
+print(f'  23. fotos das espécies .......... '
+      + (f'{len(_FOTOS)} conferidas, {_semOrigem} com origem não declarada'
+         if _maus23 == 0 else f'{_maus23} PROBLEMA(S)'))
+
+# 22. o texto do art. 3o esta' completo e com as sete excecoes
+#
+# A restricao da Lista costuma ser citada so' pelo caput — "ficam
+# protegidas de modo integral... proibicao de captura, transporte..." — e
+# o caput sozinho e' RESTRITIVO DEMAIS: o art. 3o tem sete paragrafos de
+# excecao, e dois deles decidem abordagem. O § 4o tira a captura
+# incidental liberada no ato; o § 2o tira o exemplar vindo de cultivo em
+# aquicultura licenciada.
+#
+# Falta tambem e' erro: uma pessoa parada com especie ameacada vinda de
+# cultivo tem defesa na norma, e o aplicativo tem de trazer isso.
+_te = io.open(LIB + 'tela_especies.dart', encoding='utf-8').read()
+_faltam = [p for p in ('§ 1º', '§ 2º', '§ 3º', '§ 4º', '§ 5º', '§ 6º',
+                       '§ 7º') if p not in _te]
+if _faltam:
+    erro('art. 3º',
+         f'o texto do art. 3º da Portaria 1.666 está no aplicativo sem '
+         f'{", ".join(_faltam)} — o caput sozinho proíbe mais do que a '
+         f'norma proíbe')
+for _chave, _porque in (
+        ('cultivo na aquicultura', 'o § 2º tira o exemplar de cultivo'),
+        ('capturados incidentalmente', 'o § 4º tira a captura incidental'),
+        ('art. 4º', 'sem o art. 4º o art. 3º proíbe onde há Plano')):
+    if _chave not in _te:
+        erro('art. 3º', f'falta "{_chave}" no texto da regra — {_porque}')
+_maus22 = len([f for f in falhas if f.startswith('art. 3º')])
+print(f'  22. texto do art. 3º ............ '
+      + ('caput e os sete parágrafos' if _maus22 == 0
+         else f'{_maus22} PROBLEMA(S)'))
+
+# 21. a matriz x a Lista: o cruzamento existe e nao esta' vazio
+#
+# O aplicativo tinha as duas coisas — a matriz da IN 10/2011 e a Lista da
+# Portaria 1.667/2026 — e nunca as encostou. Trinta e tres especies da
+# Lista sao nomeadas na matriz, dezoito delas como ESPECIE-ALVO,
+# inclusive tubaroes CR na modalidade 2.1.
+#
+# Esta prova garante que o cruzamento continua achando o que deve achar.
+# Se cair para zero, ou o codigo quebrou ou alguem mudou a grafia de um
+# nome cientifico nos dois lados — e o aviso some da tela em silencio.
+_ame = io.open(LIB + 'ameacadas.dart', encoding='utf-8').read()
+_LST = {}
+for _m in re.finditer(r"Ameacada\((\d+),\s*'([^']*)'((?:,[^,)]*){4,8})\)", _ame):
+    _c = re.search(r"'(CR|EN|VU|EW|EX|RE)'", _m.group(3))
+    if _c:
+        _LST[_m.group(2).strip()] = _c.group(1)
+_dd = io.open(LIB + 'dados.dart', encoding='utf-8').read()
+_corpo = _dd.split('const List<Modalidade> modalidades = [')[1]
+_cruz, _comoAlvo = set(), set()
+for _num, _b in re.findall(
+        r"Modalidade\(\s*\n\s*'([\d.A-Za-z-]+)',(.*?)\n  \),", _corpo, re.S):
+    for _f in ('alvo', 'incidental', 'acompanhante', 'complementar'):
+        _mm = re.search(r"\n    " + _f + r":\s*((?:'(?:[^'\\]|\\.)*'\s*)+),", _b)
+        if not _mm:
+            continue
+        _t = ''.join(re.findall(r"'((?:[^'\\]|\\.)*)'", _mm.group(1)))
+        for _cient in _LST:
+            if _cient in _t:
+                _cruz.add(_cient)
+                if _f == 'alvo':
+                    _comoAlvo.add(_cient)
+if len(_cruz) < 25:
+    erro('matriz x Lista',
+         f'o cruzamento achou só {len(_cruz)} espécies da Lista dentro da '
+         f'matriz — eram 33. Ou o código quebrou, ou a grafia de um nome '
+         f'científico mudou de um lado só')
+if not _comoAlvo:
+    erro('matriz x Lista',
+         'nenhuma espécie da Lista aparece como espécie-alvo — eram 18. '
+         'Confira antes de acreditar')
+print(f'  21. matriz x Lista .............. {len(_cruz)} espécies da Lista '
+      f'na matriz, {len(_comoAlvo)} como espécie-alvo')
+
+# 20. campo de NOME DE NORMA nao aceita prosa
+#
+# Aconteceu e a Camila viu na tela: o campo `ordenamento` de um Plano
+# recebeu a frase "NAO LOCALIZADA. A Portaria Interministerial no 59-B...
+# que o aplicativo chegou a atribuir aos budioes em geral...". Esse campo
+# alimenta a lista de normas, entao a frase inteira virou o NOME de uma
+# norma na tela.
+#
+# E ha' um agravante: quando duas grafias da mesma norma se encontram,
+# normas.dart fica com A MAIS LONGA (para preferir "de 9 de novembro de
+# 2018" a "59-B/2018"). Isso faz a prosa GANHAR da grafia limpa. Foi o
+# que aconteceu: uma frase substituiu o nome de uma norma federal.
+#
+# A regra: o campo tem de COMECAR com um tipo de norma.
+_TIPOS = (r'(Lei|Decreto|Decreto-lei|Portaria|Instrução Normativa|IN |INI |'
+          r'Resolução|Medida Provisória)')
+_ALVOS = [('regimes.dart', PLA, ['ordenamento', 'ato']),
+          ('defesos.dart', DEF, ['norma']),
+          ('periodos.dart', PER, ['norma']),
+          ('areas.dart', ARE, ['norma'])]
+_n20 = 0
+for _arq, _itens, _chaves in _ALVOS:
+    for _it in _itens:
+        for _k in _chaves:
+            _v = (_it.get(_k) or '').strip()
+            if not _v:
+                continue
+            _n20 += 1
+            # o nome que a lista mostra e' o pedaco ANTES do travessao —
+            # normas.dart corta ali. Se o pedaco vier longo demais, e'
+            # porque ha' explicacao colada no nome, sem separador.
+            _curto = _v.split(' — ')[0].split(', que ')[0]
+            if len(_curto) > 90:
+                erro('nome de norma',
+                     f'{_arq}: campo {_k} tem {len(_curto)} caracteres antes '
+                     f'do travessão — "{_curto[:60]}...". Separe a explicação '
+                     f'com " — ", que é onde normas.dart corta')
+            if not re.match(r'^' + _TIPOS, _v):
+                erro('nome de norma',
+                     f'{_arq}: campo {_k} começa com prosa — "{_v[:56]}...". '
+                     f'Esse campo vira o nome da norma na lista, e a grafia '
+                     f'mais longa vence a limpa. Mova o texto para um campo '
+                     f'de prosa e deixe aqui só o nome, ou vazio')
+_maus20 = len([f for f in falhas if f.startswith('nome de norma')])
+print(f'  20. campo de nome de norma ...... '
+      + (f'{_n20} conferidos, todos com nome' if _maus20 == 0
+         else f'{_maus20} COM PROSA'))
+
+# 19. borra de PDF dentro de campo de dado
+#
+# Aconteceu ao trazer a redacao nova das modalidades: a extracao do DOU
+# levou, junto com a "Area de operacao" da modalidade 3.13, TODO o rodape
+# do PDF — o Anexo III, o Anexo IV, o formulario de declaracao de entrada
+# em empresa pesqueira e o "Este conteudo nao substitui o publicado na
+# versao certificada". Meia pagina de texto virou area de operacao.
+#
+# Ninguem le' isso e acha bonito, mas o problema nao e' estetico: e' o
+# aplicativo afirmando, num campo normativo, coisa que a norma nao diz
+# daquele campo.
+_SUJEIRA = [r'ANEXO [IVX]+', r'Page \d+ of \d+', r'in\.gov\.br',
+            r'\d{2}/\d{2}/\d{2},\s*\d{2}:\d{2}', r'Imprensa Nacional',
+            r'Este conteúdo não substitui', r'DECLARAÇÃO DE ENTRADA']
+_txt = io.open(LIB + 'dados.dart', encoding='utf-8').read()
+_achados = 0
+for _m in re.finditer(r"'((?:[^'\\]|\\.){20,})'", _txt):
+    for _p in _SUJEIRA:
+        if re.search(_p, _m.group(1)):
+            _achados += 1
+            erro('borra de PDF',
+                 f'campo com "{_p}" dentro: "{_m.group(1)[:70]}..." — '
+                 f'sobra de extração, não é texto de norma')
+            break
+print(f'  19. borra de PDF em dados.dart .. '
+      + ('nenhuma' if _achados == 0 else f'{_achados} CAMPO(S) SUJO(S)'))
+
+# 18. o aplicativo nao da' palpite
+#
+# Aconteceu, e ficou meses no ar: o plano da gurijuba dizia "A especie e'
+# do litoral Norte; PROVAVELMENTE nao alcanca Santa Catarina". Isso nao
+# saiu de norma nenhuma — saiu do que quem escreveu sabia sobre onde o
+# peixe vive. E o efeito e' permissivo: quem le' "provavelmente nao
+# alcanca" conclui que nao precisa abrir a norma.
+#
+# Esta prova le' os CAMPOS DE DADOS (nao os comentarios) e falha se
+# achar palavra de palpite. Se algum dia uma norma usar uma dessas
+# palavras no proprio texto, cite-a entre aspas no campo detalhe, que
+# nao e' varrido aqui.
+_PALPITE = ['provavelmente', 'possivelmente', 'presumivelmente',
+            'deve alcançar', 'não deve alcançar', 'acredito', 'imagino',
+            'em tese', 'tipicamente', 'ao que tudo indica', 'creio']
+_CAMPOS = [('regimes.dart', PLA, ['abrang', 'especie']),
+           ('periodos.dart', PER, ['onde', 'detalhe', 'especie']),
+           ('defesos.dart', DEF, ['abrang', 'periodo', 'titulo']),
+           ('areas.dart', ARE, ['onde', 'proibe', 'titulo'])]
+_n = 0
+for arq, itens, chaves in _CAMPOS:
+    for it in itens:
+        for k in chaves:
+            t = (it.get(k) or '').lower()
+            _n += 1
+            for w in _PALPITE:
+                if w in t:
+                    erro('palpite', f'{arq}: "{it.get(chaves[-1], "?")[:34]}" '
+                                    f'usa "{w}" no campo {k} — o aplicativo '
+                                    f'não opina, ou cita norma ou diz que '
+                                    f'não sabe')
+_maus18 = len([f for f in falhas if f.startswith('palpite')])
+print(f'  18. palpite nos campos .......... '
+      + (f'nenhum em {_n} campos' if _maus18 == 0
+         else f'{_maus18} PALPITE(S) em {_n} campos'))
+
+# 17. as modalidades com redacao nova precisam existir na matriz
+#
+# O selo "texto alterado" aponta para uma linha da matriz. Se o numero no
+# mapa nao corresponder a nenhuma modalidade, o selo nao aparece em lugar
+# nenhum e o aviso se perde em silencio — que e' a falha que este
+# aplicativo mais tenta evitar.
+_dados = io.open(LIB + 'dados.dart', encoding='utf-8').read()
+_ALT = re.findall(r"^\s*'([\d.]+)':\s*'", _dados.split(
+    'const redacaoDe')[1].split('};')[0], re.M)
+# o código pode ter letra: a modalidade 2.2-A, emalhe anilhado, entrou
+# pela Portaria Interministerial nº 24/2018. Uma expressão só de dígitos
+# a perdia em silêncio — a asserção abaixo é o que apanhou isso.
+_NUMS = set(re.findall(r"\n  Modalidade\(\s*\n\s*'([\d.A-Za-z-]+)'", _dados))
+assert len(_NUMS) == _dados.count('\n  Modalidade('), (
+    f'prova 17: li {len(_NUMS)} modalidades mas o arquivo tem '
+    f'{_dados.count(chr(10) + "  Modalidade(")} — a expressão está '
+    f'subcontando, conserte-a antes de confiar nesta prova')
+for c in _ALT:
+    if c not in _NUMS:
+        erro('modalidade alterada',
+             f'"{c}" está no mapa redacaoDe mas não existe na '
+             f'matriz — o selo não apareceria em lugar nenhum')
+if len(_ALT) != len(set(_ALT)):
+    erro('modalidade alterada', 'número repetido no mapa')
+print(f'  17. modalidades alteradas ....... {len(_ALT)} marcadas, '
+      f'todas existem na matriz de {len(_NUMS)}')
+
+# 16. o catalogo nao pode abrir pagina dobrada
+#
+# Aconteceu na geracao: "Mugil liza" e "Atherinella brasiliensis" entraram
+# como candidatas porque a ficha da tainha e a do peixe-rei guardam o
+# cientifico COMPOSTO ("Mugil platanus / Mugil liza"). Se tivessem
+# passado, o aplicativo teria duas paginas para a tainha — a especie mais
+# importante do trabalho inteiro. "Pogonias cromis" e' o mesmo caso, por
+# sinonimia, e sai a mao.
+#
+# Esta prova falha se qualquer nome do catalogo aparecer dentro do
+# cientifico de uma ficha que ja' existe.
+CAT = re.findall(r"^\s*'([^']+)',", io.open(LIB+'catalogo.dart',encoding='utf-8').read(), re.M)
+cients = [c for _, c, _ in re.findall(
+    r"Especie\('([^']*)',\s*'([^']*)',\s*(\d+)", io.open(LIB+'dados.dart',encoding='utf-8').read())]
+cients += [c for _, c in re.findall(
+    r"Ameacada\((\d+),\s*'([^']*)'", io.open(LIB+'ameacadas.dart',encoding='utf-8').read())]
+_blob = ' ;; '.join(cients)
+for c in CAT:
+    if c in _blob:
+        dono = [f for f in cients if c in f]
+        erro('catálogo', f'"{c}" já está coberto pela ficha {dono} — '
+                         f'abriria página dobrada')
+_vistos = set()
+for c in CAT:
+    if c in _vistos:
+        erro('catálogo', f'"{c}" repetido no catálogo')
+    _vistos.add(c)
+_semNome = [c for c in CAT if f"'{c}':" not in io.open(LIB+'nomes.dart',encoding='utf-8').read()]
+if _semNome:
+    erro('catálogo', f'{len(_semNome)} do catálogo não estão na Portaria '
+                     f'532: {_semNome[:4]}')
+_maus = len([f for f in falhas if f.startswith('catálogo')])
+print(f'  16. catálogo de nomes ........... {len(CAT)} espécies, '
+      + ('nenhuma dobrada' if _maus == 0 else f'{_maus} PROBLEMA(S)'))
+
 # 15. nada de entrada repetida
 #
 # Aconteceu: a lula ja' estava no aplicativo, vinda da compilacao, e uma
@@ -382,6 +704,26 @@ for arq in sorted(glob.glob(LIB + '*.dart')):
                        f'deveria haver "\\n" — a tela mostraria a barra')
 print('  13. quebras de linha ............. ok')
 
+# 13b. a MESMA familia: aspa escapada duas vezes.
+#
+# Aconteceu ao gerar o fotos.dart: o texto da duvida da miraguaia saiu
+# com \\' onde devia sair \'. Em Dart isso e' barra invertida seguida de
+# fim de string — nao compila, ou compila errado. E' o mesmo defeito do
+# \\n: um gerador escapando o que ja' estava escapado.
+_barras = 0
+for _f in glob.glob(LIB + '*.dart'):
+    _t = io.open(_f, encoding='utf-8').read()
+    for _seq, _oque in ((r"\\\\'", "aspa escapada duas vezes"),
+                        (r'\\\\n', 'quebra de linha escapada duas vezes')):
+        _n = len(re.findall(_seq, _t))
+        if _n:
+            _barras += _n
+            erro('escape', f'{_f.split("/")[-1]}: {_n}x {_oque} — '
+                           f'gerador escapou o que já estava escapado')
+print(f'  13b. escape duplicado ........... '
+      + ('nenhum' if _barras == 0 else f'{_barras} OCORRÊNCIA(S)'))
+
+
 # 12. as restrições de área dizem onde valem, o que proíbem e de onde saem
 #
 # Uma restrição sem "onde" é inútil na abordagem, e uma sem artigo não
@@ -397,13 +739,21 @@ for a in ARE:
         if v and not (1 <= v // 100 <= 12 and 1 <= v % 100 <= DIAS[v // 100 - 1]):
             erro('área', f'"{a["titulo"][:40]}": data {k}={v} não existe')
     # o que não foi lido não pode afirmar regra: tem que dizer que falta
-    if not a['lida'] and 'não obtido' not in a['proibe'] \
+    if not a['lida'] and not a['revogada'] and 'não obtido' not in a['proibe'] \
             and 'a obter' not in a['artigo']:
         erro('área', f'"{a["titulo"][:40]}" não teve o texto lido mas '
                      f'afirma a regra sem ressalva')
+    # a norma revogada TEM texto lido; o que ela nao pode e' ser lida
+    # como regra em vigor. Entao a proibicao precisa dizer que caiu, e o
+    # campo da norma precisa carregar a palavra.
+    if a['revogada'] and ('REVOGADA' not in a['norma'].upper()
+                          or 'NÃO ESTÁ MAIS EM VIGOR' not in a['proibe'].upper()):
+        erro('área', f'"{a["titulo"][:40]}" está marcada como revogada mas '
+                     f'não diz isso no campo da norma e na proibição')
 sazo = sum(1 for a in ARE if a['de'])
+_rev = sum(1 for a in ARE if a['revogada'])
 print(f'  12. restrições de área ............ {len(ARE)} conferidas, '
-      f'{sazo} com período')
+      f'{sazo} com período, {_rev} de norma revogada')
 
 # 11. toda norma citada nos dados aparece na lista da tela inicial
 #

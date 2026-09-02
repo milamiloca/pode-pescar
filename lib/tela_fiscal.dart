@@ -195,8 +195,17 @@ class _TelaEnquadramentoState extends State<TelaEnquadramento> {
               const TituloSecao('Tolerância na fiscalização'),
               const SizedBox(height: 2),
               Text(
-                'Anexo ${e.anexo == 1 ? "I" : "II"} da IN 53: tolerância de '
-                '${e.tolerancia}% em peso sobre o total da captura.',
+                e.toleranciaEmPeso
+                    ? 'Anexo ${e.anexo == 1 ? "I" : "II"} da IN 53: '
+                        'tolerância de ${e.tolerancia}% EM PESO sobre o '
+                        'total da captura.'
+                    : 'Art. 2º da Portaria IBAMA nº 25-N/1993: tolerância '
+                        'de ${e.tolerancia}% EM NÚMERO DE INDIVÍDUOS sobre '
+                        'o total capturado DESTA espécie — não é '
+                        'percentual em peso. Passando disso, o parágrafo '
+                        'único manda apreender TODO o pescado. Esta tela '
+                        'calcula por peso: para esta espécie ela não '
+                        'responde, conte os indivíduos.',
                 style: estiloCorpo,
               ),
               const SizedBox(height: 16),

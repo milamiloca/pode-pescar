@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dados.dart';
 import 'desenhos.dart';
+import 'fichas.dart';
 import 'tema.dart';
 
 const _fonteNorma =
@@ -15,18 +16,51 @@ const _fonteDetalhe = 'Anexos publicados no Diário Oficial em 07/11/2011.';
 /// o RGP precisa saber disso ANTES de comparar, não depois.
 const _avisoDeVersao =
     'ESTA LISTA É O TEXTO ORIGINAL DE 2011.\n\n'
-    'A Instrução Normativa MPA nº 14, de 3 de outubro de 2014, e a '
-    'Instrução Normativa MPA/MMA nº 01, de 22 de janeiro de 2015, estão '
-    'em vigor e alteraram o Anexo I: a de 2014 reestruturou a codificação '
-    'das modalidades de embarcações artesanais e industriais e ajustou '
-    'exigências de petrecho e de malha; a de 2015 alterou e acrescentou '
-    'regras de emalhe, cerco e espinhel.\n\n'
-    'Os textos consolidados não foram obtidos. O CÓDIGO DE UMA MODALIDADE '
-    'AQUI PODE NÃO SER O CÓDIGO QUE ESTÁ NO RGP HOJE. Antes de usar um '
-    'número em conferência de licença ou em qualquer decisão, confira a '
-    'modalidade no registro do MPA e a norma nos sites oficiais.\n\n'
-    'A Portaria Interministerial nº 24/2018 acrescentou ao Anexo II a '
-    'modalidade emalhe anilhado, que também não consta desta lista.';
+    'Quatro normas posteriores alteraram a matriz de modalidades. O '
+    'aplicativo tem o texto de duas delas, e por isso consegue marcar, '
+    'uma a uma, quais modalidades mudaram — as marcadas trazem o selo '
+    '"texto alterado".\n\n'
+    'O QUE ALTEROU A MATRIZ\n\n'
+    '1. Instrução Normativa MPA nº 14, de 2014. Alterou o Anexo I. Texto '
+    'não obtido: não se sabe quais modalidades alcançou. O dia e o mês '
+    'dela também não são conhecidos — a fonte disponível traz apenas '
+    '"IN MPA Nº 14 2014".\n\n'
+    '2. Instrução Normativa Interministerial MPA/MMA nº 01, de 26 de '
+    'março de 2015 (DOU de 27/04/2015, seção 1, página 66). O art. 1º '
+    'acrescentou ao art. 5º da IN 10/2011 as definições de Fauna '
+    'Acompanhante Previsível e de Espécies de Captura Incidental; o art. '
+    '2º revogou o art. 11 da IN 10/2011. O art. 3º, na redação da '
+    'Instrução Normativa Interministerial nº 46, de 30 de dezembro de '
+    '2015, diz que "o art. 1º desta Instrução Normativa Interministerial '
+    'terá vigência até 31 de dezembro de 2016" — as duas definições '
+    'tinham prazo; a revogação do art. 11 não tem.\n\n'
+    '3. Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de '
+    '2024 (lulas). O art. 8º e o Anexo I dela reescrevem as modalidades '
+    '2.2, 2.4, 3.8, 3.9, 6.7, 6.8, 6.9, 6.10 e 6.11.\n\n'
+    '4. Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026 '
+    '(pargo). O art. 6º, § 2º e o Anexo II dela reescrevem as '
+    'modalidades 1.6, 1.8, 1.9, 1.10, 1.11 e 1.14.\n\n'
+    'Há ainda duas alterações pontuais: a Portaria Interministerial nº '
+    '24/2018 acrescentou ao Anexo II a modalidade emalhe anilhado; e a '
+    'Portaria Interministerial nº 59-B, de 9 de novembro de 2018, no art. '
+    '9º, revogou o inciso II do § 2º do art. 8º da IN 10/2011.\n\n'
+    'ATENÇÃO AO "ALTERADA PELA"\n'
+    'O PDF da IN 10/2011 que circula nos sites oficiais traz no topo '
+    '"ALTERADA PELA IN MPA Nº 14 2014, IN MPA/MMA Nº 01/2015". Isso é um '
+    'AVISO de que a norma foi alterada, e NÃO um texto consolidado: '
+    'naquele PDF, o art. 5º ainda tem apenas os §§ 1º e 2º, e o art. 11 '
+    'continua no corpo — embora a IN 01/2015 tenha acrescentado dois '
+    'parágrafos àquele e revogado este. Quem o lê como texto vigente lê '
+    'um artigo a mais e dois parágrafos a menos.\n\n'
+    'AO PROCURAR A IN MPA Nº 14/2014\n'
+    'Existe uma Instrução Normativa IBAMA nº 14, de 2014, com o mesmo '
+    'número e ano, que trata de recadastramento de fauna silvestre. Não é '
+    'a mesma norma: a que altera a matriz é do Ministério da Pesca e '
+    'Aquicultura.\n\n'
+    'O CÓDIGO DE UMA MODALIDADE AQUI PODE NÃO SER O CÓDIGO QUE ESTÁ NO '
+    'RGP HOJE. Antes de usar um número em conferência de licença ou em '
+    'qualquer decisão, confira a modalidade no registro do MPA e a norma '
+    'nos sites oficiais.';
 
 // =====================================================================
 // OS SEIS MÉTODOS
@@ -350,6 +384,8 @@ class _CartaoModalidade extends StatelessWidget {
               const SizedBox(width: 8),
               Text(m.metodo.nome.toUpperCase(), style: estiloEtiqueta),
               const Spacer(),
+              if (redacaoDaModalidade(m.numero).isNotEmpty)
+                const Selo('redação nova', cor: corMar),
             ],
           ),
           const SizedBox(height: 8),
@@ -407,6 +443,79 @@ class TelaModalidade extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Text(m.petrecho, style: estiloTitulo),
+              ..._daLista(m),
+              if (temRegistroFechado(m.numero)) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 15),
+                  decoration: BoxDecoration(
+                    color: corNaoPode.withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: corNaoPode.withValues(alpha: 0.35)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Selo('registro fechado', cor: corNaoPode),
+                      const SizedBox(height: 10),
+                      const Text(
+                        textoDoRegistroFechado,
+                        style: TextStyle(
+                            fontSize: 13, height: 1.5, color: corTinta),
+                      ),
+                      const SizedBox(height: 11),
+                      Container(height: 1, color: corBorda),
+                      const SizedBox(height: 9),
+                      const Text(
+                        normaDoRegistroFechado,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          height: 1.4,
+                          fontWeight: FontWeight.w600,
+                          color: corApagada,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (redacaoDaModalidade(m.numero).isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(15, 13, 15, 14),
+                  decoration: BoxDecoration(
+                    color: corMar.withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: corMar.withValues(alpha: 0.28)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Selo('redação nova', cor: corMar, forte: true),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'A DESCRIÇÃO ABAIXO NÃO É A DE 2011. Esta '
+                        'modalidade foi reescrita por norma posterior, e o '
+                        'que está aqui é a redação nova.',
+                        style: TextStyle(
+                            fontSize: 13, height: 1.5, color: corTinta),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Redação dada por:\n${redacaoDaModalidade(m.numero)}',
+                        style: const TextStyle(
+                            fontSize: 12.5,
+                            height: 1.45,
+                            fontWeight: FontWeight.w500,
+                            color: corApagada),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               if (m.locais.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Container(
@@ -511,4 +620,89 @@ class TelaModalidade extends StatelessWidget {
       ),
     );
   }
+}
+
+/// As espécies da Lista Nacional Oficial que esta modalidade nomeia.
+///
+/// A matriz de modalidades é de 2011 e lista espécie-alvo, captura
+/// incidental, fauna acompanhante e autorização complementar. A Lista é
+/// de 2026. Trinta e três espécies estão nas duas, e dezoito aparecem na
+/// matriz como espécie-alvo — inclusive tubarões Criticamente em Perigo.
+///
+/// Isto NÃO afirma "proibido": o art. 4º da Portaria GM/MMA nº
+/// 1.666/2026 admite o uso onde há Plano de Recuperação, ato do MMA e
+/// norma de ordenamento. Quem dá o veredito é a ficha da espécie.
+List<Widget> _daLista(Modalidade m) {
+  final naLista = ameacadasNaModalidade(m);
+  if (naLista.isEmpty) return const [];
+  return [
+    const SizedBox(height: 14),
+    Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(15, 13, 15, 14),
+      decoration: BoxDecoration(
+        color: corNaoPode.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: corNaoPode.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Selo('${naLista.length} na Lista de ameaçadas',
+              cor: corNaoPode, forte: true),
+          const SizedBox(height: 10),
+          const Text(
+            'ESTA MODALIDADE NOMEIA ESPÉCIES QUE ESTÃO NA LISTA NACIONAL '
+            'OFICIAL. A matriz de modalidades é de 2011; a Lista, de 2026. '
+            'Aparecer aqui como espécie-alvo ou fauna acompanhante não '
+            'quer dizer que a captura esteja liberada.',
+            style: TextStyle(fontSize: 13, height: 1.5, color: corTinta),
+          ),
+          const SizedBox(height: 12),
+          for (final e in naLista)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 7),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Selo(e.categoria, cor: corNaoPode),
+                  const SizedBox(width: 9),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(e.cientifico,
+                            style: const TextStyle(
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.italic,
+                                height: 1.3,
+                                color: corTinta)),
+                        Text('nesta modalidade, em ${e.campo}',
+                            style: const TextStyle(
+                                fontSize: 12,
+                                height: 1.35,
+                                color: corApagada)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Container(height: 1, color: corBorda),
+          const SizedBox(height: 10),
+          const Text(
+            'Abra a ficha de cada espécie na tela Espécies: é lá que está '
+            'o que vale — vedação, Plano de Recuperação ou tamanho mínimo. '
+            'Na dúvida, consulte a norma nos sites oficiais.',
+            style: TextStyle(
+                fontSize: 12.5,
+                height: 1.45,
+                fontWeight: FontWeight.w500,
+                color: corApagada),
+          ),
+        ],
+      ),
+    ),
+  ];
 }

@@ -393,34 +393,286 @@ const planos = <Plano>[
   Plano(
     especie: 'Pargo',
     cientificos: ['Lutjanus purpureus'],
-    normaObtida: false,
+    normaObtida: true,
     ordenamento:
         'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',
-    atoDoMMA: 'Portaria MMA nº 1.742, de 24 de julho de 2026 — substituiu '
-        'a Portaria MMA nº 228, de 14 de junho de 2018',
-    abrangencia: 'Não se sabe. O texto da norma não foi obtido, e é ele '
-        'que diz se alcança Santa Catarina.',
+    atoDoMMA: 'Portaria GM/MMA nº 1.742, de 24 de julho de 2026 — texto '
+        'obtido e lido por inteiro. O art. 7º dela revogou a Portaria MMA '
+        'nº 228, de 14 de junho de 2018',
+    abrangencia: 'NÃO ALCANÇA Santa Catarina. O art. 4º, § 1º limita a '
+        'operação de pesca ao polígono do Anexo I, "entre os limites do '
+        'norte do estado do Amapá e a divisa dos estados do Maranhão e do '
+        'Piauí" — é a costa Norte. Santa Catarina fica fora dele.',
+    ondePode: 'Polígono do Anexo I: do norte do Amapá até a divisa '
+        'Maranhão/Piauí. Os dados georreferenciados são publicados no '
+        'sítio do Ministério da Pesca e Aquicultura (art. 4º, § 2º). A '
+        'delimitação NÃO se aplica à pesca com autorização complementar '
+        'das modalidades 1.8, 1.9 e 1.10 (art. 4º, § 3º).',
+    tamanho: 'Comprimento furcal mínimo de 35 cm',
+    cmMinimo: 35,
+    defeso: '15 de dezembro a 30 de abril, anualmente',
+    quemPode: 'Só embarcações autorizadas nas modalidades 1.8, 1.9 e 1.10 '
+        'do Anexo I da IN Interministerial nº 10/2011, e a frota é '
+        'limitada a 150 embarcações — dessas, até 25 com comprimento '
+        'superior a 15 metros.',
+    incidental: 'Exemplares capturados incidentalmente em desacordo com a '
+        'Portaria devem ser LIBERADOS VIVOS ou descartados no ato da '
+        'captura, registrando-se no Mapa de Bordo a captura e a liberação '
+        'ou o descarte (art. 28). As demais modalidades devem devolver ao '
+        'mar todos os pargos capturados e registrar no campo "descarte" o '
+        'número de indivíduos devolvidos (art. 6º, § 1º).',
+    detalhe: 'QUEM PODE PESCAR (art. 2º)\n'
+        'Só as embarcações autorizadas nas modalidades 1.8, 1.9 e 1.10 do '
+        'Anexo I da IN Interministerial nº 10, de 10 de junho de 2011. O '
+        'art. 6º proíbe captura, retenção a bordo e desembarque por '
+        'qualquer outra modalidade.\n\n'
+        'TEMPORADA (art. 3º)\n'
+        'Proibida a pesca de 15 de dezembro a 30 de abril, anualmente. A '
+        'largada das embarcações permissionadas é liberada a partir das '
+        'zero horas de 1º de maio de cada ano.\n\n'
+        'LIMITE DE CAPTURA (arts. 4º, 5º, 19 a 21)\n'
+        'Limite anual de 2.750 toneladas. A partir da safra de 2027, o '
+        'excedente é deduzido integralmente do limite da safra seguinte. A '
+        'temporada é encerrada ao atingir 90% do limite, com aviso nos '
+        'canais oficiais aos 80%. Encerrada, as embarcações no mar têm 10 '
+        'dias corridos para retornar e desembarcar; depois disso ficam '
+        'proibidos captura, retenção a bordo e desembarque. Se o gatilho '
+        'não for atingido, tolera-se o desembarque até 18 de dezembro.\n\n'
+        'PETRECHOS (art. 7º)\n'
+        'I - espinhel vertical tipo pargueira, com anzóis nº 6, 5 e 4, '
+        'aberturas iguais ou superiores a 1,6 cm; e\n'
+        'II - armadilha tipo covo ou manzuá, malha fixa em losango, '
+        'hexágono ou outra, com a menor diagonal (losango) ou a menor '
+        'mediana (hexágono) entre nós opostos igual ou superior a 13 cm, '
+        'em todas as seções do covo.\n'
+        'Pescar com petrecho fora disso é atividade de pesca ILEGAL (§ '
+        '2º).\n\n'
+        'TAMANHO MÍNIMO (arts. 11 e 12, e Anexo III)\n'
+        'Proibidos captura, transporte, armazenamento, processamento e '
+        'comercialização de pargo com comprimento furcal inferior a 35 '
+        'cm. O Anexo III define: o comprimento furcal, em centímetros, '
+        'tem origem na ponta externa da boca (focinho) até a extremidade '
+        'da furca da nadadeira caudal aberta.\n'
+        'Para a safra de 2026 tolera-se o desembarque de até 5% em peso '
+        'abaixo de 35 cm, PROIBIDA a comercialização desses exemplares, '
+        'que devem ser doados a órgãos e entidades públicas de caráter '
+        'científico, cultural, educacional, hospitalar, penal, militar e '
+        'social, ou a entidades sem fins lucrativos de caráter '
+        'beneficente, com documento fiscal.\n\n'
+        'NO DEFESO (art. 22)\n'
+        'Transporte, armazenamento, processamento e comercialização só '
+        'com Declaração de Estoque, enviada ao IBAMA até 22 de dezembro '
+        'de cada ano. E o § 4º é categórico: de 16 DE FEVEREIRO A 30 DE '
+        'ABRIL ficam proibidos o transporte, o beneficiamento, a '
+        'industrialização e a comercialização de QUALQUER VOLUME de '
+        'pargo.\n\n'
+        'MONITORAMENTO (arts. 13 a 18)\n'
+        'PREPS por satélite em funcionamento; Mapa de Bordo entregue em 7 '
+        'dias corridos pelo Sistema PesqBrasil; Declaração de Entrada em '
+        'Empresa Pesqueira a partir de 1º de maio de 2027; painel de '
+        'acompanhamento do limite; e observadores de bordo ou '
+        'científicos.\n\n'
+        'SANÇÃO (arts. 25, 26, 29 e 30)\n'
+        'A embarcação em desconformidade tem a Autorização de Pesca '
+        'SUSPENSA POR 60 DIAS. A empresa pesqueira que descumprir fica '
+        'proibida de adquirir, comercializar ou transportar pargo por 7 '
+        'dias, e 30 dias na reincidência. Cruzeiro em desconformidade é '
+        'atividade de pesca ilegal. Somam-se as penalidades da Lei nº '
+        '9.605/1998 e do Decreto nº 6.514/2008.\n\n'
+        'VIGÊNCIA AMARRADA (art. 27)\n'
+        'A vigência desta Portaria está DIRETAMENTE VINCULADA à vigência '
+        'da Portaria MMA nº 1.742, de 24 de julho de 2026, ou de outra '
+        'que a substitua. Se a 1.742 cair, esta cai junto.\n\n'
+        'REVOGAÇÃO (art. 32)\n'
+        'Revogou a Portaria Interministerial nº 42, de 27 de julho de '
+        '2018, da SEAP-PR e do MMA.\n\n'
+        'ALTERA A MATRIZ DE MODALIDADES (art. 6º, § 2º, e Anexo II)\n'
+        'Os Anexos I e III da IN Interministerial nº 10/2011 passam a '
+        'vigorar com as alterações do Anexo II desta Portaria, que '
+        'reescreve as modalidades 1.6, 1.8, 1.9, 1.10, 1.11 e 1.14. É a '
+        'terceira alteração da matriz que o aplicativo conhece, ao lado '
+        'da IN MPA nº 14/2014 e da IN MPA/MMA nº 01/2015.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 27/07/2026, edição 139-C, seção 1 - Extra C, página 1. '
+        'Assinaram Rivetla Edipo Araujo Cruz, Ministro de Estado da '
+        'Pesca, e João Paulo Ribeiro Capobianco, do Meio Ambiente.',
+  ),
+  // Os budiões eram UM plano com seis espécies. A Portaria GM/MMA nº
+  // 1.749, de 27 de julho de 2026, separou os regimes, e um plano só
+  // para os seis daria a mesma resposta a bichos com regimes
+  // diferentes — o budião-azul, o mais protegido dos seis, ficaria com
+  // a resposta dos outros. São três.
+  Plano(
+    especie: 'Budião-azul',
+    cientificos: ['Scarus trispinosus'],
+    normaObtida: true,
+    ordenamento: 'Portaria Interministerial nº 59-B, de 9 de novembro de '
+        '2018 — texto obtido e lido por inteiro. VER A RESSALVA: ela foi '
+        'escrita quando a espécie era passível de uso.',
+    atoDoMMA: 'Portaria GM/MMA nº 1.749, de 27 de julho de 2026 — texto '
+        'obtido e lido por inteiro',
+    abrangencia: 'A norma não impõe recorte geográfico: a proteção '
+        'integral vale em toda a área de ocorrência da espécie, e portanto '
+        'também em Santa Catarina.',
+    tamanho: 'Não se aplica — a captura é proibida em qualquer tamanho. '
+        'A faixa de 39 a 63 cm da Portaria Interministerial nº 59-B/2018 '
+        'foi escrita quando a espécie era passível de uso. Ver a '
+        'ressalva.',
+    quemPode: 'Ninguém, pela Portaria GM/MMA nº 1.749/2026. A proteção é '
+        'integral.',
+    emVigor: 'ATENÇÃO — A PORTARIA 59-B/2018 AINDA EXISTE, E ELA PERMITE '
+        'PESCAR ESTE PEIXE. Quem a ler sozinha vai encontrar regra '
+        'permissiva: captura entre 39 e 63 cm de comprimento total, em '
+        'mergulho livre de apneia, durante o dia, com espingarda de '
+        'mergulho ou arbalete, por pescador profissional, para pesca '
+        'comercial artesanal e de subsistência, e somente em áreas de '
+        'manejo vinculadas a planos de gestão locais (arts. 3º e 4º).\n\n'
+        'MAS O PARÁGRAFO ÚNICO DO ART. 1º DA PRÓPRIA 59-B DIZ: "Enquanto '
+        'vigorar a classificação oficial do budião-azul como espécie '
+        'ameaçada de extinção em nível nacional, a vigência desta Portaria '
+        'Interministerial está diretamente vinculada à vigência da Portaria '
+        'MMA nº 129, de 26 de abril de 2018 ou outra norma que vier a '
+        'substituí-la, OFICIALIZANDO O PLANO DE RECUPERAÇÃO NACIONAL E '
+        'DECLARANDO A ESPÉCIE PASSÍVEL DE USO SUSTENTÁVEL."\n\n'
+        'E é exatamente essa condição que caiu: a Portaria GM/MMA nº '
+        '1.749, de 27 de julho de 2026, retirou o Scarus trispinosus da '
+        'lista de espécies passíveis de uso da Portaria 129/2018 (arts. 4º '
+        'e 5º) e o pôs sob proteção integral (art. 2º).\n\n'
+        'O aplicativo NÃO afirma que a 59-B está revogada — ela não foi '
+        'revogada expressamente. Afirma o que os dois textos dizem, com as '
+        'datas, e que a norma de 2026 é posterior. Confirme nos sites '
+        'oficiais antes de qualquer decisão.',
+    detalhe: 'PROTEÇÃO INTEGRAL (art. 2º)\n'
+        'A espécie budião-azul (Scarus trispinosus) fica protegida de modo '
+        'integral, nos termos do art. 3º, caput, da Portaria GM/MMA nº '
+        '1.666, de 27 de abril de 2026, e das recomendações do Plano de '
+        'Recuperação Nacional.\n'
+        '§ 1º A proteção integral inclui, entre outras medidas, a '
+        'proibição de CAPTURA, TRANSPORTE, ARMAZENAMENTO, GUARDA, MANEJO, '
+        'BENEFICIAMENTO e COMERCIALIZAÇÃO.\n'
+        '§ 2º O Plano de Recuperação Nacional poderá avaliar e reconhecer '
+        'as condições de uso e manejo sustentável da espécie, conforme o '
+        'art. 6º da Portaria GM/MMA nº 1.666/2026 — ou seja, a porta não '
+        'está fechada para sempre, mas hoje está fechada.\n\n'
+        'O PLANO (art. 1º)\n'
+        'Aprovado o Plano de Recuperação Nacional da espécie, classificada '
+        'como CR — Criticamente em Perigo — na Lista, em atendimento ao '
+        'art. 11 da Portaria GM/MMA nº 1.666/2026. O texto do Plano é '
+        'publicado no sítio do MMA, na aba Composição/SBC/DPES/Planos de '
+        'Recuperação para Espécies Aquáticas Ameaçadas de Extinção.\n\n'
+        'MONITORAMENTO (art. 3º)\n'
+        'O MMA, com apoio do ICMBio e do IBAMA, monitora periodicamente, '
+        'avalia a efetividade das medidas e revisa o Plano.\n\n'
+        'PUBLICAÇÃO\n'
+        'DOU de 27/07/2026, edição 139-C, seção 1 - Extra C, página 1. '
+        'Assinou João Paulo Ribeiro Capobianco.',
   ),
   Plano(
-    especie: 'Budiões',
+    especie: 'Budião-palhaço, budião-ferrugem e budião-batata',
     cientificos: [
-      'Scarus trispinosus',
       'Scarus zelindae',
-      'Sparisoma amplum',
       'Sparisoma axillare',
       'Sparisoma frondosum',
+    ],
+    normaObtida: false,
+    ordenamento: '',
+    quemPode: 'NÃO HÁ NORMA DE ORDENAMENTO LOCALIZADA para estas três '
+        'espécies, e sem ela o aplicativo não dá regra.\n\n'
+        'A Portaria Interministerial nº 59-B, de 9 de novembro de 2018, '
+        'que já foi atribuída aos budiões em geral, é o ordenamento do '
+        'BUDIÃO-AZUL apenas: a ementa dela diz "espécie Scarus '
+        'trispinosus (budião-azul)".\n\n'
+        'Consulte a Portaria MMA nº 129/2018, na redação da Portaria '
+        'GM/MMA nº 1.749/2026, e o Plano de Recuperação, nos sites '
+        'oficiais.',
+    atoDoMMA: 'Portaria MMA nº 129, de 27 de abril de 2018 — com a '
+        'redação dada pelos arts. 4º e 5º da Portaria GM/MMA nº 1.749, de '
+        '27 de julho de 2026. As duas com texto obtido e lido por inteiro',
+    abrangencia: 'A Portaria MMA nº 129/2018 foi lida e NÃO IMPÕE '
+        'recorte geográfico — vale onde as espécies ocorrem, Santa '
+        'Catarina inclusive. Ela também não traz condição operacional '
+        'própria: remete ao Plano de Recuperação e a normas específicas '
+        'de ordenamento, e é essa norma de ordenamento que falta.',
+    detalhe: 'O QUE A PORTARIA 129/2018 DIZ, LIDA POR INTEIRO\n'
+        'Art. 1º: reconhece a possibilidade de uso e manejo sustentável '
+        'das espécies, "atendendo ao disposto no Art. 3º da Portaria nº '
+        '445, de 17 dezembro de 2014, e mediante as condições '
+        'estabelecidas nesta Portaria".\n'
+        'Art. 2º: o uso "deverá atender às medidas propostas no Plano de '
+        'Recuperação Nacional das espécies de Budiões Ameaçadas de '
+        'Extinção e à regulamentação de medidas a serem estabelecidas por '
+        'normas específicas de ordenamento".\n'
+        'Art. 5º: o MMA "deverá suspender ou revogar os efeitos da '
+        'presente Portaria" quando identificar deficiências na '
+        'implementação.\n\n'
+        'REPARE: apesar de dizer "mediante as condições estabelecidas '
+        'nesta Portaria", a 129/2018 NÃO TRAZ NENHUMA condição '
+        'operacional — nem tamanho, nem petrecho, nem área, nem cota, nem '
+        'período. Ela remete ao Plano e a normas de ordenamento. Por isso '
+        'o aplicativo não tem regra para estas três espécies: a norma que '
+        'a traria não foi localizada.\n\n'
+        'O QUE A PORTARIA 1.749/2026 FEZ (arts. 4º e 5º)\n'
+        'Ela NÃO revogou a Portaria MMA nº 129/2018 — ALTEROU. A ementa e '
+        'o art. 1º da 129/2018 passaram a valer com esta redação:\n\n'
+        '"Art. 1º Fica reconhecida a possibilidade de uso e manejo '
+        'sustentável das espécies budião-palhaço, peixe-papagaio-banana '
+        '(Scarus zelindae), budião-ferrugem, peixe-papagaio-cinza '
+        '(Sparisoma axillare) e budião-batata, peixe-papagaio-cinza '
+        '(Sparisoma frondosum), atendendo ao disposto na Portaria GM/MMA '
+        'nº 1.666, de 27 de Abril de 2026, e mediante as condições '
+        'estabelecidas nesta Portaria." (NR)\n\n'
+        'O QUE ISSO SIGNIFICA. Estas três seguem passíveis de uso e '
+        'manejo sustentável, mas SOB AS CONDIÇÕES da Portaria 129/2018 — '
+        'e é justamente esse texto que o aplicativo não tem. Sem ele, o '
+        'aplicativo não dá regra: consulte a Portaria MMA nº 129/2018, na '
+        'redação da Portaria GM/MMA nº 1.749/2026, e a Portaria '
+        'Interministerial SEAP-PR/MMA nº 59-B/2018, nos sites oficiais.\n\n'
+        'REPARE NO QUE SAIU DA LISTA. A redação anterior falava em '
+        '"Budiões", no plural, e o Plano de 2018 reunia seis espécies. A '
+        'nova redação nomeia TRÊS. O budião-azul (Scarus trispinosus) '
+        'saiu para a proteção integral do art. 2º. E duas — Sparisoma '
+        'amplum e Sparisoma rocha — simplesmente não aparecem na redação '
+        'nova.',
+  ),
+  Plano(
+    especie: 'Budião-batata-verde e budião de Rocha',
+    cientificos: [
+      'Sparisoma amplum',
       'Sparisoma rocha',
     ],
     normaObtida: false,
-    ordenamento: 'Portaria Interministerial SEAP-PR/MMA nº 59-B, de 9 de '
-        'novembro de 2018, para o Plano de 2018. Para o Plano de 2026, a '
-        'norma de ordenamento não consta da página do Ministério.',
-    atoDoMMA: 'Portaria MMA nº 1.749, de 27 de julho de 2026, que trata do '
-        '"Budião-azul" — substituiu a Portaria MMA nº 129, de 27 de abril '
-        'de 2018, que tratava dos "Budiões", no plural. Não se sabe quais '
-        'destas seis espécies cada uma alcança.',
-    abrangencia: 'Não se sabe. O texto da norma não foi obtido, e é ele '
-        'que diz se alcança Santa Catarina.',
+    ordenamento: '',
+    atoDoMMA: 'Portaria MMA nº 129, de 27 de abril de 2018 — na redação '
+        'dada pela Portaria GM/MMA nº 1.749, de 27 de julho de 2026. '
+        'Texto obtido: NENHUMA das duas redações nomeia estas espécies',
+    abrangencia: 'A Lista Nacional Oficial não impõe recorte geográfico, e '
+        'portanto alcança Santa Catarina.',
+    quemPode: 'O aplicativo não localizou norma de ordenamento nem ato '
+        'que reconheça uso destas duas espécies depois da Portaria GM/MMA '
+        'nº 1.749/2026. Consulte a Portaria MMA nº 129/2018, na redação da '
+        'Portaria GM/MMA nº 1.749/2026, e a Lista, nos sites oficiais.',
+    detalhe: 'POR QUE ESTAS DUAS ESTÃO SEPARADAS\n'
+        'Elas não aparecem em nenhuma das duas redações da Portaria MMA '
+        'nº 129/2018.\n\n'
+        'A redação ORIGINAL do art. 1º da Portaria 129/2018 nomeava '
+        'QUATRO espécies: Scarus trispinosus (budião-azul), Scarus '
+        'zelindae (budião-palhaço, peixe-papagaio-banana), Sparisoma '
+        'axillare (budião-ferrugem, peixe-papagaio-cinza) e Sparisoma '
+        'frondosum (budião-batata, peixe-papagaio-cinza). Não seis.\n\n'
+        'A Portaria GM/MMA nº 1.749/2026 reescreveu esse artigo e deixou '
+        'TRÊS, tirando o budião-azul para a proteção integral do art. 2º. '
+        'Sparisoma amplum e Sparisoma rocha ficaram de fora das duas '
+        'redações — a de 2018 e a de 2026.\n\n'
+        'O QUE O APLICATIVO NÃO AFIRMA. Ele não afirma que estas duas '
+        'foram deliberadamente excluídas, nem que houve esquecimento. '
+        'Afirma o que está escrito: a redação vigente da Portaria '
+        '129/2018 não as nomeia. O efeito prático de não constar de um '
+        'ato que reconhece uso é matéria para quem aplica a norma — o '
+        'art. 3º da Portaria GM/MMA nº 1.666/2026 veda a captura das '
+        'espécies da Lista, e o art. 4º admite o uso onde há Plano, ato '
+        'do MMA e norma de ordenamento.\n\n'
+        'CONFIRMAR COM O TEXTO DA PORTARIA MMA Nº 129/2018 e com o Plano '
+        'de Recuperação publicado no sítio do MMA.',
   ),
   Plano(
     especie: 'Guaiamum',
@@ -429,8 +681,10 @@ const planos = <Plano>[
     ordenamento: 'Portaria Interministerial SEAP-PR/MMA nº 38, de 26 de '
         'julho de 2018',
     atoDoMMA: 'Portaria MMA nº 128, de 27 de abril de 2018',
-    abrangencia: 'Não se sabe. O texto da norma não foi obtido, e é ele '
-        'que diz se alcança Santa Catarina.',
+    abrangencia: 'NÃO SE SABE se alcança Santa Catarina. É preciso '
+        'procurar a norma: nem a Portaria MMA nº 128/2018 nem a Portaria '
+        'Interministerial SEAP-PR/MMA nº 38/2018 foram obtidas, e é o '
+        'texto delas que define a área. Consulte-as nos sites oficiais.',
   ),
   Plano(
     especie: 'Gurijuba',
@@ -439,9 +693,10 @@ const planos = <Plano>[
     ordenamento: 'Portaria Interministerial SEAP-PR/MMA nº 43, de 27 de '
         'julho de 2018',
     atoDoMMA: 'Portaria MMA nº 230, de 14 de junho de 2018',
-    abrangencia: 'Não se sabe. O texto da norma não foi obtido. A espécie '
-        'é do litoral Norte; provavelmente não alcança Santa Catarina, '
-        'mas isso precisa sair da norma, não da distribuição do bicho.',
+    abrangencia: 'NÃO SE SABE se alcança Santa Catarina. É preciso '
+        'procurar a norma: nem a Portaria MMA nº 230/2018 nem a Portaria '
+        'Interministerial SEAP-PR/MMA nº 43/2018 foram obtidas, e é o '
+        'texto delas que define a área. Consulte-as nos sites oficiais.',
   ),
   Plano(
     especie: 'Pintado ou surubim',
@@ -450,8 +705,10 @@ const planos = <Plano>[
     ordenamento: 'Portaria Interministerial MPA/MMA nº 15, de 6 de '
         'dezembro de 2024',
     atoDoMMA: 'Portaria MMA nº 355, de 27 de janeiro de 2023',
-    abrangencia: 'Não se sabe. Espécie continental; o texto da norma não '
-        'foi obtido.',
+    abrangencia: 'NÃO SE SABE se alcança Santa Catarina. É preciso '
+        'procurar a norma: nem a Portaria MMA nº 355/2023 nem a Portaria '
+        'Interministerial MPA/MMA nº 15/2024 foram obtidas, e é o texto '
+        'delas que define a área. Consulte-as nos sites oficiais.',
   ),
 ];
 

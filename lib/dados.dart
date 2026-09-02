@@ -17,10 +17,25 @@
 /// Formato do corpo, só para dar uma silhueta reconhecível na lista.
 enum Forma { comum, robusto, fita, chato, tubarao }
 
+/// Qual norma fixa o tamanho mínimo da espécie.
+///
+/// São duas, e elas não são intercambiáveis: a IN 53/2005 é de espécies
+/// MARINHAS E ESTUARINAS do Sudeste e Sul; a Portaria IBAMA nº 25-N, de
+/// 9 de março de 1993, é de espécies de ÁGUA DOCE e proíbe nos Estados
+/// do Rio Grande do Sul, Santa Catarina, Paraná, São Paulo, Rio de
+/// Janeiro e Espírito Santo.
+///
+/// A tolerância das duas se conta de maneira diferente — ver
+/// `toleranciaEmPeso`.
+enum NormaDeTamanho { in53, p25n1993 }
+
 class Especie {
   final String nome;
   final String cientifico;
   final int tamanho; // em centímetros
+
+  /// De qual norma sai este tamanho mínimo.
+  final NormaDeTamanho norma;
   final int anexo; // 1 ou 2 da IN 53/2005
   final bool furcal; // mede até a forquilha, não até a ponta do rabo
   final Forma forma;
@@ -63,11 +78,29 @@ class Especie {
     this.observacao = '',
     this.regras = '',
     this.regrasNorma = '',
+    this.norma = NormaDeTamanho.in53,
   });
 
-  /// Art. 4º: o Anexo I tolera 10% da captura abaixo do tamanho,
-  /// o Anexo II tolera 20%.
-  int get tolerancia => anexo == 1 ? 10 : 20;
+  /// Art. 4º da IN 53: o Anexo I tolera 10% da captura abaixo do
+  /// tamanho, o Anexo II tolera 20%. A Portaria 25-N/1993 tolera 10%,
+  /// mas contados de outro jeito — ver toleranciaEmPeso.
+  int get tolerancia => norma == NormaDeTamanho.p25n1993
+      ? 10
+      : (anexo == 1 ? 10 : 20);
+
+  /// A IN 53 mede a tolerância EM PESO sobre o total da captura. A
+  /// Portaria 25-N/1993 mede EM NÚMERO DE INDIVÍDUOS e POR ESPÉCIE
+  /// (art. 2º). Somar peso onde a norma conta indivíduo dá conta errada
+  /// na abordagem.
+  bool get toleranciaEmPeso => norma == NormaDeTamanho.in53;
+
+  /// O nome da norma que fixa o tamanho desta espécie.
+  String get normaDoTamanho => switch (norma) {
+        NormaDeTamanho.in53 =>
+          'Instrução Normativa MMA nº 53, de 22 de novembro de 2005',
+        NormaDeTamanho.p25n1993 =>
+          'Portaria IBAMA nº 25-N, de 9 de março de 1993',
+      };
 
   bool get ameacada => ameaca.isNotEmpty;
 
@@ -122,8 +155,12 @@ const List<Especie> especies = [
       ameaca: 'CR',
       itemLista: 294,
       jaConstava: true,
-      observacao: 'A IN 53 traz o nome antigo, Pogonias cromis. '
-          'A Portaria 445/2014 já a listava com o nome comum Miragaia.'),
+      observacao: 'TRÊS NORMAS, TRÊS NÚMEROS — ver o ponto em '
+          'verificação. A IN 53 traz o nome antigo, Pogonias cromis, e '
+          '65 cm. A Portaria SAQ nº 009/2025, do Estado de Santa '
+          'Catarina, traz Pogonias courbina e 55 cm. A Portaria GM/MMA '
+          'nº 1.667/2026 traz Pogonias courbina na Lista, como CR. A '
+          'Portaria 445/2014 já a listava com o nome comum Miragaia.'),
   Especie('Cação anjo asa longa', 'Squatina argentina', 70,
       anexo: 1,
       forma: Forma.tubarao,
@@ -199,6 +236,90 @@ const List<Especie> especies = [
   Especie('Tainha', 'Mugil platanus / Mugil liza', 35),
   Especie('Parati ou saúba', 'Mugil curema', 20),
   Especie('Trilha', 'Mullus argentinae', 13),
+
+// ------------------------------------- Portaria 25-N/1993: água doce
+//
+// Portaria IBAMA nº 25-N, de 9 de março de 1993, publicada no DOU de
+// 10/03/1993. Art. 1º: proíbe, NOS ESTADOS DO RIO GRANDE DO SUL, SANTA
+// CATARINA, PARANÁ, SÃO PAULO, RIO DE JANEIRO E ESPÍRITO SANTO, a
+// captura, o transporte e a comercialização das espécies abaixo com
+// comprimento total inferior ao da tabela.
+//
+// COMPRIMENTO TOTAL, no parágrafo único do art. 1º, é a distância entre
+// a ponta do focinho e a extremidade da nadadeira caudal. Não é o
+// comprimento furcal da IN 53.
+//
+// TOLERÂNCIA (art. 2º): até 10% de INDIVÍDUOS com tamanho inferior,
+// sobre o total capturado POR ESPÉCIE. Não é percentual em peso, como
+// na IN 53. Passando disso, o parágrafo único manda apreender TODO o
+// pescado.
+//
+// TRANSPORTE (art. 3º): durante o transporte, somente o tamanho mínimo
+// é fiscalizado.
+//
+// A norma revogou as Portarias SUDEPE nº 68/1985, N-50/1987 e
+// N-52/1987.
+  Especie('Piracanjuba', 'Brycon orbignyanus', 30,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Piracanjuba ou salmão', 'Brycon hilarii', 40,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Curimbatá', 'Prochilodus lineatus', 30,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Curimatá, curimbatá ou grumatá', 'Prochilodus affinis', 30,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Piapara ou piau-verdadeiro', 'Leporinus aff obtusidens', 25,
+      norma: NormaDeTamanho.p25n1993,
+      observacao: 'A norma escreve "Leporinus aff obtusidens", com o "aff" que '
+          'a taxonomia usa para dizer "afim de", isto é, parecida com. '
+          'Está reproduzido como o documento imprime.',
+      ),
+  Especie('Piapara ou piau-verdadeiro', 'Leporinus aff elongatus', 30,
+      norma: NormaDeTamanho.p25n1993,
+      observacao: 'A norma escreve "Leporinus aff elongatus". Mesmo nome '
+          'popular da linha anterior, tamanho diferente: 30 cm, contra '
+          '25 cm da aff obtusidens.',
+      ),
+  Especie('Pacu ou pacu-caranha', 'Piaractus mesopotamicus', 40,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Dourado', 'Salminus maxillosus', 55,
+      norma: NormaDeTamanho.p25n1993,
+      observacao: 'O texto da portaria que circula imprime "Salrninus '
+          'maxillosus", com "rn" no lugar de "m" — defeito de '
+          'digitalização. O nome correto é Salminus maxillosus, e é o '
+          'que o aplicativo usa.\n\n'
+          'A Portaria MPA nº 532/2025 nomeia "Dourado" outra espécie: '
+          'Salminus brasiliensis, que tem página própria neste '
+          'aplicativo. São dois nomes científicos diferentes e o '
+          'aplicativo não afirma que sejam o mesmo peixe — confira o '
+          'nome científico antes de aplicar os 55 cm.',
+      ),
+  Especie('Jaú', 'Paulicea luetkeni', 80,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Surubim ou pintado', 'Pseudoplatystoma coruscans', 80,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Surubim ou pintado', 'Pseudoplatystoma fasciatum', 80,
+      norma: NormaDeTamanho.p25n1993,
+      observacao: 'O texto da portaria que circula imprime '
+          '"Pseudoplatystoma fasciaturn" — defeito de digitalização, '
+          'porque "turn" não é terminação latina. O nome correto é '
+          'Pseudoplatystoma fasciatum, e é o que o aplicativo usa.',
+      ),
+  Especie('Armado', 'Pterodoras granulosus', 35,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Pescada', 'Plagioscion squamosissimus', 25,
+      norma: NormaDeTamanho.p25n1993,
+      ),
+  Especie('Mandi', 'Pimelodus maculatus', 18,
+      norma: NormaDeTamanho.p25n1993,
+      ),
 ];
 
 // ------------------------------------------- IN 10: método e apetrecho
@@ -269,6 +390,101 @@ class Modalidade {
   });
 }
 
+// =====================================================================
+// AS MODALIDADES COM REDAÇÃO POSTERIOR A 2011
+//
+// A matriz abaixo nasceu no Anexo I da IN 10/2011. Quatro normas
+// posteriores a alteraram, e de duas delas o aplicativo tem o texto — a
+// Portaria Interministerial MPA/MMA nº 14/2024 (lulas) e a Portaria
+// Interministerial MPA/MMA nº 66/2026 (pargo).
+//
+// PARA ESSAS, O QUE ESTÁ AQUI É A REDAÇÃO NOVA, não a de 2011. O texto
+// foi extraído do Diário Oficial por script, campo a campo, sem
+// redigitação — ver ferramentas/ e o registro do texto anterior.
+//
+// As duas normas alteram de formas diferentes, e confundi-las apagaria
+// dado: a de 2024 troca UM campo de cada modalidade (o resto vem com a
+// linha pontilhada do DOU, que significa "inalterado"); a de 2026
+// reescreve a modalidade inteira.
+//
+// Falta ainda a Instrução Normativa MPA nº 14, de 2014, cujo texto não
+// foi obtido — e por isso não se sabe quais modalidades ela alcançou.
+// Por isso o aviso geral da tela continua.
+// =====================================================================
+const redacaoDe = <String, String>{
+  // Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024
+  '2.2': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // complementar
+  '2.4': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // complementar
+  '3.8': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // complementar
+  '3.9': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // complementar
+  '6.7': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // alvo
+  '6.8': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // alvo
+  '6.9': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // alvo
+  '6.10': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // alvo
+  '6.11': 'Portaria Interministerial MPA/MMA nº 14, de 1º de novembro de 2024',  // alvo
+  // Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026
+  '1.6': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // alvo, incidental, acompanhante, complementar, area
+  '1.8': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // locais, alvo, incidental, acompanhante, complementar, area
+  '1.9': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // locais, alvo, incidental, acompanhante, complementar, area
+  '1.10': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // locais, alvo, incidental, acompanhante, complementar, area
+  '1.11': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // locais, alvo, incidental, acompanhante, area
+  '1.14': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // alvo, incidental, acompanhante, area
+  '3.11': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // alvo, incidental, acompanhante, area
+  '3.13': 'Portaria Interministerial MPA/MMA nº 66, de 27 de julho de 2026',  // alvo, incidental, acompanhante, area
+};
+
+/// A norma cuja redação está nesta modalidade, quando não é a de 2011.
+String redacaoDaModalidade(String numero) => redacaoDe[numero] ?? '';
+
+// =====================================================================
+// AS MODALIDADES DE PORTA FECHADA
+//
+// A Portaria Interministerial MPA/MMA nº 19, de 24 de dezembro de 2024,
+// não reescreve modalidade nenhuma: ela PROÍBE O REGISTRO DE NOVAS
+// EMBARCAÇÕES em quatro delas. A modalidade continua existindo e quem
+// já está dentro continua operando — o que fechou foi a entrada.
+//
+// Ler "proibido" sem os arts. 2º, 3º e 4º dá resposta errada: a
+// substituição de embarcação, a transformação e a pesquisa seguem
+// permitidas.
+// =====================================================================
+const registroFechado = <String>['1.2', '1.3', '1.4', '1.15'];
+
+const normaDoRegistroFechado =
+    'Portaria Interministerial MPA/MMA nº 19, de 24 de dezembro de 2024';
+
+const textoDoRegistroFechado =
+    'O REGISTRO DE NOVAS EMBARCAÇÕES NESTA MODALIDADE ESTÁ PROIBIDO.\n\n'
+    'Art. 1º Fica proibido o registro de novas embarcações de pesca nas '
+    'modalidades de permissionamento 1.2, 1.3, 1.4 e 1.15 do Anexo I da '
+    'Instrução Normativa nº 10, de 10 de junho de 2011, do Ministério da '
+    'Pesca e Aquicultura e do Ministério do Meio Ambiente.\n'
+    'Parágrafo único. A proibição não se aplica ao Requerimento de '
+    'Permissão Prévia de Pesca para Registro Inicial protocolado até a '
+    'entrada em vigor desta Portaria Interministerial.\n\n'
+    'O QUE CONTINUA PERMITIDO\n\n'
+    'SUBSTITUIÇÃO (art. 2º). Permitida em caso de naufrágio, destruição '
+    'ou desativação, desde que do mesmo proprietário. A substituta não '
+    'pode ter capacidade de porão superior à substituída (§ 1º, I), e um '
+    'mesmo proprietário pode substituir até três embarcações por uma só, '
+    'desde que a nova não exceda a soma da capacidade de porão das '
+    'substituídas (§ 1º, II). Naufrágio ou destruição pedem documento da '
+    'autoridade marítima (§ 2º); desativação pede manifestação de '
+    'interesse (§ 3º).\n\n'
+    'TRANSFORMAÇÃO (art. 3º). Permitida desde que não se altere a '
+    'capacidade de porão da embarcação.\n\n'
+    'PESQUISA (art. 4º). A proibição não se aplica para fins de '
+    'pesquisa, desde que autorizada pelos órgãos competentes.\n\n'
+    'SANÇÃO (art. 5º). Lei nº 9.605, de 12 de fevereiro de 1998, e '
+    'Decreto nº 6.514, de 22 de julho de 2008.\n\n'
+    'Publicada no DOU de 27/12/2024, edição 249, seção 1, página 182. '
+    'Em vigor na data da publicação (art. 7º).';
+
+/// True quando a modalidade não aceita registro de embarcação nova.
+bool temRegistroFechado(String numero) => registroFechado.contains(numero);
+
+int get quantasComRedacaoNova => redacaoDe.length;
+
 const List<Modalidade> modalidades = [
   Modalidade(
     '1.1',
@@ -331,10 +547,10 @@ const List<Modalidade> modalidades = [
     '1.6',
     Metodo.linha,
     'Espinhel horizontal (fundo)',
-    alvo: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa- vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo-quadrado (Mycteroperca bonaci), Badejomira (Mycteroperca acutirostris), Badejo-da-areia (Mycteroperca microlepis), Xaréu, garacimbora, xarelete (Caranx latus), Garaximpora, xaréu (Caranx hippos), Arabaiana, olho- de-boi (Seriola dumerili), Garajuba (Caranx crysus), Xaréu (Caranx latus), Garajuba amarela (Carangoides bartholomaei), Garaximbora (Caranx hippos), Palombeta (Chloroscombrus chrysurus), Peixe-rei (Elagatis bipinnulata), Timbira (Oligoplites saliens), Galo (Selene setapinnis), Galo-de-penacho (Selene vomer), Galo-do-alto (Alectis ciliaris), Xixarro (Trachurus lathami), Arabaiana (Seriola dumerili), (Seriola fasciata), Olhete (Seriola lalandi), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus)',
-    incidental: 'Mero (Epinephelus itajara), Cherne-poveiro (Polyprion americanus)',
-    acompanhante: 'Pargo (Lutjanus purpureus), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Tubarão azul (Prionace glauca), Tubarão lombopreto, Cação-lombo-preto (Carcharhinus falciformis), Mako (Isurus oxyrinchus), Cambéua, bagre-branco (Arius grandicassis), Bagre-defita, (Bagre marinus); Bandeirado, bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Genidens planifrons), Uricica, bagre-amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), Raia emplasto (Atlantoraja platana, Sympterygia bonapartii, Sympterygia acuta), Raia (Breviraja spinosa, Rajella purpuriventralis) e Pescada amarela (Cynoscion acoupa)',
-    complementar: 'Linha de mão (fundo), Espécies: Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa-vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo-quadrado (Mycteroperca bonaci), Badejo-mira (Mycteroperca acutirostris), Badejo-da-areia (Mycteroperca microlepis), Xaréu, garacimbora, xarelete (Caranx latus), Garaximpora, xaréu (Caranx hippos), Arabaiana, olho-de-boi (Seriola dumerili), Pargo (Lutjanus purpureus), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens) Garajuba (Caranx crysus), Xaréu (Caranx latus), Garajuba amarela (Carangoides bartholomaei), Garaximbora (Caranx hippos), Palombeta (Chloroscombrus chrysurus), Peixe- rei (Elagatis bipinnulata), Timbira (Oligoplites saliens), Galo (Selene setapinnis), Galo-de- penacho (Selene vomer), Galo-do-alto (Alectis ciliaris), Xixarro (Trachurus lathami), Arabaiana (Seriola dumerili), (Seriola fasciata), Olhete (Seriola lalandi), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus)',
+    alvo: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo-quadrado (Mycteroperca bonaci), Badejo-da- areia (Mycteroperca microlepis), Xaréu, garacimbora, xarelete (Caranx latus), Garaximpora, xaréu (Caranx hippos), Arabaiana, olho de-boi (Seriola dumerili), Garajuba (Caranx crysus), Xaréu (Caranx latus), Garajuba amarela (Carangoides bartholomaei), Garaximbora (Caranx hippos), Palombeta (Chloroscombrus chrysurus), Peixe- rei (Elagatis bipinnulata), Timbira (Oligoplites saliens), Galo (Selene setapinnis), Galo-de- penacho (Selene vomer), Galo-do-alto (Alectis ciliaris), Xixarro (Trachurus lathami), Arabaiana (Seriola dumerili), (Seriola fasciata), Olhete (Seriola lalandi), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus)',
+    incidental: 'Mero (Epinephelus itajara), Cherne-poveiro (Polyprion americanus), Badejomira (Mycteroperca acutirostris), Tubarão lombopreto, Cação-lombo-preto (Carcharhinus falciformis), Mako (Isurus oxyrinchus), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), raia emplasto (Sympterygia bonapartii, Sympterygia acuta)',
+    acompanhante: 'Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Tubarão azul (Prionace glauca), Cambéua, bagre-branco (Arius grandicassis), Bagre-defita, (Bagre marinus); Bandeirado, bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Genidens planifrons), Uricica, bagre-amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Raia emplasto (Atlantoraja platana, Raia (Breviraja spinosa, Rajella purpuriventralis) e Pescada amarela (Cynoscion acoupa)',
+    complementar: 'Linha de mão (fundo), Espécies: Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa- vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo-quadrado (Mycteroperca bonaci), Badejo-da- areia (Mycteroperca microlepis), Xaréu, garacimbora, xarelete (Caranx latus), Garaximpora, xaréu (Caranx hippos), Arabaiana, olho-de-boi (Seriola dumerili), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens) Garajuba (Caranx crysus), Xaréu (Caranx latus), Garajuba amarela (Carangoides bartholomaei), Garaximbora (Caranx hippos), Palombeta (Chloroscombrus chrysurus), Peixe rei (Elagatis bipinnulata), Timbira (Oligoplites saliens), Galo (Selene setapinnis), Galo-de-penacho (Selene vomer), Galo-do-alto (Alectis ciliaris), Xixarro (Trachurus lathami), Arabaiana (Seriola dumerili), (Seriola fasciata), Olhete (Seriola lalandi), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus)',
     area: 'Mar territorial NE; e ZEE NE',
   ),
   Modalidade(
@@ -366,7 +582,7 @@ const List<Modalidade> modalidades = [
     alvo: 'Pargo (Lutjanus purpureus)',
     incidental: 'Mero (Epinephelus itajara)',
     acompanhante: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Sirigado (Mycteroperca bonaci), Arabaiana (Seriola dumerili), Bejupira (Rachycentron canadum)',
-    complementar: 'Espinhel Horizontal Pelágico, Espécies: Albacora laje (Thunnus albacares), Albacora branca (Thunnus alalunga), Albacora bandolim (Thunnus obesus), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako (Isurus oxyrinchus), Agulhão verde (Tetrapturus pfluegeri), Agulhão vela (Istiophorus albicans), Albacora azul (Thunnus thynnus), Albacorinha (Thunnus atlanticus), Espadarte (Xiphias gladius), Bonito listrado (Katsuwonus pelamis), Bonito cachorro (Auxis thazard), Sarda (Sarda sarda), Cavala empige (Acanthocybium solandri), Cavala (Scomberomorus cavalla), Serra (Scomberomorus brasiliensis), Dourado (Coryphaena hippurus)',
+    complementar: 'Espinhel Horizontal Pelágico, Espécies: Albacora laje (Thunnus albacares), Albacora branca (Thunnus alalunga), Albacora bandolim (Thunnus obesus), Tubarão azul (Prionace glauca), Agulhão verde (Tetrapturus pfluegeri), Agulhão vela (Istiophorus albicans), Albacorinha (Thunnus atlanticus), Espadarte (Xiphias gladius), Bonito listrado (Katsuwonus pelamis), Bonito cachorro (Auxis thazard), Sarda (Sarda sarda), Cavala empige (Acanthocybium solandri), Cavala (Scomberomorus cavalla), Serra (Scomberomorus brasiliensis), Dourado (Coryphaena hippurus)',
     area: 'Mar territorial N/NE (AP a AL); e ZEE N/NE (AP a AL)',
   ),
   Modalidade(
@@ -377,7 +593,7 @@ const List<Modalidade> modalidades = [
     alvo: 'Pargo (Lutjanus purpureus)',
     incidental: 'Mero (Epinephelus itajara)',
     acompanhante: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Sirigado (Mycteroperca bonaci), Arabaiana (Seriola dumerili), Bejupira (Rachycentron canadum)',
-    complementar: 'Rede de emalhe de superfície, Espécies: Cavala (Scomberomorus cavalla), Serra (Scomberomorus brasiliensis), Curuca (Micropogonias furnieri), Timbira (Oligoplites saliens), Bonito (Katsuwonus pelamis), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação- espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Uritinga (Arius proops)',
+    complementar: 'Rede de emalhe de superfície, Espécies: Cavala (Scomberomorus cavalla), Serra (Scomberomorus brasiliensis), Curuca (Micropogonias furnieri), Timbira (Oligoplites saliens), Bonito (Katsuwonus pelamis), Tubarão azul (Prionace glauca), Cação- bagre (Squalus acanthias, Squalus cubensis), Cação espinho (Squalus blainville), Uritinga (Arius proops)',
     area: 'Mar territorial N/NE (AP a AL); e ZEE N/NE (AP a AL) (IN SEAP Nº 001/2007)',
   ),
   Modalidade(
@@ -385,9 +601,9 @@ const List<Modalidade> modalidades = [
     Metodo.linha,
     'Espinhel vertical',
     locais: 'Linha Pargueira, Caico e Bicicleta',
-    alvo: 'Pargo (Lutjanus purpureus), Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens)',
+    alvo: 'Dentão (Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens)',
     incidental: 'Cherne-poveiro (Polyprion americanus), Tubarão raposa (Alopias supercilliosus), Cação-bico-doce (Galeorhinus galeus), Cação-cola-fina, caçonete (Mustelus schmitti), Tubarão - peregrino (Cetorhinus maximus), Cação-lixa, tubarão-lixa, Lambaru (Ginglymostoma cirratum), Tubarão - baleia (Rhincodon typus), Cação-anjo-espinhoso (Squatina Guggenheim), Cação-anjo-liso (Squatina occulta), Cação bicudo, cação espátula, Quati (Isogomphodon oxyrhynchus)',
-    acompanhante: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa-vermelha-deabrolhos (Epinephelus morio) Batata (Lopholatilus villariii), Uricica, bagre-amarelo (Cathorops spixii), Bandeirado, bagre-de-penacho (Bagre bagre), Cambéua, bagre-branco (Arius grandicassis), Bagre (Genidens barbus, Genidens planifrons), Bagre-amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Congro (Conger orbignyanus), Congro rosa (Genypterus brasiliensis), Namorado (Pseudopercis numida), Abrótea de fundo (Urophycis cirrata)',
+    acompanhante: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa-vermelha-deabrolhos (Epinephelus morio) Batata (Lopholatilus villariii), Uricica, bagre- amarelo (Cathorops spixii), Bandeirado, bagre-de-penacho (Bagre bagre), Cambéua, bagre-branco (Arius grandicassis), Bagre (Genidens barbus, Genidens planifrons), Bagre-amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Congro (Conger orbignyanus), Congro rosa (Genypterus brasiliensis), Namorado (Pseudopercis numida), Abrótea de fundo (Urophycis cirrata)',
     area: 'Mar territorial S/SE; e ZEE S/SE',
     valeEmSc: true,
   ),
@@ -415,9 +631,9 @@ const List<Modalidade> modalidades = [
     '1.14',
     Metodo.linha,
     'Linha de mão (fundo)',
-    alvo: 'Peroá (Balistes capriscus), Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Corvina (Micropogonias furnieri)',
-    incidental: 'Raia Viola (Rhinobatus horkelii, Rinobatos percellens)',
-    acompanhante: 'Baiacu (Lagocephalus laevigatus), Pargo (Lutjanus purpureus), Dentão(Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Pargo- rosa (Pagrus pagrus), Bagre-branco (Arius grandicassis), Bagre-de-fita (Bagre marinus), Bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Netuma planifrons), Bagre- amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação- espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Sargo (Archosargus probatocephalus), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus), Goete (Cynoscion jamaicensis), Betara (Menticirrhus americanus)',
+    alvo: 'Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Corvina (Micropogonias furnieri)',
+    incidental: 'Peroá (Balistes capriscus), Raia Viola (Rhinobatus horkelii, Rhinobatos percellens), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-malhado (Mustelus fasciatus)',
+    acompanhante: 'Baiacu (Lagocephalus laevigatus), Dentão(Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Pargo rosa (Pagrus pagrus), Bagre-branco (Arius grandicassis), Bagre-de-fita (Bagre marinus), Bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Netuma planifrons), Bagre amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Tubarão azul (Prionace glauca), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação espinho (Squalus blainville), Sargo (Archosargus probatocephalus), Pampo (Trachinotus carolinus, Trachinotus falcatus, Trachinotus goodie), Pampo malhado (Trachinotus marginatus), Goete (Cynoscion jamaicensis), Betara (Menticirrhus americanus)',
     area: 'Mar territorial SE; e ZEE SE',
   ),
   Modalidade(
@@ -459,7 +675,7 @@ const List<Modalidade> modalidades = [
     alvo: 'Tainha (Mugil platanus ou Mugil liza), Anchova (Pomatomus saltatrix), Sororoca, serra (Scomberomorus brasiliensis)',
     incidental: 'Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartaruga-de-pente (Eretmochelys imbricata) Tartaruga-oliva (Lepidochelys olivacea ), Tartaruga-gigante (Dermochelys coriacea), Peixe-boi marinho (Trichechus manatus), Boto- cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Baleia-jubarte (Megaptera novaeangliae), Baleia-cachalote (Physeter macrocephalus)',
     acompanhante: 'Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-noturno (Carcharhinus signatus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Peixe-espada (Trichiurus lepturus), Serrinha, Cavala Pintada (Scomberomorus maculatus), Prejereba (Lobotes surinamensis), Guaivira (Oligoplites saliens) Pampo (Trachinotus falcatus) Pampo- verdadeiro (Trachinotus carolinus), Pampo-listrado (Trachinotus goodei), Pampo-malhado (Trachinotus marginatus), Paru-branco (Chaetodipterus faber)',
-    complementar: 'Linha de mão (superfície), Espécies: Sororoca, serra (Scomberomorus brasiliensis), Cavala (Scomberomorus cavalla), Guaivira (Oligoplites saliens), Prejereba (Lobotes surinamensis), Robalo (Centropomus parallelus, Centropomus undecimalis, Centropomus ensiferus, Centropomus pectinatus), Anchova (Pomatomus saltatrix)',
+    complementar: 'Linha de mão (superfície), Espécies: Sororoca, serra (Scomberomorus brasiliensis), Cavala (Scomberomorus cavalla), Guaivira (Oligoplites saliens), Prejereba (Lobotes surinamensis), Robalo (Centropomus parallelus, Centropomus undecimalis, Centropomus ensiferus, Centropomus pectinatus), Anchova (Pomatomus saltatrix); Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis) com o emprego de linha de mão com isca artificial ou natural denominada zangarilho, garateias ou outras denominações regionais e/ou tarrafas com auxílio de atração luminosa (apenas no mar territorial adjacente ao estado de Santa Catarina)',
     area: 'Mar territorial S/SE',
     valeEmSc: true,
   ),
@@ -478,6 +694,7 @@ const List<Modalidade> modalidades = [
     Metodo.emalhe,
     'Emalhe costeiro (fundo)',
     alvo: 'Corvina (Micropogonias furnieri), Castanha (Umbrina canosai), Pescada (Cynoscion striatus), Abrotea (Urophycis brasiliensis)',
+    complementar: 'Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis) com o emprego de linha de mão com isca artificial ou natural denominada zangarilho, garateias ou outras denominações regionais e/ou tarrafas com auxílio de atração luminosa (apenas no mar territorial adjacente ao estado de Santa Catarina)." (NR) - O Anexo III da Instrução Normativa MPA/MMA nº 10, de 10 de junho de 2011, do Ministério da Pesca e Aquicultura e do Ministério do Meio Ambiente e Mudança do Clima passa a vigorar com a seguinte redação: "',
     incidental: 'Raia Viola (Rhinobatus horkelii, Rinobatos percellens), Cação-anjo- espinhoso (Squatina Guggenheim), Cação-anjo-liso (Squatina occulta), Boto-cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartarugade-pente (Eretmochelys imbricata) Tartaruga-oliva (Lepidochelys olivacea), Tartaruga-gigante (Dermochelys coriacea)',
     acompanhante: 'Savelha (Brevoortia pectinata), Cabrinha (Prionotus punctatus) Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Peixe-espada (Trichiurus lepturus, Trichiurus lepturus), Guavira (Oligoplites saliens), Linguado (Paralichthys brasiliensis, Paralichthys isósceles, Paralichthys triocellatus, Paralichthys patagonicus), Maria-luiza (Paralonchurus brasiliensis), Papa-terra, Betara (Menticirrhus americanus), Pescada amarela (Cynoscion acoupa), Pescada branca (Cynoscion leiarchus), Pescada bicuda (Cynoscion microlepidotus), Pescada cambucu (Cynoscion virescen), Pescadinha (Macrodon ancylodon), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), Raia emplasto (Atlantoraja platana, Sympterygia bonapartii, Sympterygia acuta), Raia (Breviraja spinosa, Rajella purpuriventralis), Anchova (Pomatomus saltatrix), Gordinho (Peprilus paru) (Peprilus paru) miracel, Merluza (Merluccius hubbsi), Tira-vira (Percophis brasiliensis), Congro rosa (Genypterus brasiliensis), Congro-preto (Conger orbignianus, Myrophis punctatus, Raneya brasiliensis), Namorado (Pseudopercis numida), Pargo rosa (Pagrus pagrus), Batata (Lopholatilus villarii), Bagre-branco, (Arius grandicassis); Bagre-de-fita, (Bagre marinus); Bagre-de-penacho (Bagre bagre), Bagre (Genidens barbus, Netuma planifrons); Bagre- amarelo (Cathorops spixii), Bagre rosado (Genidens genidens, Genidens barbus), Camarão branco (Litopenaeus schmitti), Robalo (Centropomus parallelus, Centropomus undecimalis, Centropomus ensiferus, Centropomus pectinatus), Prejereba (Lobotes surinamensis), Vermelho (Lutjanus jocu, Ocyurus chrysurus), Sororoca, serra (Scomberomorus brasiliensis), Siri-mangue (Callinectes exasperatus), Siri-azul (Callinectes sapidus), Siri nema (Callinectes bocourti), Siri (Callinectes danae, Callinectes ornatus), Goete (Cynoscion jamaicensis)',
     area: 'Mar territorial S/SE; e ZEE S/SE',
@@ -668,7 +885,7 @@ const List<Modalidade> modalidades = [
     alvo: 'Camarão sete-barbas (Xiphopenaeus kroyeri), Camarão santana (Pleoticus muelleri), Camarão barba ruça (Artemesia longinaris)',
     incidental: 'Cação-anjo liso (Squatina occulta)',
     acompanhante: 'Linguado (Paralichthys brasiliensis, Paralichthys isósceles, Paralichthys triocellatus, Paralichthys patagonicus), Trilha (Mullus argentinae), Abrotea (Urophycis brasiliensis), Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea), Corvina (Micropogonias furnieri), Papa terra, Judeu, Betara (Menticirrhus americanus), Cabrinha (Prionotus punctatus), Castanha (Umbrina canosai), Pescada, Maria-mole (Cynoscion striatus), Pescadinha real, Pescada foguete (Macrodon ancylodon), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), Raia emplasto (Atlantoraja platana, Sympterygia bonapartii, Sympterygia acuta), Raia (Breviraja spinosa, Rajella purpuriventralis), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Caçãolombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Camarão branco (Litopenaeus schmitti), Maria-luiza (Paralonchurus brasiliensis), Porquinho, peroá (Balistes capriscus), siri-mangue (Callinectes exasperatus), siri-azul (Callinectes sapidus), Siri nema (Callinectes bocourti), Siri (Callinectes danae, Callinectes ornatus), Goete (Cynoscion jamaicensis), Peixe-sapo (Lophius gastrophysus)',
-    complementar: 'Garatéia com atração luminosa (vulgo zangarilho), Espécies: Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea)',
+    complementar: 'Garatéia com atração luminosa (vulgo zangarilho), Espécies: Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea); Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis) com o emprego de linha de mão com isca artificial ou natural denominada zangarilho, garateias ou outras denominações regionais e/ou tarrafas com auxílio de atração luminosa (apenas no mar territorial adjacente ao estado de Santa Catarina)',
     area: 'Mar territorial S/SE; e ZEE S/SE',
     valeEmSc: true,
   ),
@@ -680,7 +897,7 @@ const List<Modalidade> modalidades = [
     alvo: 'Camarão sete-barbas (Xiphopenaeus kroyeri), Camarão santana (Pleoticus muelleri), Camarão barba ruça (Artemesia longinaris)',
     incidental: 'Cação-anjo liso (Squatina occulta)',
     acompanhante: 'Linguado (Paralichthys brasiliensis, Paralichthys isósceles, Paralichthys triocellatus, Paralichthys patagonicus), Trilha (Mullus argentinae), Abrotea (Urophycis brasiliensis), Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea), Corvina (Micropogonias furnieri), Papa terra, Judeu, Betara (Menticirrhus americanus), Cabrinha (Prionotus punctatus), Castanha (Umbrina canosai), Pescada, Maria-mole (Cynoscion striatus), Pescadinha real, Pescada foguete (Macrodon ancylodon), Raia santa (Rioraja agassizii), Raia carimbada (Atlantoraja cyclophora), Raia chita (Atlantoraja castelnaui), Raia emplasto (Atlantoraja platana, Sympterygia bonapartii, Sympterygia acuta), Raia (Breviraja spinosa, Rajella purpuriventralis), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Caçãolombo-preto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação-espinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Camarão branco (Litopenaeus schmitti), Maria-luiza (Paralonchurus brasiliensis), Porquinho, peroá (Balistes capriscus), Siri-mangue (Callinectes exasperatus), Siri-azul (Callinectes sapidus), Siri nema (Callinectes bocourti), Siri (Callinectes danae, Callinectes ornatus), Goete (Cynoscion jamaicensis), Peixe-sapo (Lophius gastrophysus)',
-    complementar: 'Rede de espera (superfície), Espécies: Tainha (Mugil platanus ou Mugil liza), Anchova (Pomatomus saltatrix), Sororoca, serra (Scomberomorus brasiliensis), Guavira (Oligoplites saliens)',
+    complementar: 'Rede de espera (superície), Espécies: Tainha (Mugil platanus ou Mugil liza), Anchova (Pomatomus saltatrix), Sororoca, serra (Scomberomorus brasiliensis), Guavira (Oligoplites saliens); Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis) com o emprego de linha de mão com isca artificial ou natural denominada zangarilho, garateias ou outras denominações regionais e/ou tarrafas com auxílio de atração luminosa (apenas no mar territorial adjacente ao estado de Santa Catarina)." (NR) O Anexo VI da Instrução Normativa MPA/MMA nº 10, de 10 de junho de 2011, do Ministério da Pesca e Aquicultura e do Ministério do Meio Ambiente e Mudança do Clima, alterado pela Portaria nº 617, de 8 de março de 2022, da Secretaria de Aquicultura e Pesca do Ministério da Agricultura, Pecuária e Abastecimento, passa a vigorar com a seguinte redação: "',
     area: 'Mar territorial S/SE; e ZEE S/SE',
     valeEmSc: true,
   ),
@@ -699,9 +916,9 @@ const List<Modalidade> modalidades = [
     '3.11',
     Metodo.arrasto,
     'Arrasto costeiro (fundo simples e parelha)',
-    alvo: 'Corvina (Micropogonias furnieri), Castanha (Umbrina canosai), Pescada, Maria- mole (Cynoscion striatus), Pescadinha real, Pescada foguete (Macrodon ancylodon)',
-    incidental: 'Raia Viola (Rhinobatus horkelii, Rinobatos percellens)',
-    acompanhante: 'Linguado (Paralichthys brasiliensis, Paralichthys isósceles, Paralichthys triocellatus, Paralichthys patagonicus), Trilha (Mullus argentinae), Abrotea (Urophycis brasiliensis), Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea), Cabrinha (Prionotus punctatus), Congro rosa (Genypterus brasiliensis), Peixe-sapo (Lophius gastrophysus), Tira-vira (Percophis brasiliensis), Namorado (Pseudopercis numida), Batata (Lopholatilus villarii), Lacraia, Pitu (Metanephrops rubellus), Cavaca, carapau, xerelete (Caranx crysus), Pargo (Lutjanus purpureus), Dentão(Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Garoupa, cherne pintado, cherne verdadeiro (Epinephelus niveatus), Garoupa-vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo-quadrado (Mycteroperca bonaci), Badejo-mira (Mycteroperca acutirostris), Badejo-da-areia (Mycteroperca microlepis), Olho de cão (Priacanthus arenatus), Peixe-espada (Trichiurus lepturus)',
+    alvo: 'Corvina (Micropogonias furnieri), Castanha (Umbrina canosai), Pescada, Maria mole (Cynoscion striatus), Pescadinha real, Pescada foguete (Macrodon ancylodon)',
+    incidental: 'Raia Viola (Rhinobatus horkelii, Rhinobatos percellens), Badejo-mira (Mycteroperca acutirostris)',
+    acompanhante: 'Linguado (Paralichthys brasiliensis, Paralichthys isósceles, Paralichthys triocellatus, Paralichthys patagonicus), Trilha (Mullus argentinae), Abrotea (Urophycis brasiliensis), Lula (Loligo sanpaulensis, Loligo surinamensis, Lolliguncula brevis, Doryteuthis plei, Sepioteuthis sepioidea), Cabrinha (Prionotus punctatus), Congro rosa (Genypterus brasiliensis), Peixe-sapo (Lophius gastrophysus), Tira-vira (Percophis brasiliensis), Namorado (Pseudopercis numida), Batata (Lopholatilus villarii), Lacraia, Pitu (Metanephrops rubellus), Cavaca, carapau, xerelete (Caranx crysus), Dentão(Lutjanus jocu), Caranha (Lutjanus cyanopterus), Ariacó (Lutjanus synagris), Guaiúba (Ocyurus chrysurus), Pargo-piranga (Rhomboplites aurorubens), Garoupa, cherne pintado, cherne verdadeiro - (Epinephelus niveatus), Garoupa-vermelha-de-abrolhos (Epinephelus morio), Sirigado, badejo- quadrado (Mycteroperca bonaci), Badejo-da-areia (Mycteroperca microlepis), Olho de cão (Priacanthus arenatus), Peixe-espada (Trichiurus lepturus)',
     area: 'Mar territorial S/SE (profundidades inferiores a 250metros); e ZEE S/SE (profundidades inferiores a 250 metros)',
     valeEmSc: true,
   ),
@@ -719,7 +936,8 @@ const List<Modalidade> modalidades = [
     Metodo.arrasto,
     'Arrasto oceânico (fundo) - simples e duplo',
     alvo: 'Camarão carabineiro (Aristaeopsis edwardsiana), Camarão alistado (Aristeus antillensis)',
-    acompanhante: 'Calamar argentino (Illex argentinus), Calamar vermelho (Ommastrephes bartramii), Caranguejo real (Chaceon ramosae), Caranguejo vermelho (Chaceon notialis), Tubarão azul (Prionace glauca), Tubarão lombo-preto, Cação-lombopreto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-bagre (Squalus acanthias, Squalus cubensis), Caçãoespinho (Squalus blainville), Cação-malhado (Mustelus fasciatus), Merluza (Merluccius hubbsi), Pargo (Lutjanus purpureus), Pargo Rosa (Pagrus pagrus), Abrótea de profundidade (Urophycis cirrata)',
+    incidental: 'Tubarão lombo-preto, Cação-lombopreto (Carcharhinus falciformis), Mako, cação anequim (Isurus oxyrinchus), Cação-malhado (Mustelus fasciatus)',
+    acompanhante: 'Calamar argentino (Illex argentinus), Calamar vermelho (Ommastrephes bartramii), Caranguejo real (Chaceon ramosae), Caranguejo vermelho (Chaceon notialis), Tubarão azul (Prionace glauca), Cação-bagre (Squalus acanthias, Squalus cubensis), Cação espinho (Squalus blainville), Merluza (Merluccius hubbsi), Pargo Rosa (Pagrus pagrus), Abrótea de profundidade (Urophycis cirrata)',
     area: 'ZEE (profundidades superiores a 500 metros e inferiores a 1000 metros)',
   ),
   Modalidade(
@@ -945,7 +1163,7 @@ const List<Modalidade> modalidades = [
     '6.7',
     Metodo.outros,
     'Diversficada costeira (embarcações de pequeno porte, com propulsão a remo ou a vela, e, quando motorizadas, com potência de motor até 18,0 hp, comprimento até 8,00 m e arqueação bruta até 2,0.)',
-    alvo: 'Peixes e crustáceos diversos não controlados por regulamentação específica',
+    alvo: 'Peixes, crustáceos e moluscos diversos',
     area: 'Mar territorial (SP ao RS)',
     valeEmSc: true,
   ),
@@ -953,8 +1171,7 @@ const List<Modalidade> modalidades = [
     '6.8',
     Metodo.arrasto,
     'Arrasto de praia',
-    alvo:
-        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    alvo: 'Tainha (Mugil liza); Parati (Mugil curema) Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); e Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha- real (Macrodon ancylodon); Peixerei (Odonthestes bonariensis /Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi) Linguado (Paralichthys patagonicus /P. brasiliensis); Galo (Selene vômer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus), Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis)',
     incidental:
         'Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartaruga-de-pente (Eretmochelys imbricata), Tartaruga-oliva (Lepidochelys olivacea), Tartaruga-gigante (Dermochelys coriacea), Peixe-boi marinho (Trichechus manatus), Boto-cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Baleia-jubarte (Megaptera novaeangliae), Baleia-cachalote (Physeter macrocephalus)',
     acompanhante:
@@ -972,8 +1189,7 @@ const List<Modalidade> modalidades = [
     '6.9',
     Metodo.arrasto,
     'Arrasto de praia',
-    alvo:
-        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    alvo: 'Tainha (Mugil liza); Parati (Mugil curema) Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); e Maria- luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha- real (Macrodon ancylodon); Peixerei (Odonthestes bonariensis /Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi) Linguado (Paralichthys patagonicus /P. brasiliensis); Galo (Selene vômer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus), Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis)',
     incidental:
         'Raia Viola (Rhinobatus horkelii, Rinobatos percellens), Cação-anjo-espinhoso (Squatina guggenheim), Cação-anjo-liso (Squatina occulta), Boto-cinza (Sotalia guianensis), Golfinho-de-dentes-rugosos (Steno bredanensis), Golfinho-rotador (Stenella longirostris), Golfinho-pintado-do-Atlântico (Stenella frontalis), Golfinho-comum (Delphinus delphis), Golfinho-nariz-de-garrafa (Tursiops truncatus), Toninha (Pontoporia blainvillei), Tartaruga-verde (Chelonia mydas), Tartaruga-cabeçuda (Caretta caretta), Tartaruga-de-pente (Eretmochelys imbricata), Tartaruga-oliva (Lepidochelys olivacea), Tartaruga-gigante (Dermochelys coriacea)',
     acompanhante:
@@ -991,8 +1207,7 @@ const List<Modalidade> modalidades = [
     '6.10',
     Metodo.arrasto,
     'Arrasto de praia',
-    alvo:
-        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    alvo: 'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); e Maria- luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha- real (Macrodon ancylodon); Peixerei (Odonthestes bonariensis /Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi) Linguado (Paralichthys patagonicus /P. brasiliensis); Galo (Selene vômer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus), Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis)',
     complementar:
         'Diversificada costeira (embarcações de pequeno porte, com propulsão a remo ou a vela, e, quando motorizadas, com potência de motor até 18,0 hp, comprimento até 8,00 m e arqueação bruta até 2,0). Espécie-alvo: peixes e crustáceos diversos',
     area: 'Mar territorial do Estado de Santa Catarina',
@@ -1006,8 +1221,7 @@ const List<Modalidade> modalidades = [
     '6.11',
     Metodo.arrasto,
     'Arrasto de praia',
-    alvo:
-        'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha-real (Macrodon ancylodon); Peixe-rei (Odonthestes bonariensis / Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi); Linguado (Paralichthys patagonicus / P. brasiliensis); Galo (Selene vomer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus)',
+    alvo: 'Tainha (Mugil liza); Parati (Mugil curema); Betara (Menticirrhus littoralis); Pescada (Cynoscion striatus); Corvina (Micropogonias furnieri); Pampo ou Gordinho (Peprilus paru); Enchova ou Anchova (Pomatomus saltatrix); Espada (Trichiurus lepturus); e Maria-luiza (Paralonchurus brasiliensis); Xaréu (Caranx hippos); Sororoca (Scomberomorus brasiliensis); Savelha (Brevoortia pectinata); Pescadinha- real (Macrodon ancylodon); Peixerei (Odonthestes bonariensis /Atherinella brasiliensis); Goete (Cynoscion jamaicensis); Abrótea (Urophycis brasiliensis); Xerelete (Caranx crysus); Sardinha-lage (Opisthonema oglinum); Prejereba (Lobotes surinamensis); Pescada-branca (Cynoscion leiarchus); Pescada-amarela (Cynoscion acoupa); Cavala (Scomber japonicus); Peixe-porco (Balistes capriscus / B. vetula); Palombeta ou Carapau (Chloroscombrus chrysurus); Olho-de-cão (Priacanthus arenatus); Olho-de-boi (Seriola lalandi) Linguado (Paralichthys patagonicus /P. brasiliensis); Galo (Selene vômer); Paru (Chaetodipterus faber); Oveva (Larimus breviceps); Marimbá (Diplodus argenteus); Guaivira (Oligoplites saliens); Robalo (Centropomus parallelus, Centropomus undecimalis); Carapicu (Eucinostomus gula); Cangoá (Stellifer rastifer); Miracéu (Astrocopus sexspinosus); Caratinga (Eugerres brasilianus); Carapeba (Diapterus rhombeus), Lulas (Loligo plei, Loligo sanpaulensis, Loligo sp., Lolliguncula brevis)',
     area: 'Mar territorial do Estado de Santa Catarina',
     valeEmSc: true,
     regras:

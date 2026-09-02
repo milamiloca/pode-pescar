@@ -16,6 +16,9 @@ echo "== 4. caracteres invisíveis"
 python3 pode_pescar/ferramentas/limpar.py | tail -1
 echo "== 5. coerência do que o app afirma"
 python3 pode_pescar/ferramentas/coerencia.py || falhou=1
+echo "== 6. procedência das citações de normas não lidas"
+python3 pode_pescar/ferramentas/inventario.py > /dev/null || falhou=1
+python3 pode_pescar/ferramentas/procedencia.py | tail -4 || falhou=1
 echo
 [ $falhou -eq 0 ] && echo "TUDO CERTO" || echo "TEM FALHA — não publique"
 exit $falhou

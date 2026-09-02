@@ -76,9 +76,11 @@ class TelaInicial extends StatelessWidget {
                       _Porta(
                         titulo: 'Espécies',
                         detalhe: 'As ${fichas.length} espécies com regra: '
-                            'tamanho mínimo, vedação por ameaça de extinção, '
-                            'ou as duas.',
-                        norma: 'IN 53 · Portarias 1.666 e 1.667',
+                            'tamanho mínimo, ameaça de extinção, defeso, '
+                            'área proibida, petrecho e Plano de '
+                            'Recuperação.',
+                        norma: 'IN 53 · Portaria 25-N · Portarias 1.666 e '
+                            '1.667 · Planos de Recuperação · Portaria 532',
                         destino: _Destino.especies,
                       ),
                       const SizedBox(height: 12),
@@ -239,7 +241,7 @@ class _Porta extends StatelessWidget {
             height: 46,
             child: Align(alignment: Alignment.centerLeft, child: _visual()),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 20),
           Text(
             titulo,
             style: const TextStyle(
@@ -450,8 +452,8 @@ class _TodasAsNormasState extends State<_TodasAsNormas> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          '$lidas com o texto lido por inteiro, '
-                          '${todas.length - lidas} citadas e ainda por obter',
+                          '${todas.length - lidas} ainda por obter, '
+                          'em vermelho na lista',
                           style: const TextStyle(
                               fontSize: 12.5, height: 1.35, color: corApagada),
                         ),
@@ -543,7 +545,7 @@ class _LinhaDeNorma extends StatelessWidget {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: n.lida ? corPode : corBoia,
+              color: n.lida ? corPode : corNaoPode,
               shape: BoxShape.circle,
             ),
           ),
@@ -553,19 +555,31 @@ class _LinhaDeNorma extends StatelessWidget {
               children: [
                 Text(
                   n.nome,
-                  style: const TextStyle(
-                      fontSize: 13.5, height: 1.35, color: corTinta),
-                ),
-                Text(
-                  n.lida
-                      ? 'texto lido por inteiro'
-                      : 'citada — texto ainda por obter',
                   style: TextStyle(
-                    fontSize: 11.5,
-                    height: 1.4,
-                    color: n.lida ? corPode : corBoia,
+                    fontSize: 13.5,
+                    height: 1.35,
+                    fontWeight:
+                        n.lida ? FontWeight.normal : FontWeight.w600,
+                    color: n.lida ? corTinta : corNaoPode,
                   ),
                 ),
+                if (n.legenda.isNotEmpty)
+                  Text(
+                    n.legenda,
+                    style: const TextStyle(
+                        fontSize: 11.5, height: 1.4, color: corApagada),
+                  ),
+                if (!n.lida)
+                  const Text(
+                    'TEXTO AINDA POR OBTER',
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      height: 1.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.7,
+                      color: corNaoPode,
+                    ),
+                  ),
               ],
             ),
           ),

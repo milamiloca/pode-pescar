@@ -56,6 +56,101 @@ class Conflito {
 
 const conflitos = <Conflito>[
   Conflito(
+    titulo: 'Miraguaia ou burriquete — 55 cm em norma estadual de SC, '
+        'vedação em norma federal posterior',
+    desde: '01/09/2026',
+    cientificos: [
+      'Pogonias courbina',
+      'Pogonias cromis',
+    ],
+    tambemAlcanca: 'Alcança quem pesca miraguaia ou burriquete no litoral '
+        'de Santa Catarina, e em especial nas Baías Norte e Sul da Ilha de '
+        'Santa Catarina, que é a área de que trata o parecer técnico '
+        'citado na portaria estadual.',
+    appDiz: 'Que a captura está VEDADA, e não que o tamanho mínimo seja '
+        '55 cm.\n\n'
+        'Pogonias courbina consta do Anexo I da Portaria GM/MMA nº 1.667, '
+        'de 27 de abril de 2026, no item 294, categoria CR — Criticamente '
+        'em Perigo. A coluna do asterisco vem VAZIA nesse item, e o '
+        'aplicativo lê asterisco ausente como espécie que já constava da '
+        'Lista anterior. Nessa leitura, a vedação do art. 3º da Portaria '
+        'GM/MMA nº 1.666/2026 vale desde já, sem o prazo de 25 de outubro '
+        'de 2026 do art. 12.\n\n'
+        'O tamanho de 65 cm que aparece na ficha vem da Instrução '
+        'Normativa MMA nº 53/2005, que nomeia a espécie pelo nome antigo, '
+        'Pogonias cromis.',
+    indicio: 'EXISTE UMA NORMA ESTADUAL DE SANTA CATARINA, POSTERIOR À IN '
+        '53 E ANTERIOR À LISTA, QUE FIXA OUTRO NÚMERO E NÃO PROÍBE A '
+        'CAPTURA.\n\n'
+        'A Portaria SAQ nº 009/2025, de 12 de novembro de 2025, do '
+        'Secretário Executivo da Aquicultura e Pesca do Estado de Santa '
+        'Catarina, publicada no Diário Oficial do Estado em 12 de dezembro '
+        'de 2025 (edição 22660-A, matéria nº 1143988), diz no art. 1º, § '
+        '1º: "O tamanho mínimo de captura é de 55 cm (cinquenta e cinco '
+        'centímetros) de comprimento total (da ponta do focinho à '
+        'extremidade da nadadeira caudal)". O § 2º manda medir o peixe em '
+        'posição reta, sem curvaturas. O art. 2º exige RGP e o '
+        'cumprimento das demais normas federais e estaduais aplicáveis. '
+        'Assinou Tiago Bolan Frigo.\n\n'
+        'OS TRÊS NÚMEROS:\n'
+        '· IN MMA nº 53/2005, federal, de 2005 — 65 cm, sob o nome '
+        'Pogonias cromis.\n'
+        '· Portaria SAQ nº 009/2025, de Santa Catarina, de 12/11/2025 — '
+        '55 cm, sob o nome Pogonias courbina.\n'
+        '· Portaria GM/MMA nº 1.667/2026, federal, de 27/04/2026 — '
+        'espécie na Lista, categoria CR. A Lista não trata de tamanho: '
+        'trata de vedação de captura.\n\n'
+        'NÃO SÃO DUAS ESPÉCIES. Quem afirma isso é a própria portaria '
+        'estadual, nos considerandos: Pogonias courbina (Lacepède, 1803), '
+        'popularmente burriquete ou miraguaia, "foi reconhecida como '
+        'válida e distinta de Pogonias cromis (black drum do Atlântico '
+        'Norte) com base em evidências morfológicas e moleculares", e '
+        'Pogonias cromis, "segundo a IUCN e estudos taxonômicos recentes, '
+        'não ocorre no Brasil". É um peixe só, com troca de nome '
+        'científico.\n\n'
+        'POR QUE A PORTARIA ESTADUAL FOI EDITADA. Os considerandos dizem '
+        'que a espécie não constava "na Lista Nacional Oficial de Espécies '
+        'da Fauna Brasileira Ameaçadas de Extinção atualizada pela '
+        'Portaria MMA nº 148, de 7 de junho de 2022, não havendo '
+        'proibição federal ou estadual à sua captura". Registram parecer '
+        'técnico do Coordenador-Geral do PMAP-SC, da UNIVALI, concluindo '
+        'não haver fundamento científico para a proibição da pesca nas '
+        'Baías Norte e Sul da Ilha de Santa Catarina, e que aquela '
+        'proibição decorreu exclusivamente de a espécie ter sido incluída '
+        'na Portaria MMA nº 445/2014 sob o nome Pogonias cromis. '
+        'Registram ainda relatos de maricultores de que a espécie causa '
+        'prejuízo aos cultivos de moluscos, e produção de 41.000 kg em '
+        '2016, só na pesca artesanal.\n\n'
+        'O QUE MUDOU DEPOIS. A portaria estadual é de 12 de novembro de '
+        '2025. A Portaria GM/MMA nº 1.667 é de 27 de abril de 2026, '
+        'quatro meses e meio DEPOIS, e nela a espécie aparece pelo nome '
+        'NOVO — Pogonias courbina — no item 294, como CR. A premissa que a '
+        'portaria estadual declara por escrito deixou de ser verdadeira '
+        'depois que ela foi publicada.\n\n'
+        'O aplicativo não afirma qual norma prevalece. Registra que as '
+        'três existem, com as datas, e que a federal é a posterior.',
+    falta: 'Saber se a Portaria SAQ nº 009/2025 foi revogada, alterada ou '
+        'reafirmada depois de 27 de abril de 2026, e se o Estado de Santa '
+        'Catarina se manifestou sobre a inclusão da espécie na Portaria '
+        'GM/MMA nº 1.667/2026. Consultar o Diário Oficial do Estado de '
+        'Santa Catarina e a página da Secretaria Executiva da Aquicultura '
+        'e Pesca nos sites oficiais.\n\n'
+        'Falta o defeso que o art. 4º da portaria estadual anuncia: ela '
+        'diz que as medidas poderão ser revistas a qualquer tempo '
+        '"especialmente para definição do período de defeso da Pogonias '
+        'courbina no Estado de Santa Catarina". Se esse defeso já foi '
+        'publicado, o aplicativo não o tem.\n\n'
+        'E FALTA RESOLVER UMA CONTRADIÇÃO DE LEITURA. O aplicativo lê a '
+        'coluna do asterisco do item 294 como vazia, o que significa '
+        'espécie que já constava da Lista anterior — e por isso mostra a '
+        'vedação valendo hoje. A portaria estadual afirma o contrário: '
+        'que a espécie não constava da Lista atualizada pela Portaria MMA '
+        'nº 148/2022. As duas leituras não podem estar certas ao mesmo '
+        'tempo, e a diferença muda a data em que a vedação passa a valer '
+        '— hoje, ou 25 de outubro de 2026. Confirmar no texto publicado '
+        'da Portaria 1.667/2026 e na Portaria MMA nº 148/2022.',
+  ),
+  Conflito(
     titulo: 'Lula com arrasto de fundo dentro do defeso do camarão — '
         'RESOLVIDO',
     desde: '01/09/2026',
@@ -145,10 +240,12 @@ const conflitos = <Conflito>[
         'aplica.\n\n'
         'Fica em aberto, ao lado disto, qual norma fixa hoje a DISTÂNCIA '
         'MÍNIMA DA COSTA para o arrasto motorizado na costa aberta de '
-        'Santa Catarina. A Portaria IBAMA nº 107/1992 foi esvaziada do '
-        'aplicativo em 01/09/2026 e a IN IBAMA nº 189/2008, cujo texto foi '
-        'lido, não fixa distância nenhuma nem revoga aquela. Veja o item '
-        '"Distância mínima da costa" na tela Onde não pode.',
+        'Santa Catarina. O aplicativo não traz número: o texto da Portaria '
+        'IBAMA nº 107/1992 não foi obtido, e a IN IBAMA nº 189/2008, cujo '
+        'texto foi lido, não fixa distância nenhuma nem revoga aquela — e '
+        'ela própria foi revogada pelo art. 21, IV da Portaria SAP/MAPA nº '
+        '656/2022. '
+        'Veja o item "Distância mínima da costa" na tela Onde não pode.',
   ),
   Conflito(
     titulo: 'A vigência dos Planos de Recuperação, e a revisão de 2026',

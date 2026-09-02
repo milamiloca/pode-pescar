@@ -246,6 +246,11 @@ class _Regra extends StatelessWidget {
                   cor: valeAgora ? corNaoPode : corBoia,
                   forte: valeAgora,
                 ),
+              if (r.texto == TextoDaNorma.revogada)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Selo('norma revogada', cor: corNaoPode),
+                ),
               if (r.texto == TextoDaNorma.aObter)
                 const Selo('texto a obter', cor: corBoia),
               if (r.temExcecao) const Selo('tem exceção', cor: corMar),

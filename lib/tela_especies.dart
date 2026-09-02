@@ -5,6 +5,7 @@ import 'dados.dart';
 import 'defesos.dart';
 import 'desenhos.dart';
 import 'fichas.dart';
+import 'fotos.dart';
 import 'nomes.dart';
 import 'procura.dart';
 import 'regimes.dart';
@@ -20,6 +21,147 @@ const _lista = 'Portaria GM/MMA nº 1.667, de 27 de abril de 2026 (a lista) '
     'e nº 1.666, de 27 de abril de 2026 (as regras)';
 const _listad = 'Publicadas no Diário Oficial em 28/04/2026, edição 78, '
     'seção 1, página 96. A 1.667 revogou a Portaria MMA nº 445/2014.';
+/// O art. 3º e o art. 4º da Portaria GM/MMA nº 1.666, de 27 de abril de
+/// 2026, transcritos.
+///
+/// O art. 3º é a regra de proteção; o art. 4º é a porta de saída dela.
+/// Ler um sem o outro dá resposta errada nos dois sentidos: só o 3º diz
+/// "proibido" onde há pesca regulada por Plano; só o 4º sugere que basta
+/// existir Plano.
+///
+/// Os sete parágrafos do art. 3º importam em fiscalização, e cinco deles
+/// não estavam no aplicativo. O § 2º é o mais sensível: exemplar vindo
+/// de cultivo licenciado fica fora da restrição.
+const textoArt3e4 = 'A REGRA — art. 3º, caput\n'
+    'As espécies constantes da Lista classificadas nas categorias '
+    'Extintas na Natureza - EW, Criticamente em Perigo - CR, Em Perigo - '
+    'EN e Vulnerável - VU ficam protegidas de modo integral, incluindo, '
+    'entre outras medidas, a proibição de captura, transporte, '
+    'armazenamento, guarda, manejo, beneficiamento e comercialização.\n\n'
+    'O QUE FICA DE FORA DA REGRA\n\n'
+    '§ 1º PESQUISA E CONSERVAÇÃO. A captura, transporte, armazenamento, '
+    'guarda e manejo poderá ser permitida para fins de pesquisa ou para a '
+    'conservação da espécie, mediante autorização do órgão ambiental '
+    'competente.\n\n'
+    '§ 2º AQUICULTURA. As restrições estabelecidas no caput NÃO SE '
+    'APLICAM a exemplares provenientes do cultivo na aquicultura em '
+    'estabelecimentos devidamente licenciados pelo órgão ambiental '
+    'competente.\n\n'
+    '§ 3º FORMAÇÃO DE PLANTEL. A coleta de indivíduos na natureza, para a '
+    'formação de plantel e demais medidas associadas, deve observar '
+    'regulamentação específica dos órgãos ambientais competentes, desde '
+    'que autorizada pelo Instituto Chico Mendes.\n\n'
+    '§ 4º CAPTURA INCIDENTAL. As restrições do caput NÃO SE APLICAM a '
+    'exemplares capturados incidentalmente, DESDE QUE liberados vivos ou '
+    'descartados no ato da captura, devendo ser registrados a captura e a '
+    'liberação ou o descarte, conforme regulamentação específica.\n\n'
+    '§ 5º DESEMBARQUE PARA PESQUISA. Poderá ser admitido o desembarque de '
+    'espécie ameaçada para fins de pesquisa e monitoramento, quando '
+    'autorizado pelo Plano de Recuperação e regulamentado por normas '
+    'específicas.\n\n'
+    '§ 6º DESTINAÇÃO SOCIAL. Poderá ser admitida a destinação dos '
+    'exemplares desembarcados do § 5º para fins sociais, VEDADA A '
+    'COMERCIALIZAÇÃO, observadas as medidas de regulamentação ambiental '
+    'específica e a Política Nacional de Combate à Perda e ao Desperdício '
+    'de Alimentos, da Lei nº 15.224, de 30 de setembro de 2025.\n\n'
+    '§ 7º IMPORTAÇÃO E EXPORTAÇÃO. Ficam proibidas a importação e a '
+    'exportação de exemplares mortos provenientes da natureza das '
+    'espécies constantes da Lista, excetuando-se casos definidos em '
+    'regulamentação específica, atendidas as recomendações do Plano de '
+    'Recuperação.\n\n'
+    'A PORTA DE SAÍDA — art. 4º\n'
+    'O uso das espécies ameaçadas constantes na Lista poderá ser '
+    'permitido, em bases sustentáveis, mediante a implementação de '
+    'medidas para a conservação e recuperação populacional da espécie, '
+    'por meio de Plano de Recuperação e do atendimento às seguintes '
+    'condições:\n'
+    'I - o reconhecimento, pelo Plano de Recuperação, da possibilidade de '
+    'uso de uma ou mais espécies, bem como a definição das medidas de '
+    'manejo necessárias para promover o uso sustentável;\n'
+    'II - o reconhecimento, por meio de ato normativo do Ministério do '
+    'Meio Ambiente e Mudança do Clima, da possibilidade de uso '
+    'sustentável das espécies, condicionada ao cumprimento das medidas '
+    'previstas no Plano de Recuperação; e\n'
+    'III - a regulamentação das medidas de manejo previstas no Plano de '
+    'Recuperação pelos órgãos federais competentes.\n'
+    '§ 1º O Plano de Recuperação poderá prever a MANUTENÇÃO DA MORATÓRIA '
+    'da pesca da espécie ameaçada caso seja necessário para a recuperação '
+    'da espécie.\n'
+    '§ 2º Em Unidades de Conservação de Uso Sustentável, além dos incisos '
+    'I a III, devem ser observadas as regras de manejo da unidade.\n'
+    '§ 3º As espécies do caput serão consideradas prioritárias por '
+    'ocasião da edição de atos normativos de ordenamento pesqueiro.\n\n'
+    'SÃO AS TRÊS CONDIÇÕES JUNTAS. Plano, ato do MMA e norma de '
+    'ordenamento. Faltando uma, o art. 3º volta a valer inteiro.';
+
+/// O que a Portaria 1.667 faz, e o que ela NÃO faz.
+///
+/// É comum atribuir a ela a regra de proteção. A 1.667 tem três artigos:
+/// reconhece as espécies da Lista, revoga a Portaria 445/2014, e entra
+/// em vigor. Quem protege é a 1.666.
+const oQueA1667Faz = 'A Portaria GM/MMA nº 1.667, de 27 de abril de 2026, '
+    'tem três artigos:\n\n'
+    'Art. 1º Ficam reconhecidas como espécies de peixes e invertebrados '
+    'aquáticos da fauna brasileira ameaçadas de extinção aquelas '
+    'constantes da "Lista Nacional Oficial de Espécies da Fauna Ameaçadas '
+    'de Extinção - Peixes e Invertebrados Aquáticos" - Lista, conforme '
+    'Anexo I desta Portaria.\n\n'
+    'Art. 2º Fica revogada a Portaria MMA nº 445, de 17 de dezembro de '
+    '2014.\n\n'
+    'Art. 3º Esta Portaria entra em vigor na data da sua publicação.\n\n'
+    'ELA DÁ A LISTA, NÃO DÁ A REGRA. O regime de proteção — o que fica '
+    'proibido, e as sete exceções — está no art. 3º da Portaria GM/MMA nº '
+    '1.666, de 27 de abril de 2026.';
+
+/// O caput do art. 3º da Portaria GM/MMA nº 1.666/2026, transcrito.
+///
+/// É esta frase que a ficha mostra, e não uma conclusão do aplicativo
+/// sobre ela. Onde há Plano de Recuperação a ficha acrescenta a
+/// observação e o nome das normas — sem decidir o resultado no lugar de
+/// quem lê.
+/// O título de todo bloco de espécie da Lista. É um fato, e o mesmo
+/// para as 490: quem analisa a espécie é que conclui o efeito.
+const tituloDaLista =
+    'Integra a Lista Nacional Oficial de Espécies da Fauna Ameaçadas de '
+    'Extinção';
+
+/// O texto do bloco da espécie da Lista: o caput transcrito, a
+/// categoria DESTA espécie nomeada como a norma a nomeia, e a citação.
+///
+/// A categoria entra no corpo, e não só na etiqueta, porque o caput
+/// lista as quatro e quem lê precisa saber em qual delas está o bicho
+/// que tem na mão — sem ter que casar a sigla da tarja com a frase.
+String textoDaLista(Ficha f) {
+  final cat = f.categoriaComSigla;
+  return '$caputArt3\n\n'
+      '${cat.isEmpty ? '' : 'Na Lista, esta espécie está classificada '
+          'como $cat.\n\n'}'
+      '— art. 3º, caput, da Portaria GM/MMA nº 1.666, de 27 de abril '
+      'de 2026.';
+}
+
+const caputArt3 =
+    'As espécies constantes da Lista classificadas nas categorias '
+    'Extintas na Natureza - EW, Criticamente em Perigo - CR, Em Perigo - '
+    'EN e Vulnerável - VU ficam protegidas de modo integral, incluindo, '
+    'entre outras medidas, a proibição de captura, transporte, '
+    'armazenamento, guarda, manejo, beneficiamento e comercialização.';
+
+const _p25n = 'Portaria IBAMA nº 25-N, de 9 de março de 1993';
+const _p25nd = 'Tamanho mínimo de espécies de água doce. O art. 1º proíbe '
+    'a captura, o transporte e a comercialização abaixo do tamanho nos '
+    'Estados do Rio Grande do Sul, SANTA CATARINA, Paraná, São Paulo, Rio '
+    'de Janeiro e Espírito Santo. Comprimento total = da ponta do focinho '
+    'à extremidade da nadadeira caudal (art. 1º, parágrafo único). '
+    'Tolerância de 10% em NÚMERO DE INDIVÍDUOS por espécie (art. 2º); '
+    'acima disso, apreensão de todo o pescado. No transporte só o tamanho '
+    'é fiscalizado (art. 3º). DOU de 10/03/1993.';
+
+const _p532 = 'Portaria MPA nº 532, de 24 de julho de 2025';
+const _p532d = 'Norma de ROTULAGEM: fixa o nome comum oficial de cada '
+    'espécie para fins de comercialização. O art. 4º diz que ela "não '
+    'exclui a obrigatoriedade de observar os regramentos de ordenamento". '
+    'Ou seja: ela dá o nome, não dá a regra de pesca.';
 
 // =====================================================================
 // ESPÉCIES — a lista única
@@ -326,20 +468,23 @@ class _Etiqueta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (f.temPlano) {
-      return const Selo('regulada', cor: corMar, forte: true);
+    // UMA ETIQUETA SÓ PARA TODA ESPÉCIE DA LISTA.
+    //
+    // Antes eram quatro — "regulada", "25/10", "ver norma", "não pode" —
+    // e as quatro eram CONCLUSÃO: o aplicativo lia o art. 3º, o art. 4º
+    // e o art. 12 e decidia o resultado na tarja, antes de a pessoa
+    // abrir a ficha. Numa lista de 689 espécies, a tarja é lida como
+    // veredito.
+    //
+    // Agora ela diz só o fato: a espécie integra a Lista Nacional
+    // Oficial. O que isso produz — proteção integral do art. 3º, prazo
+    // do art. 12, Plano de Recuperação do art. 4º — está na ficha, com o
+    // texto da norma, para quem analisa a espécie concluir.
+    if (f.ameacada) {
+      return const Selo('na Lista', cor: corNaoPode, forte: true);
     }
     if (f.temDuvida) {
       return const Selo('verificar', cor: corBoia, forte: true);
-    }
-    if (f.planoSemNorma) {
-      return const Selo('ver norma', cor: corBoia, forte: true);
-    }
-    if (f.vedadaEm2510) {
-      return const Selo('25/10', cor: corBoia, forte: true);
-    }
-    if (f.ameacada) {
-      return const Selo('não pode', cor: corNaoPode, forte: true);
     }
     if (!f.temTamanho) return const SizedBox.shrink();
     return Text(
@@ -597,6 +742,9 @@ class TelaFicha extends StatelessWidget {
               // 3. a classificação na Lista
               if (f.ameacada) ..._classificacao(),
 
+              // 3a. a foto, quando há
+              ..._foto(),
+
               // 3b. o que o aplicativo procurou e não encontrou
               ..._naoEncontrado(),
 
@@ -638,14 +786,112 @@ class TelaFicha extends StatelessWidget {
 
               // 5. as fontes
               const SizedBox(height: 24),
-              if (f.temTamanho) const Fonte(norma: _in53, detalhe: _in53d),
+              if (f.temTamanho && f.in53!.norma == NormaDeTamanho.in53)
+                const Fonte(norma: _in53, detalhe: _in53d),
+              if (f.temTamanho && f.in53!.norma == NormaDeTamanho.p25n1993)
+                const Fonte(norma: _p25n, detalhe: _p25nd),
               if (f.temTamanho && f.ameacada) const SizedBox(height: 12),
               if (f.ameacada) const Fonte(norma: _lista, detalhe: _listad),
+              if (f.soDoCatalogo && f.nomesComuns.isNotEmpty)
+                const Fonte(norma: _p532, detalhe: _p532d),
+              if (f.soPelaFoto) ...[
+                const SizedBox(height: 12),
+                _SoPelaFoto(f: f),
+              ],
+              if (f.ameacada) ...[
+                const SizedBox(height: 12),
+                const _TextoDaRegra(),
+              ],
             ],
           ),
         ),
       ),
     );
+  }
+
+
+  // ---------- a foto da espécie ----------
+  //
+  // Uma foto aqui é uma AFIRMAÇÃO de que aquele bicho é esta espécie. Se
+  // a identificação estiver errada, o erro sai do aplicativo e vira
+  // identificação errada no campo. Por isso a origem vem junto, sempre,
+  // e quando ela não foi declarada o aplicativo diz isso na cara.
+
+  List<Widget> _foto() {
+    final foto = fotoDe(f.cientifico);
+    if (foto == null) return const [];
+    return [
+      const SizedBox(height: 14),
+      Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: corSuperficie,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: corBorda),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(11)),
+              child: Image.asset(
+                foto.caminho,
+                width: double.infinity,
+                fit: BoxFit.contain,
+                errorBuilder: (c, e, p) => const SizedBox.shrink(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 11, 14, 13),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    foto.credito,
+                    style: const TextStyle(
+                        fontSize: 12,
+                        height: 1.4,
+                        fontWeight: FontWeight.w600,
+                        color: corApagada),
+                  ),
+                  if (foto.observacao.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Text(foto.observacao,
+                        style: const TextStyle(
+                            fontSize: 12, height: 1.45, color: corApagada)),
+                  ],
+                  if (foto.precisaDeAviso) ...[
+                    const SizedBox(height: 9),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(11, 9, 11, 10),
+                      decoration: BoxDecoration(
+                        color: corBoia.withValues(alpha: 0.09),
+                        borderRadius: BorderRadius.circular(8),
+                        border:
+                            Border.all(color: corBoia.withValues(alpha: 0.3)),
+                      ),
+                      child: Text(
+                        avisoDeOrigem[foto.origem]!,
+                        style: const TextStyle(
+                            fontSize: 12.5, height: 1.45, color: corTinta),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      foto.fonte,
+                      style: const TextStyle(
+                          fontSize: 11.5, height: 1.4, color: corApagada),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
   }
 
   // ---------- o que o aplicativo procurou e não encontrou ----------
@@ -769,13 +1015,25 @@ class TelaFicha extends StatelessWidget {
     return [
       _Bloco(
         cor: corProfundo,
-        etiqueta: '${f.categoriaPorExtenso.toUpperCase()}  ·  '
-            'PLANO DE RECUPERAÇÃO',
-        titulo: 'Pesca regulada',
-        texto: 'Está na Lista, mas a captura não é vedada: há Plano de '
-            'Recuperação, ato do Ministério do Meio Ambiente reconhecendo '
-            'o uso e norma de ordenamento (art. 4º da Portaria 1.666). '
-            'Valem as regras abaixo, não a vedação do art. 3º.',
+        etiqueta: f.categoriaComSigla.toUpperCase(),
+        titulo: tituloDaLista,
+        texto: textoDaLista(f),
+      ),
+      const SizedBox(height: 12),
+      _Aviso(
+        etiqueta: 'OBSERVAÇÃO',
+        titulo: 'Esta espécie tem Plano de Recuperação',
+        texto: 'O art. 4º da mesma Portaria admite o uso das espécies da '
+            'Lista, em bases sustentáveis, mediante Plano de Recuperação, '
+            'ato do Ministério do Meio Ambiente reconhecendo o uso e '
+            'regulamentação pelos órgãos federais competentes — as três '
+            'condições juntas.\n\n'
+            'AS NORMAS CORRESPONDENTES\n'
+            'Ordenamento: ${p.ordenamento}\n'
+            'Ato do MMA: ${p.atoDoMMA}\n\n'
+            'O que essas normas dizem está logo abaixo, transcrito. O '
+            'aplicativo não conclui o resultado: ele mostra o art. 3º, o '
+            'art. 4º e as normas, para que a leitura seja feita nelas.',
       ),
       const SizedBox(height: 12),
       _RegraDoPlano(p: p),
@@ -815,14 +1073,21 @@ class TelaFicha extends StatelessWidget {
     final p = f.plano!;
     return [
       _Bloco(
-        cor: corBoia,
-        etiqueta: '${f.categoriaPorExtenso.toUpperCase()}  ·  '
-            'PLANO DE RECUPERAÇÃO',
-        titulo: 'Consulte a norma',
-        texto: 'Esta espécie tem Plano de Recuperação. Onde há Plano, a '
-            'vedação do art. 3º da Portaria 1.666 não se aplica sozinha — '
-            'quem diz o que pode é a norma de ordenamento, e o aplicativo '
-            'não obteve o texto dela.',
+        cor: corProfundo,
+        etiqueta: f.categoriaComSigla.toUpperCase(),
+        titulo: tituloDaLista,
+        texto: textoDaLista(f),
+      ),
+      const SizedBox(height: 12),
+      _Aviso(
+        etiqueta: 'OBSERVAÇÃO',
+        titulo: 'Há Plano de Recuperação, e a norma não foi obtida',
+        texto: 'O art. 4º da mesma Portaria admite o uso das espécies da '
+            'Lista mediante Plano de Recuperação, ato do MMA e '
+            'regulamentação — as três condições juntas. Esta espécie tem '
+            'Plano, mas o aplicativo NÃO OBTEVE o texto da norma de '
+            'ordenamento, e por isso não reproduz regra nenhuma dela.\n\n'
+            'É preciso consultar a norma abaixo nos sites oficiais.',
       ),
       const SizedBox(height: 12),
       Container(
@@ -856,18 +1121,19 @@ class TelaFicha extends StatelessWidget {
   List<Widget> _proibida(BuildContext context) => [
         _Bloco(
           cor: corNaoPode,
-          etiqueta: f.categoriaPorExtenso.toUpperCase(),
-          titulo: 'Vedação por padrão',
-          texto: 'Vedados também o transporte, a guarda a bordo, o '
-              'armazenamento, o manejo, o beneficiamento e a comercialização '
-              '(art. 3º da Portaria 1.666).',
+          etiqueta: f.categoriaComSigla.toUpperCase(),
+          titulo: tituloDaLista,
+          texto: '${textoDaLista(f)}\n\n'
+              'A norma escreve GUARDA, sem restringir a bordo. O mesmo '
+              'artigo traz sete parágrafos de exceção — entre eles a '
+              'captura incidental com liberação no ato (§ 4º) e o '
+              'exemplar vindo de cultivo em aquicultura licenciada '
+              '(§ 2º). Os sete estão transcritos no fim desta ficha.',
         ),
         const SizedBox(height: 12),
         const _OQueADataQuerDizer(nova: false, dias: 0),
         const SizedBox(height: 12),
         const _PlanoNaoConferido(),
-        const SizedBox(height: 10),
-        const _MesmaProtecao(),
         if (f.temTamanho) ...[
           const SizedBox(height: 12),
           _MedidaVencida(cm: f.in53!.tamanho),
@@ -881,22 +1147,29 @@ class TelaFicha extends StatelessWidget {
     return [
       _Bloco(
         cor: corBoia,
-        etiqueta: f.categoriaPorExtenso.toUpperCase(),
+        etiqueta: f.categoriaComSigla.toUpperCase(),
+        titulo: tituloDaLista,
+        texto: textoDaLista(f),
+      ),
+      const SizedBox(height: 12),
+      _Aviso(
+        etiqueta: 'OBSERVAÇÃO',
         titulo: dias > 0
-            ? 'Passa a ser vedada\nem 25 de outubro'
-            : 'Captura vedada',
+            ? 'O art. 12 marca 25 de outubro de 2026'
+            : 'O prazo do art. 12 venceu em 25 de outubro de 2026',
         texto: dias > 0
-            ? 'O item desta espécie tem asterisco na Lista: ela é nova, '
-                'não constava da lista anterior. Pelo art. 12 da Portaria '
-                '1.666, a vedação do art. 3º entra em vigor em 25/10/2026 '
-                '— faltam $dias dias.'
-            : 'O prazo de 180 dias do art. 12 da Portaria 1.666 venceu em '
-                '25/10/2026. A vedação do art. 3º está em vigor.',
+            ? 'O item desta espécie tem asterisco na Lista: ela não '
+                'constava da lista anterior. O art. 12 da Portaria GM/MMA '
+                'nº 1.666/2026 dá 180 dias da publicação para as '
+                'restrições do art. 3º — o prazo cai em 25/10/2026, e '
+                'faltam $dias dias.'
+            : 'O item desta espécie tem asterisco na Lista: ela não '
+                'constava da lista anterior. O prazo de 180 dias do art. '
+                '12 da Portaria GM/MMA nº 1.666/2026 venceu em '
+                '25/10/2026.',
       ),
       const SizedBox(height: 12),
       _OQueADataQuerDizer(nova: true, dias: dias),
-      const SizedBox(height: 10),
-      const _MesmaProtecao(),
       if (f.temTamanho && dias > 0) ...[
         const SizedBox(height: 12),
         _MedidaValendo(e: f.in53!),
@@ -1065,6 +1338,42 @@ class TelaFicha extends StatelessWidget {
       listaAmeacadas.where((o) => o.genero == a.genero && o.n != a.n).toList();
 }
 
+/// Por que esta página existe, quando ela existe só por causa da foto.
+///
+/// Uma foto sem esta explicação sugere que alguém regulou a espécie.
+/// Aqui não regulou: a imagem veio de uma compilação, e a norma sob a
+/// qual a compilação a lista — quando há — é de outro estado ou não foi
+/// lida. A página diz as duas coisas antes de qualquer outra.
+class _SoPelaFoto extends StatelessWidget {
+  final Ficha f;
+
+  const _SoPelaFoto({required this.f});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 15),
+      decoration: BoxDecoration(
+        color: corSuperficie,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: corBorda),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Selo('por que esta página existe', cor: corApagada),
+          const SizedBox(height: 11),
+          Text(
+            porQueSoTemFoto(f.cientifico),
+            style: const TextStyle(fontSize: 13, height: 1.5, color: corTinta),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SemEnquadramento extends StatelessWidget {
   final Ficha f;
   const _SemEnquadramento({required this.f});
@@ -1079,11 +1388,16 @@ class _SemEnquadramento extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: corBorda),
       ),
-      child: const Text(
-        'O gerador de enquadramento monta o cálculo da tolerância da IN 53, '
-        'que não se aplica a esta espécie: a vedação do art. 3º alcança '
-        'qualquer tamanho, sem percentual a apurar.',
-        style: TextStyle(fontSize: 13.5, height: 1.45, color: corApagada),
+      child: Text(
+        f.soDoCatalogo
+            ? 'O gerador de enquadramento monta o cálculo da tolerância da '
+                'IN 53, e esta espécie não tem tamanho mínimo naquela '
+                'norma. Não há percentual a apurar aqui.'
+            : 'O gerador de enquadramento monta o cálculo da tolerância da '
+                'IN 53, que não se aplica a esta espécie: a vedação do art. '
+                '3º alcança qualquer tamanho, sem percentual a apurar.',
+        style: const TextStyle(
+            fontSize: 13.5, height: 1.45, color: corApagada),
       ),
     );
   }
@@ -1456,28 +1770,6 @@ class _PlanoNaoConferido extends StatelessWidget {
   }
 }
 
-class _MesmaProtecao extends StatelessWidget {
-  const _MesmaProtecao();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: corNaoPode.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        'Criticamente em Perigo, Em Perigo e Vulnerável recebem a mesma '
-        'proteção integral. A categoria diz o risco de extinção, não o '
-        'tamanho da vedação.',
-        style: TextStyle(fontSize: 13.5, height: 1.4, color: corApagada),
-      ),
-    );
-  }
-}
-
 class _Aviso extends StatelessWidget {
   final String etiqueta;
   final String? titulo;
@@ -1569,6 +1861,101 @@ class _Campo extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: corTinta)),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// O texto do art. 3º e do art. 4º da Portaria 1.666, sob toque.
+///
+/// Fica recolhido porque é longo e o veredito vem antes — mas fica na
+/// ficha, e não numa tela de ajuda, porque é a norma que sustenta o que
+/// a ficha acabou de afirmar. Quem precisa citar, cita daqui.
+class _TextoDaRegra extends StatefulWidget {
+  const _TextoDaRegra();
+
+  @override
+  State<_TextoDaRegra> createState() => _TextoDaRegraState();
+}
+
+class _TextoDaRegraState extends State<_TextoDaRegra> {
+  bool aberto = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: corSuperficie,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: corBorda),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => setState(() => aberto = !aberto),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'O texto da regra e das sete exceções',
+                      style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w600,
+                          height: 1.3,
+                          color: corTinta),
+                    ),
+                  ),
+                  Icon(aberto ? Icons.expand_less : Icons.expand_more,
+                      size: 22, color: corApagada),
+                ],
+              ),
+            ),
+          ),
+          if (aberto) ...[
+            Container(height: 1, color: corBorda),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Portaria GM/MMA nº 1.666, de 27 de abril de 2026',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                        color: corMar),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(textoArt3e4,
+                      style: TextStyle(
+                          fontSize: 13, height: 1.55, color: corTinta)),
+                  const SizedBox(height: 18),
+                  Container(height: 1, color: corBorda),
+                  const SizedBox(height: 14),
+                  const Text(
+                    'E a Portaria 1.667?',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                        color: corMar),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(oQueA1667Faz,
+                      style: TextStyle(
+                          fontSize: 13, height: 1.55, color: corTinta)),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

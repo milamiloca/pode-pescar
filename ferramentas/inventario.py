@@ -77,45 +77,27 @@ def junta(texto, lida, uso, papel=''):
         e['nome'] = nome
 
 
-BASE = [
-    ('Instrução Normativa MMA nº 53, de 22 de novembro de 2005',
-     'Tamanho mínimo de captura de 35 espécies', True),
-    ('Instrução Normativa Interministerial MPA/MMA nº 10, de 10 de junho '
-     'de 2011', 'As 72 modalidades de permissionamento', True),
-    ('Lei nº 11.959, de 29 de junho de 2009',
-     'Política Nacional de Pesca: definições e fiscalização', True),
-    ('Portaria GM/MMA nº 1.666, de 27 de abril de 2026',
-     'As regras aplicáveis às espécies ameaçadas', True),
-    ('Portaria GM/MMA nº 1.667, de 27 de abril de 2026',
-     'A Lista Nacional Oficial: 490 espécies', True),
-    ('Portaria MMA nº 445, de 17 de dezembro de 2014',
-     'Lista anterior, revogada. Serve de comparação', True),
-    ('Portaria MMA nº 148, de 7 de junho de 2022',
-     'Substituiu o Anexo I da 445/2014', True),
-    ('Portaria MMA nº 354, de 27 de janeiro de 2023',
-     'Acrescentou 5 elasmobrânquios à 148/2022', True),
-    ('Portaria MMA nº 73, de 26 de março de 2018',
-     'Reescreveu o art. 3º da 445/2014: manejo sustentável', True),
-    ('Portaria SAP/MAPA nº 617, de 8 de março de 2022',
-     'Arrasto de praia em SC: modalidades 6.8 a 6.11', True),
-    ('Portaria Interministerial MPA/MMA nº 51, de 27 de fevereiro de 2026',
-     'Safra 2026 da tainha: cotas e confirmação das datas', True),
-    ('Portaria Interministerial MPA/MMA nº 63, de 11 de junho de 2026',
-     'Alterou a 51/2026', True),
-    ('Portaria Interministerial MPA/MMA nº 57, de 12 de maio de 2026',
-     'Alterou o art. 21 da 24/2018: rastreamento', True),
-    ('Portaria Interministerial MPA/MMA nº 47, de 14 de janeiro de 2026',
-     'Alterou o art. 18 da 656/2022: rastreamento', True),
-    ('Portaria SAP/MAPA nº 695, de 27 de abril de 2022',
-     'Alterou a 656/2022 dos camarões', True),
-    ('Portaria SAP/MAPA nº 75, de 3 de abril de 2020',
-     'Alterou o art. 3º, V da 24/2018 da tainha', True),
-    ('Portaria MPA nº 127, de 29 de agosto de 2023',
-     'RGP e Licença de Pescador Profissional; o REAP', True),
-    ('Decreto SC nº 1.017, de 13 de novembro de 1991',
-     'Policiamento florestal da PMSC. Base institucional do TCC, '
-     'não do aplicativo', True),
-]
+# A base normativa é LIDA de normas.dart, não copiada.
+#
+# Havia aqui uma segunda lista, escrita à mão, com as mesmas normas. Duas
+# listas da mesma coisa divergem em silêncio — foi assim que a Portaria
+# SUDEPE nº N-42/1984 sumiu da tela sem ninguém notar, por causa de uma
+# regex duplicada. A base agora tem um só dono.
+def _le_base():
+    t = io.open(LIB + 'normas.dart', encoding='utf-8').read()
+    b = t.split('const _base = <List<String>>[')[1].split('\n];')[0]
+    fora = []
+    for m in re.finditer(r"\[((?:\s*'(?:[^'\\]|\\.)*')+)\s*,"
+                         r"((?:\s*'(?:[^'\\]|\\.)*')+)\s*,"
+                         r"\s*'(lida|a obter)'\s*\]", b):
+        nome = ''.join(re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(1)))
+        papel = ''.join(re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(2)))
+        fora.append((nome, papel, m.group(3) == 'lida'))
+    assert fora, 'inventario: não consegui ler a _base de normas.dart'
+    return fora
+
+
+BASE = _le_base()
 for nome, papel, lida in BASE:
     junta(nome, lida, 'base normativa', papel)
 
@@ -129,8 +111,13 @@ for b in blocos('regimes.dart', 'const planos = <Plano>[', 'Plano'):
     obtida = 'normaObtida: false' not in b
     esp = campo(b, 'especie')
     junta(campo(b, 'ordenamento'), obtida, 'plano: ' + esp)
+    # o ato do MMA e a norma de ordenamento sao documentos diferentes e
+    # podem ter sido obtidos separadamente: nos budioes, a Portaria
+    # 129/2018 foi lida e a norma de ordenamento das tres especies nao
+    # existe. Amarrar um ao outro fazia a ferramenta contar como "a
+    # obter" uma norma que esta' em maos.
     ato = campo(b, 'atoDoMMA')
-    junta(ato, obtida and 'texto obtido' in ato, 'plano: ' + esp)
+    junta(ato, 'texto obtido' in ato, 'plano: ' + esp)
 
 for b in blocos('periodos.dart', 'const periodos = <Periodo>[', 'Periodo'):
     junta(campo(b, 'norma'), 'confirmado: false' not in b,
@@ -158,9 +145,14 @@ SEM_CITAR = [
      'REVOGADA, antes de ela chegar a entrar no aplicativo. Fica registrada '
      'só para não ser recolhida de novo por engano. Falta saber qual norma '
      'a revogou e o que passou a valer no lugar.'),
-    ('Instrução Normativa IBAMA nº 21, de 7 de julho de 2009', 'IBAMA',
-     'Camarão no Complexo Lagunar Sul: defeso de 15/7 a 15/11. Não foi '
-     'revogada pela Portaria 65/2026, e as datas coincidem.'),
+    ('Instrução Normativa IBAMA nº 21, de 7 de julho de 2009 — TEXTO LIDO '
+     'EM 01/09/2026', 'IBAMA',
+     'Camarão-rosa e camarão-branco no Complexo Lagunar Sul: defeso de '
+     '15/7 a 15/11, com QUALQUER modalidade e petrecho, e com a ordem de '
+     'retirar os petrechos dos pontos de pesca (art. 1º, parágrafo único). '
+     'Não foi revogada pela Portaria 65/2026, e as datas coincidem. O '
+     'conteúdo está na ficha do Complexo Lagunar; ela não aparece como '
+     'norma própria porque a regra vigente citada é a Portaria 65/2026.'),
     ('Instrução Normativa IBAMA nº 15, de 21 de maio de 2009', 'IBAMA',
      'Norma-base da sardinha-verdadeira. Temos a redação atual dos '
      'arts. 4º e 5º pela IN SAP/MAPA 18/2020, mas não o texto integral.'),
@@ -180,7 +172,7 @@ SEM_CITAR = [
      'lido e o art. 8º dela revoga apenas as IN IBAMA 91/2006 e 92/2006. '
      'Fica registrada só como histórico. NÃO REPOR números dela sem o '
      'texto publicado na mão.'),
-    ('Instrução Normativa MPA nº 14, de 3 de outubro de 2014 — '
+    ('Instrução Normativa MPA nº 14, de 2014 (dia e mês desconhecidos) — '
      'CONSOLIDADO DA IN 10/2011', 'MPA',
      'EM VIGOR. Alterou o Anexo I da IN 10/2011: reestruturou a '
      'codificação das modalidades de embarcações artesanais e industriais '

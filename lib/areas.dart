@@ -44,7 +44,13 @@ const nomesDeAlcance = <Alcance, String>{
 /// Não se chama "Fonte" porque tema.dart já tem uma classe Fonte —
 /// o rodapé que cita a norma. Dois nomes iguais importados juntos
 /// não compilam.
-enum TextoDaNorma { lido, aObter }
+/// Em que pé está o texto da norma que sustenta a restrição.
+///
+/// `revogada` não é o mesmo que `aObter`: aqui o texto FOI lido e se
+/// sabe o que ele dizia — o que não vale mais é a norma. A restrição
+/// continua na tela para que quem conhecia a regra antiga saiba que ela
+/// caiu, em vez de aplicá-la de memória.
+enum TextoDaNorma { lido, aObter, revogada }
 
 class Restricao {
   /// O que a regra proíbe, em uma linha, sem rodeio.
@@ -528,36 +534,47 @@ const restricoes = <Restricao>[
   // a costa catarinense — norma ainda não obtida
   // -------------------------------------------------------------------
   Restricao(
-    titulo: 'Arrasto de camarão no defeso: a frota não pode trocar de alvo',
-    onde: 'Regiões Sudeste e Sul. Alcança Santa Catarina inteira.',
-    oQueProibe: 'Durante o período de defeso do camarão, as frotas '
-        'permissionadas para o arrasto de camarão ficam proibidas de '
-        'capturar OUTRAS espécies cujo esforço de pesca esteja sob '
-        'controle, ou que constem do Anexo II da Instrução Normativa MMA '
-        'nº 5, de 21 de maio de 2004, e da Instrução Normativa MMA nº 52, '
-        'de 8 de novembro de 2005.',
-    excecao: 'A captura de outras espécies NÃO alcançadas pelo caput, pela '
-        'frota camaroeira permissionada para o camarão-rosa, depende de '
-        'permissão de pesca específica do órgão competente (parágrafo '
-        'único).',
-    norma: 'Instrução Normativa IBAMA nº 189, de 23 de setembro de 2008',
-    artigo: 'art. 6º',
+    titulo: 'Trocar de alvo no defeso do camarão: a norma que proibia foi '
+        'revogada',
+    onde: 'Regiões Sudeste e Sul, quando valia. Alcançava Santa Catarina '
+        'inteira.',
+    oQueProibe: 'ESTA REGRA NÃO ESTÁ MAIS EM VIGOR POR ESTA NORMA. O art. '
+        '6º da Instrução Normativa IBAMA nº 189/2008 proibia que, durante '
+        'o defeso do camarão, as frotas permissionadas para o arrasto de '
+        'camarão capturassem OUTRAS espécies cujo esforço de pesca '
+        'estivesse sob controle, ou que constassem do Anexo II da '
+        'Instrução Normativa MMA nº 5, de 21 de maio de 2004, e da '
+        'Instrução Normativa MMA nº 52, de 8 de novembro de 2005.\n\n'
+        'A Portaria SAP/MAPA nº 656, de 30 de março de 2022, revogou a IN '
+        '189/2008 inteira — o ato, não um artigo dele.',
+    excecao: 'O parágrafo único do mesmo art. 6º, também revogado, exigia '
+        'permissão de pesca específica para a frota camaroeira do '
+        'camarão-rosa capturar espécies fora do caput.',
+    norma: 'Instrução Normativa IBAMA nº 189, de 23 de setembro de 2008 — '
+        'REVOGADA',
+    artigo: 'art. 6º, revogado com o resto da norma',
     alcance: Alcance.regiao,
-    texto: TextoDaNorma.lido,
-    ressalva: 'ATENÇÃO ÀS DATAS DESTA NORMA. O art. 1º, I dela fixou o '
-        'defeso do arrasto motorizado de camarão em 1º DE MARÇO A 31 DE '
-        'MAIO, da divisa ES/RJ até a foz do Arroio Chuí. Não é esse o '
-        'período que se aplica hoje no mar de Santa Catarina: a Portaria '
-        'SAP/MAPA nº 656, de 30 de março de 2022, fixa 28 DE JANEIRO A 30 '
-        'DE ABRIL para RJ, SP, PR, SC e RS, e é ela que a página de '
-        'defesos marinhos do IBAMA, atualizada em 21 de janeiro de 2026, '
-        'apresenta como vigente. Use o defeso da tela de temporadas, não '
-        'as datas de 2008.\n\n'
-        'O que segue útil desta norma é o art. 6º, acima, e o art. 5º: '
-        '"nas áreas estuarinas e lagunares os períodos de defeso serão '
-        'definidos em instruções normativas específicas". É esse artigo '
-        'que sustenta os defesos próprios da Baía da Babitonga e do '
-        'Complexo Lagunar Sul.',
+    texto: TextoDaNorma.revogada,
+    ressalva: 'A REVOGAÇÃO, NAS PALAVRAS DA NORMA QUE REVOGOU. Art. '
+        '21 da Portaria SAP/MAPA nº 656, de 30 de março de 2022: "Ficam '
+        'revogadas: (...) IV - a Instrução Normativa nº 189, de 23 de '
+        'setembro de 2008, do Instituto Brasileiro do Meio Ambiente e dos '
+        'Recursos Naturais Renováveis". A mesma lista revogou as '
+        'Portarias SUDEPE nº N-55 e N-56, de 1984, a Portaria IBAMA nº '
+        '97/1997, a Instrução Normativa Interministerial nº 03/2011, a '
+        'Portaria Interministerial nº 47/2018 e a Portaria nº 220/2020.\n\n'
+        'A 656/2022 NÃO REPRODUZ ESTA REGRA. O art. 1º dela limita o '
+        'alcance ao Mar Territorial e à Zona Econômica Exclusiva, e os '
+        'artigos seguintes tratam de defeso, petrecho, tamanho mínimo, '
+        'limite e operação de embarcação, conversão de modalidade e '
+        'monitoramento. Não há artigo sobre trocar de espécie-alvo no '
+        'defeso.\n\n'
+        'Se existir norma em vigor que proíba a mesma coisa, ela não foi '
+        'localizada. Consulte a norma nos sites oficiais antes de '
+        'sustentar essa proibição.\n\n'
+        'O DEFESO QUE VALE HOJE não é o desta norma revogada: é 28 DE '
+        'JANEIRO A 30 DE ABRIL para RJ, SP, PR, SC e RS, pelo art. 2º da '
+        'Portaria SAP/MAPA nº 656/2022. Use a tela de temporadas.',
     detalhe: 'DEFESO DE 2008 (art. 1º) — VER A RESSALVA ACIMA\n'
         'Proibiu o arrasto com tração motorizada para captura de '
         'camarão-rosa (Farfantepenaeus paulensis, F. brasiliensis e F. '
@@ -620,11 +637,10 @@ const restricoes = <Restricao>[
     artigo: 'a norma de distância não foi identificada',
     alcance: Alcance.estado,
     texto: TextoDaNorma.lido,
-    ressalva: 'DE ONDE VEIO ESTA LACUNA. A regra de milhas da costa para o '
-        'arrasto motorizado em Santa Catarina era atribuída à Portaria '
-        'IBAMA nº 107, de 29 de setembro de 1992. Em 01/09/2026 essa '
-        'entrada foi ESVAZIADA: nenhum número dela permanece no '
-        'aplicativo.\n\n'
+    ressalva: 'ESTA REGRA ESTÁ EM ABERTO. A distância mínima da costa '
+        'para o arrasto motorizado em Santa Catarina era atribuída à '
+        'Portaria IBAMA nº 107, de 29 de setembro de 1992, cujo texto não '
+        'foi obtido. O aplicativo não traz número nenhum dela.\n\n'
         'O QUE SE SABE, E O QUE NÃO SE SABE. A pesquisa aponta a Portaria '
         '107/1992 como revogada pela Instrução Normativa IBAMA nº 189, de '
         '23 de setembro de 2008. O texto da IN 189/2008 foi obtido e lido, '
@@ -633,6 +649,9 @@ const restricoes = <Restricao>[
         'distância da costa nenhuma — ela fixa um defeso por faixa de '
         'latitude. Então ela não é a substituta da regra de milhas: é '
         'outra coisa.\n\n'
+        'E A PRÓPRIA IN 189/2008 JÁ NÃO VALE: o art. 21, IV da Portaria '
+        'SAP/MAPA nº 656, de 30 de março de 2022, revogou-a por inteiro. '
+        'Ela está citada aqui como histórico, não como norma em vigor.\n\n'
         'Pode ser que a 107/1992 tenha sido revogada por outra norma, ou '
         'tacitamente. O aplicativo não afirma nem uma coisa nem outra, e '
         'sobretudo não reproduz os números antigos.\n\n'
